@@ -1,0 +1,1374 @@
+[
+    {
+        "zip_code": 90001,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 33.97,
+        "longitude": -118.24
+    },
+    {
+        "zip_code": 90002,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 33.94,
+        "longitude": -118.24
+    },
+    {
+        "zip_code": 90003,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 33.96,
+        "longitude": -118.27
+    },
+    {
+        "zip_code": 90004,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.07,
+        "longitude": -118.31
+    },
+    {
+        "zip_code": 90005,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.06,
+        "longitude": -118.31
+    },
+    {
+        "zip_code": 90006,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.05,
+        "longitude": -118.29
+    },
+    {
+        "zip_code": 90007,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.02,
+        "longitude": -118.28
+    },
+    {
+        "zip_code": 90008,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.01,
+        "longitude": -118.35
+    },
+    {
+        "zip_code": 90010,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.06,
+        "longitude": -118.32
+    },
+    {
+        "zip_code": 90011,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.0,
+        "longitude": -118.25
+    },
+    {
+        "zip_code": 90012,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.06,
+        "longitude": -118.24
+    },
+    {
+        "zip_code": 90013,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.05,
+        "longitude": -118.24
+    },
+    {
+        "zip_code": 90014,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.04,
+        "longitude": -118.25
+    },
+    {
+        "zip_code": 90015,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.03,
+        "longitude": -118.26
+    },
+    {
+        "zip_code": 90016,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.02,
+        "longitude": -118.35
+    },
+    {
+        "zip_code": 90017,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.05,
+        "longitude": -118.26
+    },
+    {
+        "zip_code": 90018,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.02,
+        "longitude": -118.31
+    },
+    {
+        "zip_code": 90019,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.04,
+        "longitude": -118.34
+    },
+    {
+        "zip_code": 90021,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.03,
+        "longitude": -118.24
+    },
+    {
+        "zip_code": 90022,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.02,
+        "longitude": -118.15
+    },
+    {
+        "zip_code": 90023,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.02,
+        "longitude": -118.2
+    },
+    {
+        "zip_code": 90024,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.06,
+        "longitude": -118.43
+    },
+    {
+        "zip_code": 90025,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.04,
+        "longitude": -118.44
+    },
+    {
+        "zip_code": 90026,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.07,
+        "longitude": -118.26
+    },
+    {
+        "zip_code": 90027,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.12,
+        "longitude": -118.28
+    },
+    {
+        "zip_code": 90028,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.1,
+        "longitude": -118.32
+    },
+    {
+        "zip_code": 90029,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.09,
+        "longitude": -118.29
+    },
+    {
+        "zip_code": 90031,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.09,
+        "longitude": -118.21
+    },
+    {
+        "zip_code": 90032,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.08,
+        "longitude": -118.17
+    },
+    {
+        "zip_code": 90033,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.04,
+        "longitude": -118.21
+    },
+    {
+        "zip_code": 90034,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.03,
+        "longitude": -118.4
+    },
+    {
+        "zip_code": 90035,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.05,
+        "longitude": -118.38
+    },
+    {
+        "zip_code": 90036,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.06,
+        "longitude": -118.35
+    },
+    {
+        "zip_code": 90037,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.0,
+        "longitude": -118.28
+    },
+    {
+        "zip_code": 90038,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.09,
+        "longitude": -118.33
+    },
+    {
+        "zip_code": 90039,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.11,
+        "longitude": -118.26
+    },
+    {
+        "zip_code": 90041,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.13,
+        "longitude": -118.2
+    },
+    {
+        "zip_code": 90042,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.11,
+        "longitude": -118.19
+    },
+    {
+        "zip_code": 90043,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 33.98,
+        "longitude": -118.33
+    },
+    {
+        "zip_code": 90044,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 33.95,
+        "longitude": -118.29
+    },
+    {
+        "zip_code": 90045,
+        "risk_zone": "Moderate Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 33.95,
+        "longitude": -118.4
+    },
+    {
+        "zip_code": 90046,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.11,
+        "longitude": -118.36
+    },
+    {
+        "zip_code": 90047,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 33.95,
+        "longitude": -118.31
+    },
+    {
+        "zip_code": 90048,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.07,
+        "longitude": -118.37
+    },
+    {
+        "zip_code": 90049,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.08,
+        "longitude": -118.49
+    },
+    {
+        "zip_code": 90056,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 33.99,
+        "longitude": -118.37
+    },
+    {
+        "zip_code": 90057,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.06,
+        "longitude": -118.27
+    },
+    {
+        "zip_code": 90059,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 33.93,
+        "longitude": -118.25
+    },
+    {
+        "zip_code": 90061,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 33.92,
+        "longitude": -118.27
+    },
+    {
+        "zip_code": 90062,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.0,
+        "longitude": -118.31
+    },
+    {
+        "zip_code": 90063,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.04,
+        "longitude": -118.18
+    },
+    {
+        "zip_code": 90064,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.03,
+        "longitude": -118.43
+    },
+    {
+        "zip_code": 90065,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.1,
+        "longitude": -118.22
+    },
+    {
+        "zip_code": 90066,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.0,
+        "longitude": -118.43
+    },
+    {
+        "zip_code": 90067,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.06,
+        "longitude": -118.41
+    },
+    {
+        "zip_code": 90068,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.13,
+        "longitude": -118.33
+    },
+    {
+        "zip_code": 90069,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "West Hollywood",
+        "latitude": 34.09,
+        "longitude": -118.38
+    },
+    {
+        "zip_code": 90071,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.05,
+        "longitude": -118.25
+    },
+    {
+        "zip_code": 90077,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.1,
+        "longitude": -118.45
+    },
+    {
+        "zip_code": 90079,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 34.04,
+        "longitude": -118.26
+    },
+    {
+        "zip_code": 90094,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Playa Vista",
+        "latitude": 33.98,
+        "longitude": -118.42
+    },
+    {
+        "zip_code": 90101,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Los Angeles",
+        "latitude": 33.99,
+        "longitude": -118.16
+    },
+    {
+        "zip_code": 90201,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Bell Gardens",
+        "latitude": 33.97,
+        "longitude": -118.15
+    },
+    {
+        "zip_code": 90210,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Beverly Hills",
+        "latitude": 34.09,
+        "longitude": -118.41
+    },
+    {
+        "zip_code": 90211,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Beverly Hills",
+        "latitude": 34.06,
+        "longitude": -118.38
+    },
+    {
+        "zip_code": 90212,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Beverly Hills",
+        "latitude": 34.06,
+        "longitude": -118.4
+    },
+    {
+        "zip_code": 90221,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Compton",
+        "latitude": 33.87,
+        "longitude": -118.21
+    },
+    {
+        "zip_code": 90222,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Compton",
+        "latitude": 33.91,
+        "longitude": -118.23
+    },
+    {
+        "zip_code": 90230,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Culver City",
+        "latitude": 33.99,
+        "longitude": -118.39
+    },
+    {
+        "zip_code": 90232,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Culver City",
+        "latitude": 34.02,
+        "longitude": -118.39
+    },
+    {
+        "zip_code": 90240,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Downey",
+        "latitude": 33.95,
+        "longitude": -118.12
+    },
+    {
+        "zip_code": 90241,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Downey",
+        "latitude": 33.94,
+        "longitude": -118.13
+    },
+    {
+        "zip_code": 90245,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "El Segundo",
+        "latitude": 33.91,
+        "longitude": -118.4
+    },
+    {
+        "zip_code": 90247,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Gardena",
+        "latitude": 33.89,
+        "longitude": -118.29
+    },
+    {
+        "zip_code": 90248,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Gardena",
+        "latitude": 33.88,
+        "longitude": -118.28
+    },
+    {
+        "zip_code": 90254,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Hermosa Beach",
+        "latitude": 33.86,
+        "longitude": -118.39
+    },
+    {
+        "zip_code": 90261,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Lawndale",
+        "latitude": 33.89,
+        "longitude": -118.37
+    },
+    {
+        "zip_code": 90265,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Malibu",
+        "latitude": 34.06,
+        "longitude": -118.81
+    },
+    {
+        "zip_code": 90266,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Manhattan Beach",
+        "latitude": 33.88,
+        "longitude": -118.4
+    },
+    {
+        "zip_code": 90272,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Pacific Palisades",
+        "latitude": 34.07,
+        "longitude": -118.54
+    },
+    {
+        "zip_code": 90274,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Palos Verdes Peninsula",
+        "latitude": 33.77,
+        "longitude": -118.34
+    },
+    {
+        "zip_code": 90275,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Rancho Palos Verdes",
+        "latitude": 33.75,
+        "longitude": -118.31
+    },
+    {
+        "zip_code": 90290,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Topanga",
+        "latitude": 34.1,
+        "longitude": -118.6
+    },
+    {
+        "zip_code": 90291,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Venice",
+        "latitude": 33.99,
+        "longitude": -118.46
+    },
+    {
+        "zip_code": 90292,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Marina Del Rey",
+        "latitude": 33.98,
+        "longitude": -118.46
+    },
+    {
+        "zip_code": 90293,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Playa Del Rey",
+        "latitude": 33.94,
+        "longitude": -118.44
+    },
+    {
+        "zip_code": 90301,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Inglewood",
+        "latitude": 33.95,
+        "longitude": -118.36
+    },
+    {
+        "zip_code": 90302,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Inglewood",
+        "latitude": 33.97,
+        "longitude": -118.35
+    },
+    {
+        "zip_code": 90303,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Inglewood",
+        "latitude": 33.93,
+        "longitude": -118.33
+    },
+    {
+        "zip_code": 90304,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Inglewood",
+        "latitude": 33.94,
+        "longitude": -118.36
+    },
+    {
+        "zip_code": 90305,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Inglewood",
+        "latitude": 33.95,
+        "longitude": -118.33
+    },
+    {
+        "zip_code": 90311,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Inglewood",
+        "latitude": 33.95,
+        "longitude": -118.35
+    },
+    {
+        "zip_code": 90401,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Santa Monica",
+        "latitude": 34.01,
+        "longitude": -118.49
+    },
+    {
+        "zip_code": 90402,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Santa Monica",
+        "latitude": 34.03,
+        "longitude": -118.5
+    },
+    {
+        "zip_code": 90403,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Santa Monica",
+        "latitude": 34.03,
+        "longitude": -118.49
+    },
+    {
+        "zip_code": 90404,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Santa Monica",
+        "latitude": 34.02,
+        "longitude": -118.47
+    },
+    {
+        "zip_code": 90405,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Santa Monica",
+        "latitude": 34.01,
+        "longitude": -118.46
+    },
+    {
+        "zip_code": 90501,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Torrance",
+        "latitude": 33.83,
+        "longitude": -118.31
+    },
+    {
+        "zip_code": 90502,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Torrance",
+        "latitude": 33.83,
+        "longitude": -118.29
+    },
+    {
+        "zip_code": 90504,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Torrance",
+        "latitude": 33.86,
+        "longitude": -118.33
+    },
+    {
+        "zip_code": 90603,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Whittier",
+        "latitude": 33.94,
+        "longitude": -117.99
+    },
+    {
+        "zip_code": 90640,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Montebello",
+        "latitude": 34.02,
+        "longitude": -118.11
+    },
+    {
+        "zip_code": 90670,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Santa Fe Springs",
+        "latitude": 33.92,
+        "longitude": -118.06
+    },
+    {
+        "zip_code": 90701,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Artesia",
+        "latitude": 33.86,
+        "longitude": -118.08
+    },
+    {
+        "zip_code": 90703,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Cerritos",
+        "latitude": 33.86,
+        "longitude": -118.05
+    },
+    {
+        "zip_code": 90706,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Bellflower",
+        "latitude": 33.88,
+        "longitude": -118.13
+    },
+    {
+        "zip_code": 90710,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Harbor City",
+        "latitude": 33.8,
+        "longitude": -118.3
+    },
+    {
+        "zip_code": 90715,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Lakewood",
+        "latitude": 33.84,
+        "longitude": -118.07
+    },
+    {
+        "zip_code": 90717,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Lomita",
+        "latitude": 33.79,
+        "longitude": -118.31
+    },
+    {
+        "zip_code": 90723,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Paramount",
+        "latitude": 33.89,
+        "longitude": -118.16
+    },
+    {
+        "zip_code": 90731,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "San Pedro",
+        "latitude": 33.73,
+        "longitude": -118.29
+    },
+    {
+        "zip_code": 90732,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "San Pedro",
+        "latitude": 33.73,
+        "longitude": -118.31
+    },
+    {
+        "zip_code": 90744,
+        "risk_zone": "Moderate Risk Zone",
+        "primary_city": "Wilmington",
+        "latitude": 33.77,
+        "longitude": -118.26
+    },
+    {
+        "zip_code": 90745,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Carson",
+        "latitude": 33.82,
+        "longitude": -118.26
+    },
+    {
+        "zip_code": 90755,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Signal Hill",
+        "latitude": 33.8,
+        "longitude": -118.16
+    },
+    {
+        "zip_code": 90802,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Long Beach",
+        "latitude": 33.75,
+        "longitude": -118.2
+    },
+    {
+        "zip_code": 90804,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Long Beach",
+        "latitude": 33.78,
+        "longitude": -118.14
+    },
+    {
+        "zip_code": 90805,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Long Beach",
+        "latitude": 33.86,
+        "longitude": -118.18
+    },
+    {
+        "zip_code": 90806,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Long Beach",
+        "latitude": 33.81,
+        "longitude": -118.18
+    },
+    {
+        "zip_code": 90808,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Long Beach",
+        "latitude": 33.82,
+        "longitude": -118.11
+    },
+    {
+        "zip_code": 90810,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Long Beach",
+        "latitude": 33.81,
+        "longitude": -118.22
+    },
+    {
+        "zip_code": 90813,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Long Beach",
+        "latitude": 33.78,
+        "longitude": -118.18
+    },
+    {
+        "zip_code": 90814,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Long Beach",
+        "latitude": 33.77,
+        "longitude": -118.14
+    },
+    {
+        "zip_code": 90822,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Long Beach",
+        "latitude": 33.78,
+        "longitude": -118.12
+    },
+    {
+        "zip_code": 90831,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Long Beach",
+        "latitude": 33.77,
+        "longitude": -118.2
+    },
+    {
+        "zip_code": 91006,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Arcadia",
+        "latitude": 34.13,
+        "longitude": -118.02
+    },
+    {
+        "zip_code": 91010,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Duarte",
+        "latitude": 34.13,
+        "longitude": -117.94
+    },
+    {
+        "zip_code": 91011,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "La Canada Flintridge",
+        "latitude": 34.22,
+        "longitude": -118.21
+    },
+    {
+        "zip_code": 91030,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "South Pasadena",
+        "latitude": 34.11,
+        "longitude": -118.15
+    },
+    {
+        "zip_code": 91040,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Sunland",
+        "latitude": 34.26,
+        "longitude": -118.32
+    },
+    {
+        "zip_code": 91042,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Tujunga",
+        "latitude": 34.29,
+        "longitude": -118.25
+    },
+    {
+        "zip_code": 91103,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Pasadena",
+        "latitude": 34.17,
+        "longitude": -118.17
+    },
+    {
+        "zip_code": 91105,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Pasadena",
+        "latitude": 34.14,
+        "longitude": -118.16
+    },
+    {
+        "zip_code": 91201,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Glendale",
+        "latitude": 34.17,
+        "longitude": -118.29
+    },
+    {
+        "zip_code": 91203,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Glendale",
+        "latitude": 34.15,
+        "longitude": -118.26
+    },
+    {
+        "zip_code": 91204,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Glendale",
+        "latitude": 34.13,
+        "longitude": -118.26
+    },
+    {
+        "zip_code": 91205,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Glendale",
+        "latitude": 34.13,
+        "longitude": -118.24
+    },
+    {
+        "zip_code": 91206,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Glendale",
+        "latitude": 34.16,
+        "longitude": -118.2
+    },
+    {
+        "zip_code": 91210,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Glendale",
+        "latitude": 34.14,
+        "longitude": -118.26
+    },
+    {
+        "zip_code": 91214,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "La Crescenta",
+        "latitude": 34.23,
+        "longitude": -118.24
+    },
+    {
+        "zip_code": 91301,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Agoura Hills",
+        "latitude": 34.12,
+        "longitude": -118.76
+    },
+    {
+        "zip_code": 91303,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Canoga Park",
+        "latitude": 34.19,
+        "longitude": -118.6
+    },
+    {
+        "zip_code": 91304,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Canoga Park",
+        "latitude": 34.22,
+        "longitude": -118.59
+    },
+    {
+        "zip_code": 91306,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Winnetka",
+        "latitude": 34.2,
+        "longitude": -118.57
+    },
+    {
+        "zip_code": 91307,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "West Hills",
+        "latitude": 34.2,
+        "longitude": -118.69
+    },
+    {
+        "zip_code": 91311,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Chatsworth",
+        "latitude": 34.28,
+        "longitude": -118.61
+    },
+    {
+        "zip_code": 91316,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Encino",
+        "latitude": 34.15,
+        "longitude": -118.52
+    },
+    {
+        "zip_code": 91321,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Newhall",
+        "latitude": 34.36,
+        "longitude": -118.47
+    },
+    {
+        "zip_code": 91324,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Northridge",
+        "latitude": 34.24,
+        "longitude": -118.55
+    },
+    {
+        "zip_code": 91325,
+        "risk_zone": "Moderate Risk Zone",
+        "primary_city": "Northridge",
+        "latitude": 34.23,
+        "longitude": -118.51
+    },
+    {
+        "zip_code": 91326,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Porter Ranch",
+        "latitude": 34.28,
+        "longitude": -118.55
+    },
+    {
+        "zip_code": 91331,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Pacoima",
+        "latitude": 34.25,
+        "longitude": -118.41
+    },
+    {
+        "zip_code": 91335,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Reseda",
+        "latitude": 34.2,
+        "longitude": -118.54
+    },
+    {
+        "zip_code": 91340,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "San Fernando",
+        "latitude": 34.28,
+        "longitude": -118.44
+    },
+    {
+        "zip_code": 91342,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Sylmar",
+        "latitude": 34.32,
+        "longitude": -118.38
+    },
+    {
+        "zip_code": 91343,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "North Hills",
+        "latitude": 34.23,
+        "longitude": -118.47
+    },
+    {
+        "zip_code": 91344,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Granada Hills",
+        "latitude": 34.29,
+        "longitude": -118.5
+    },
+    {
+        "zip_code": 91345,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Mission Hills",
+        "latitude": 34.27,
+        "longitude": -118.45
+    },
+    {
+        "zip_code": 91350,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Santa Clarita",
+        "latitude": 34.43,
+        "longitude": -118.51
+    },
+    {
+        "zip_code": 91352,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Sun Valley",
+        "latitude": 34.23,
+        "longitude": -118.34
+    },
+    {
+        "zip_code": 91356,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Tarzana",
+        "latitude": 34.15,
+        "longitude": -118.54
+    },
+    {
+        "zip_code": 91364,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Woodland Hills",
+        "latitude": 34.15,
+        "longitude": -118.6
+    },
+    {
+        "zip_code": 91367,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Woodland Hills",
+        "latitude": 34.17,
+        "longitude": -118.61
+    },
+    {
+        "zip_code": 91382,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Santa Clarita",
+        "latitude": 34.41,
+        "longitude": -118.51
+    },
+    {
+        "zip_code": 91383,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Santa Clarita",
+        "latitude": 34.36,
+        "longitude": -118.45
+    },
+    {
+        "zip_code": 91401,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Van Nuys",
+        "latitude": 34.17,
+        "longitude": -118.43
+    },
+    {
+        "zip_code": 91402,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Panorama City",
+        "latitude": 34.22,
+        "longitude": -118.44
+    },
+    {
+        "zip_code": 91403,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Sherman Oaks",
+        "latitude": 34.14,
+        "longitude": -118.46
+    },
+    {
+        "zip_code": 91405,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Van Nuys",
+        "latitude": 34.2,
+        "longitude": -118.44
+    },
+    {
+        "zip_code": 91406,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Van Nuys",
+        "latitude": 34.19,
+        "longitude": -118.49
+    },
+    {
+        "zip_code": 91411,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "Van Nuys",
+        "latitude": 34.17,
+        "longitude": -118.46
+    },
+    {
+        "zip_code": 91423,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Sherman Oaks",
+        "latitude": 34.14,
+        "longitude": -118.42
+    },
+    {
+        "zip_code": 91436,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Encino",
+        "latitude": 34.15,
+        "longitude": -118.49
+    },
+    {
+        "zip_code": 91502,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Burbank",
+        "latitude": 34.17,
+        "longitude": -118.31
+    },
+    {
+        "zip_code": 91504,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Burbank",
+        "latitude": 34.2,
+        "longitude": -118.33
+    },
+    {
+        "zip_code": 91505,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Burbank",
+        "latitude": 34.17,
+        "longitude": -118.34
+    },
+    {
+        "zip_code": 91506,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Burbank",
+        "latitude": 34.17,
+        "longitude": -118.32
+    },
+    {
+        "zip_code": 91601,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "North Hollywood",
+        "latitude": 34.16,
+        "longitude": -118.37
+    },
+    {
+        "zip_code": 91602,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "North Hollywood",
+        "latitude": 34.15,
+        "longitude": -118.36
+    },
+    {
+        "zip_code": 91604,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Studio City",
+        "latitude": 34.13,
+        "longitude": -118.39
+    },
+    {
+        "zip_code": 91605,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "North Hollywood",
+        "latitude": 34.2,
+        "longitude": -118.39
+    },
+    {
+        "zip_code": 91606,
+        "risk_zone": "High Risk Zone",
+        "primary_city": "North Hollywood",
+        "latitude": 34.18,
+        "longitude": -118.39
+    },
+    {
+        "zip_code": 91607,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Valley Village",
+        "latitude": 34.16,
+        "longitude": -118.4
+    },
+    {
+        "zip_code": 91608,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Universal City",
+        "latitude": 34.14,
+        "longitude": -118.35
+    },
+    {
+        "zip_code": 91711,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Claremont",
+        "latitude": 34.12,
+        "longitude": -117.71
+    },
+    {
+        "zip_code": 91722,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Covina",
+        "latitude": 34.09,
+        "longitude": -117.9
+    },
+    {
+        "zip_code": 91732,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "El Monte",
+        "latitude": 34.07,
+        "longitude": -118.01
+    },
+    {
+        "zip_code": 91744,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "La Puente",
+        "latitude": 34.02,
+        "longitude": -117.93
+    },
+    {
+        "zip_code": 91767,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Pomona",
+        "latitude": 34.08,
+        "longitude": -117.73
+    },
+    {
+        "zip_code": 91768,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Pomona",
+        "latitude": 34.06,
+        "longitude": -117.79
+    },
+    {
+        "zip_code": 91773,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "San Dimas",
+        "latitude": 34.1,
+        "longitude": -117.81
+    },
+    {
+        "zip_code": 91789,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Walnut",
+        "latitude": 34.01,
+        "longitude": -117.85
+    },
+    {
+        "zip_code": 91792,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "West Covina",
+        "latitude": 34.02,
+        "longitude": -117.9
+    },
+    {
+        "zip_code": 91801,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Alhambra",
+        "latitude": 34.09,
+        "longitude": -118.13
+    },
+    {
+        "zip_code": 93534,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Lancaster",
+        "latitude": 34.72,
+        "longitude": -118.15
+    },
+    {
+        "zip_code": 93550,
+        "risk_zone": "Low Risk Zone",
+        "primary_city": "Palmdale",
+        "latitude": 34.52,
+        "longitude": -118.08
+    }
+]

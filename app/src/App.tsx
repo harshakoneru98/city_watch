@@ -1,5 +1,11 @@
+import { Fragment } from "react"
+import Map from "./components/Map/Map"
+
 export default function App() {
   return (
-    <h1>Hello</h1>
+    <Fragment>
+      <Map />
+    </Fragment>
+    
   )
 }
