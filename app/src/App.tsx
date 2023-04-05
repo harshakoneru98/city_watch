@@ -1,10 +1,10 @@
 import { Fragment } from "react"
-import Map from "./components/Map/Map"
+import Dashboard from "./pages/Dashboard/Dashboard"
 
 export default function App() {
   return (
     <Fragment>
-      <Map />
+      <Dashboard />
     </Fragment>
     
   )
