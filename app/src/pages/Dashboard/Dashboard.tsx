@@ -22,6 +22,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     const [selectedCity, setSelectedCity] = useState<string>(defaultCity);
     const [zipCodes, setZipCodes] = useState<number[]>([]);
     const [selectedZipcode, setSelectedZipcode] = useState<number>();
+    const [filteredData, setFilteredData] = useState<any>([]);
 
     useEffect(() => {
         const uniqueCities = [
@@ -33,10 +34,17 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     useEffect(() => {
         const selectedCityZipCodes = map_riskzone
             .filter((item) => item.primary_city === selectedCity)
-            .map((item) => item.zip_code);
-        setZipCodes(selectedCityZipCodes);
-        console.log('Selected City : ', selectedCity);
+        setZipCodes(selectedCityZipCodes.map((item) => item.zip_code));
+        setFilteredData(selectedCityZipCodes)
     }, [selectedCity]);
+
+    useEffect(() => {
+        if(selectedZipcode){
+            const selectedCityZipCodes = map_riskzone.filter((item) => item.primary_city === selectedCity)
+            const filterzipData = selectedCityZipCodes.filter((item: any) => item.zip_code === selectedZipcode)
+            setFilteredData(filterzipData)
+        }
+    }, [selectedZipcode])
 
     const handleCityChange = (city: string) => {
         setSelectedCity(city);
@@ -47,13 +55,9 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         setSelectedZipcode(zip);
     };
 
-    useEffect(() => {
-        console.log('Selected Zipcode : ', selectedZipcode);
-    }, [selectedZipcode]);
-
     return (
         <Fragment>
-            <div className="container">
+            <div className="filter-container">
                 <div className="selectInputContainer selectInputRight">
                     <SelectInput
                         data={cities}
@@ -70,7 +74,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                     />
                 </div>
             </div>
-            {/* <Map /> */}
+            <Map data={filteredData}/>
         </Fragment>
     );
 }
