@@ -4,6 +4,7 @@ import SelectInput from '../../components/SelectInput/SelectInput';
 import Map from '../../components/Map/Map';
 import map_riskzone from '../../assets/data/map_riskzone.json';
 import './Dashboard.scss';
+import LineChart from '../../components/LineChart/LineChart';
 
 interface DashboardProps {
     defaultCity: string;
@@ -90,6 +91,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                 </div>
             </div>
             <Map data={filteredData} onValChange={handleZipcodeChange} selectedZipCode={selectedZipcode}/>
+            <LineChart />
         </Fragment>
     );
 }
