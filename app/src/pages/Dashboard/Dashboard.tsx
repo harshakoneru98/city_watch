@@ -17,9 +17,10 @@ Dashboard.propTypes = {
 };
 
 export default function Dashboard({defaultCity}: DashboardProps) {
-    // console.log('Data : ', map_riskzone)
     const [cities, setCities] = useState<string[]>([]);
     const [selectedCity, setSelectedCity] = useState<string>(defaultCity);
+    const [zipCodes, setZipCodes] = useState<number[]>([]);
+    const [selectedZipcode, setSelectedZipcode] = useState<number>();
 
     useEffect(() => {
         const uniqueCities = [
@@ -28,17 +29,29 @@ export default function Dashboard({defaultCity}: DashboardProps) {
         setCities(uniqueCities);
     }, []);
 
+    useEffect(() => {
+        const selectedCityZipCodes = map_riskzone.filter((item) => item.primary_city === selectedCity).map((item) => item.zip_code);
+        setZipCodes(selectedCityZipCodes);
+        console.log('Selected City : ', selectedCity)
+    }, [selectedCity]);
+
     const handleCityChange = (city: string) => {
         setSelectedCity(city);
+        setSelectedZipcode(undefined)
+    };
+
+    const handleZipcodeChange = (zip: number) => {
+        setSelectedZipcode(zip);
     };
 
     useEffect(() => {
-        console.log('Selected City : ', selectedCity)
-    }, [selectedCity])
+        console.log('Selected Zipcode : ', selectedZipcode)
+    }, [selectedZipcode])
 
     return (
         <Fragment>
             <SelectInput data={cities} name="City" defaultValue={defaultCity} onValChange={handleCityChange}/>
+            <SelectInput data={zipCodes} name="Zipcode" onValChange={handleZipcodeChange}/>
             {/* <Map /> */}
         </Fragment>
     );
