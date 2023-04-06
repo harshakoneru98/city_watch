@@ -5,6 +5,7 @@ import Map from '../../components/Map/Map';
 import map_riskzone from '../../assets/data/map_riskzone.json';
 import './Dashboard.scss';
 import LineChart from '../../components/LineChart/LineChart';
+import PieChart from '../../components/PieChart/PieChart';
 
 interface DashboardProps {
     defaultCity: string;
@@ -92,6 +93,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
             </div>
             <Map data={filteredData} onValChange={handleZipcodeChange} selectedZipCode={selectedZipcode}/>
             <LineChart />
+            <PieChart />
         </Fragment>
     );
 }
