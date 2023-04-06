@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import SelectInput from '../../components/SelectInput/SelectInput';
 import Map from '../../components/Map/Map';
 import map_riskzone from '../../assets/data/map_riskzone.json';
+import './Dashboard.scss';
 
 interface DashboardProps {
-    defaultCity: string
+    defaultCity: string;
 }
 
 Dashboard.defaultProps = {
@@ -16,7 +17,7 @@ Dashboard.propTypes = {
     defaultCity: PropTypes.string
 };
 
-export default function Dashboard({defaultCity}: DashboardProps) {
+export default function Dashboard({ defaultCity }: DashboardProps) {
     const [cities, setCities] = useState<string[]>([]);
     const [selectedCity, setSelectedCity] = useState<string>(defaultCity);
     const [zipCodes, setZipCodes] = useState<number[]>([]);
@@ -30,14 +31,16 @@ export default function Dashboard({defaultCity}: DashboardProps) {
     }, []);
 
     useEffect(() => {
-        const selectedCityZipCodes = map_riskzone.filter((item) => item.primary_city === selectedCity).map((item) => item.zip_code);
+        const selectedCityZipCodes = map_riskzone
+            .filter((item) => item.primary_city === selectedCity)
+            .map((item) => item.zip_code);
         setZipCodes(selectedCityZipCodes);
-        console.log('Selected City : ', selectedCity)
+        console.log('Selected City : ', selectedCity);
     }, [selectedCity]);
 
     const handleCityChange = (city: string) => {
         setSelectedCity(city);
-        setSelectedZipcode(undefined)
+        setSelectedZipcode(undefined);
     };
 
     const handleZipcodeChange = (zip: number) => {
@@ -45,13 +48,28 @@ export default function Dashboard({defaultCity}: DashboardProps) {
     };
 
     useEffect(() => {
-        console.log('Selected Zipcode : ', selectedZipcode)
-    }, [selectedZipcode])
+        console.log('Selected Zipcode : ', selectedZipcode);
+    }, [selectedZipcode]);
 
     return (
         <Fragment>
-            <SelectInput data={cities} name="City" defaultValue={defaultCity} onValChange={handleCityChange}/>
-            <SelectInput data={zipCodes} name="Zipcode" onValChange={handleZipcodeChange}/>
+            <div className="container">
+                <div className="selectInputContainer selectInputRight">
+                    <SelectInput
+                        data={cities}
+                        name="City"
+                        defaultValue={defaultCity}
+                        onValChange={handleCityChange}
+                    />
+                </div>
+                <div className="selectInputContainer">
+                    <SelectInput
+                        data={zipCodes}
+                        name="Zipcode"
+                        onValChange={handleZipcodeChange}
+                    />
+                </div>
+            </div>
             {/* <Map /> */}
         </Fragment>
     );
