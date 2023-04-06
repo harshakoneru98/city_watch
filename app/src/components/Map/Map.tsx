@@ -18,7 +18,7 @@ Map.defaultProps = {
         lat: 34.052235,
         lng: -118.243683
     },
-    zoom: 10,
+    zoom: 10.5,
     apiKey: import.meta.env.VITE_GOOGLE_API_KEY
 };
 
@@ -34,6 +34,7 @@ Map.propTypes = {
 export default function Map({ center, zoom, apiKey, data }: MapProps) {
     const [googleApiObj, setIsGoogleApiLoadedObj] = useState<any>(null);
     const [circles, setCircles] = useState<any[]>([]);
+    const [centerMap, setCenterMap] = useState<any>(center);
 
     const getRiskZone = (zip_code_info: any) => {
         const center = {
@@ -93,6 +94,19 @@ export default function Map({ center, zoom, apiKey, data }: MapProps) {
 
             // Add new circles
             renderMarkers(map, maps);
+
+            // Modify Center
+            const avgLatitude =
+                data.reduce((sum, item) => sum + item.latitude, 0) /
+                data.length;
+            const avgLongitude =
+                data.reduce((sum, item) => sum + item.longitude, 0) /
+                data.length;
+
+            setCenterMap({
+                lat: avgLatitude,
+                lng: avgLongitude
+            });
         }
     }, [googleApiObj, data]);
 
@@ -102,7 +116,7 @@ export default function Map({ center, zoom, apiKey, data }: MapProps) {
                 bootstrapURLKeys={{
                     key: apiKey
                 }}
-                center={center}
+                center={centerMap}
                 zoom={zoom}
                 yesIWantToUseGoogleMapApiInternals
                 onGoogleApiLoaded={({ map, maps }) =>
