@@ -1,0 +1,21 @@
+.location-info {
+    position: absolute;
+    top: 120px;
+    right: 50px;
+    width: 300px;
+    min-height: 200px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    font-size: 18px;
+    color: white;
+}
+
+.location-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.location-info li {
+    padding: 5px 0;
+}

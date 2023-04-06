@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import PropTypes from 'prop-types';
+import LocationInfo from './LocationInfo';
 import './Map.scss';
 
 interface MapProps {
@@ -11,6 +12,8 @@ interface MapProps {
     zoom: number;
     apiKey: string;
     data: any[];
+    onValChange: (value: any) => void;
+    selectedZipCode: any;
 }
 
 Map.defaultProps = {
@@ -31,10 +34,18 @@ Map.propTypes = {
     apiKey: PropTypes.string
 };
 
-export default function Map({ center, zoom, apiKey, data }: MapProps) {
+export default function Map({
+    center,
+    zoom,
+    apiKey,
+    data,
+    selectedZipCode,
+    onValChange
+}: MapProps) {
     const [googleApiObj, setIsGoogleApiLoadedObj] = useState<any>(null);
     const [circles, setCircles] = useState<any[]>([]);
     const [centerMap, setCenterMap] = useState<any>(center);
+    const [locationInfo, setLocationInfo] = useState<boolean>(false);
 
     const getRiskZone = (zip_code_info: any) => {
         const center = {
@@ -76,6 +87,17 @@ export default function Map({ center, zoom, apiKey, data }: MapProps) {
                 center: center,
                 radius: 1000
             });
+
+            if (selectedZipCode) {
+                setLocationInfo(true);
+            } else {
+                setLocationInfo(false);
+                circle.addListener('click', () => {
+                    if (onValChange) {
+                        onValChange(data[i].zip_code);
+                    }
+                });
+            }
 
             newCircles.push(circle);
         }
@@ -123,6 +145,14 @@ export default function Map({ center, zoom, apiKey, data }: MapProps) {
                     setIsGoogleApiLoadedObj({ map, maps })
                 }
             ></GoogleMapReact>
+            {locationInfo && (
+                <LocationInfo
+                    zip_code={data[0].zip_code}
+                    risk_zone={data[0].risk_zone}
+                    latitude={data[0].latitude}
+                    longitude={data[0].longitude}
+                />
+            )}
         </div>
     );
 }

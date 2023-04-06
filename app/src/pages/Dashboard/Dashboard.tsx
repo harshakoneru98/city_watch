@@ -32,19 +32,28 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     }, []);
 
     useEffect(() => {
-        const selectedCityZipCodes = map_riskzone
-            .filter((item) => item.primary_city === selectedCity)
+        const selectedCityZipCodes = map_riskzone.filter(
+            (item) => item.primary_city === selectedCity
+        );
         setZipCodes(selectedCityZipCodes.map((item) => item.zip_code));
-        setFilteredData(selectedCityZipCodes)
+        setFilteredData(selectedCityZipCodes);
+        
+        if (selectedCityZipCodes.length == 1){
+            setSelectedZipcode(selectedCityZipCodes[0].zip_code)
+        }
     }, [selectedCity]);
 
     useEffect(() => {
-        if(selectedZipcode){
-            const selectedCityZipCodes = map_riskzone.filter((item) => item.primary_city === selectedCity)
-            const filterzipData = selectedCityZipCodes.filter((item: any) => item.zip_code === selectedZipcode)
-            setFilteredData(filterzipData)
+        if (selectedZipcode) {
+            const selectedCityZipCodes = map_riskzone.filter(
+                (item) => item.primary_city === selectedCity
+            );
+            const filterzipData = selectedCityZipCodes.filter(
+                (item: any) => item.zip_code === selectedZipcode
+            );
+            setFilteredData(filterzipData);
         }
-    }, [selectedZipcode])
+    }, [selectedZipcode]);
 
     const handleCityChange = (city: string) => {
         setSelectedCity(city);
@@ -70,11 +79,12 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                     <SelectInput
                         data={zipCodes}
                         name="Zipcode"
+                        selectedValue={selectedZipcode}
                         onValChange={handleZipcodeChange}
                     />
                 </div>
             </div>
-            <Map data={filteredData}/>
+            <Map data={filteredData} onValChange={handleZipcodeChange} selectedZipCode={selectedZipcode}/>
         </Fragment>
     );
 }

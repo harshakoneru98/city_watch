@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,6 +9,7 @@ interface SelectInputProps {
     data: any[];
     name: string;
     defaultValue?: string;
+    selectedValue?: any;
     onValChange: (value: any) => void;
 }
 
@@ -16,9 +17,16 @@ export default function SelectInput({
     data,
     name,
     defaultValue,
+    selectedValue,
     onValChange
 }: SelectInputProps) {
     const [val, setVal] = useState(defaultValue || '');
+
+    useEffect(() => {
+        if (!defaultValue){
+            setVal(selectedValue || '');
+        }
+    }, [selectedValue]);
 
     const handleChange = (event: SelectChangeEvent) => {
       const value_selected = event.target.value as string
