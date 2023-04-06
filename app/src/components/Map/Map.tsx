@@ -88,7 +88,7 @@ export default function Map({
                 radius: 1000
             });
 
-            if (selectedZipCode) {
+            if (selectedZipCode && selectedZipCode != 'All') {
                 setLocationInfo(true);
             } else {
                 setLocationInfo(false);

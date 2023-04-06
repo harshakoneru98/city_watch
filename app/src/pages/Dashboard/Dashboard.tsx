@@ -20,8 +20,8 @@ Dashboard.propTypes = {
 export default function Dashboard({ defaultCity }: DashboardProps) {
     const [cities, setCities] = useState<string[]>([]);
     const [selectedCity, setSelectedCity] = useState<string>(defaultCity);
-    const [zipCodes, setZipCodes] = useState<number[]>([]);
-    const [selectedZipcode, setSelectedZipcode] = useState<number>();
+    const [zipCodes, setZipCodes] = useState<any[]>([]);
+    const [selectedZipcode, setSelectedZipcode] = useState<any>();
     const [filteredData, setFilteredData] = useState<any>([]);
 
     useEffect(() => {
@@ -35,22 +35,27 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         const selectedCityZipCodes = map_riskzone.filter(
             (item) => item.primary_city === selectedCity
         );
-        setZipCodes(selectedCityZipCodes.map((item) => item.zip_code));
-        setFilteredData(selectedCityZipCodes);
         
+        setFilteredData(selectedCityZipCodes);
         if (selectedCityZipCodes.length == 1){
+            setZipCodes(selectedCityZipCodes.map((item) => item.zip_code))
             setSelectedZipcode(selectedCityZipCodes[0].zip_code)
+        }else{
+            setZipCodes(["All", ...selectedCityZipCodes.map((item) => item.zip_code)]);
+            setSelectedZipcode('All')
         }
     }, [selectedCity]);
 
     useEffect(() => {
         if (selectedZipcode) {
-            const selectedCityZipCodes = map_riskzone.filter(
+            let filterzipData = map_riskzone.filter(
                 (item) => item.primary_city === selectedCity
             );
-            const filterzipData = selectedCityZipCodes.filter(
-                (item: any) => item.zip_code === selectedZipcode
-            );
+            if(selectedZipcode != 'All'){
+                filterzipData = filterzipData.filter(
+                    (item: any) => item.zip_code === selectedZipcode
+                );
+            }
             setFilteredData(filterzipData);
         }
     }, [selectedZipcode]);
