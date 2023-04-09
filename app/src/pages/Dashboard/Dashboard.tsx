@@ -6,6 +6,8 @@ import map_riskzone from '../../assets/data/map_riskzone.json';
 import './Dashboard.scss';
 import LineChart from '../../components/LineChart/LineChart';
 import PieChart from '../../components/PieChart/PieChart';
+import StackedBarChart from '../../components/StackedBarChart/StackedBarChart';
+import BarChart from '../../components/BarChart/BarChart';
 
 interface DashboardProps {
     defaultCity: string;
@@ -94,6 +96,8 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
             <Map data={filteredData} onValChange={handleZipcodeChange} selectedZipCode={selectedZipcode}/>
             <LineChart />
             <PieChart />
+            <StackedBarChart />
+            <BarChart />
         </Fragment>
     );
 }

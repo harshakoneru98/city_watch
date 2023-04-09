@@ -9,7 +9,7 @@ export default function PieChart() {
     { id: 'La Canada Flintridge', value: 40 },
   ];
 
-  const pieChartColors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'];
+  const pieChartColors = ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854']
 
   return (
     <div style={{ height: '400px' }}>
