@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as AWS from 'aws-sdk';
 import config from '../../config/config';
 import * as risk_zone from '../../config/Final_Datasets/risk_zone.json'
+import * as metadata from '../../config/Final_Datasets/metadata.json'
 
 AWS.config.update({
     region: config.AWS_REGION,
@@ -32,6 +33,34 @@ export default class CrimeController {
         await res.send({
             status: 200,
             data: 'Created Riskzone DB Successfully',
+            message: 'OK'
+        });
+    };
+
+    // Create Zipcode Metadata Database
+    public create_metadata_db = async (req: Request, res: Response) => {
+        let documentClient = new AWS.DynamoDB.DocumentClient();
+
+        await metadata.forEach(async (data) => {
+            let params = {
+                TableName: config.DATABASE_NAME,
+                Item: {
+                    PK: `META#${data.zip_code}`,
+                    SK: `INFO#${data.zip_code}`,
+                    primary_city: data.primary_city,
+                    latitude: data.latitude,
+                    longitude: data.longitude
+                }
+            };
+
+            await documentClient.put(params, function (err, data) {
+                if (err) console.log(err);
+            });
+        });
+
+        await res.send({
+            status: 200,
+            data: 'Created Metadata DB Successfully',
             message: 'OK'
         });
     };
