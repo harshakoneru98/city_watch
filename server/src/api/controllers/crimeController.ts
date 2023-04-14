@@ -4,6 +4,8 @@ import config from '../../config/config';
 import * as risk_zone from '../../config/Final_Datasets/risk_zone.json'
 import * as metadata from '../../config/Final_Datasets/metadata.json'
 import * as crime_data from '../../config/Final_Datasets/crime_data.json'
+import * as forecasted_actual_month_data from '../../config/Final_Datasets/forecasted_actual_month_data.json'
+import * as forecasted_predict_month_data from '../../config/Final_Datasets/forecasted_predict_month_data.json'
 
 AWS.config.update({
     region: config.AWS_REGION,
@@ -91,6 +93,47 @@ export default class CrimeController {
         await res.send({
             status: 200,
             data: 'Created Crime Data DB Successfully',
+            message: 'OK'
+        });
+    };
+
+    // Create Monthly Crime Data Database
+    public create_monthdata_db = async (req: Request, res: Response) => {
+        let documentClient = new AWS.DynamoDB.DocumentClient();
+
+        await forecasted_actual_month_data.forEach(async (data) => {
+            let params = {
+                TableName: config.DATABASE_NAME,
+                Item: {
+                    PK: `MNT#ACT#${data.zip_code}`,
+                    SK: `YR#${data.year}`,
+                    month_frequency: Object.entries(data.month_frequency).map(([key, value]) => ({ [key]: value })),
+                }
+            };
+
+            await documentClient.put(params, function (err, data) {
+                if (err) console.log(err);
+            });
+        });
+
+        await forecasted_predict_month_data.forEach(async (data) => {
+            let params = {
+                TableName: config.DATABASE_NAME,
+                Item: {
+                    PK: `MNT#PRD#${data.zip_code}`,
+                    SK: `YR#${data.year}`,
+                    month_frequency: Object.entries(data.month_frequency).map(([key, value]) => ({ [key]: value })),
+                }
+            };
+
+            await documentClient.put(params, function (err, data) {
+                if (err) console.log(err);
+            });
+        });
+
+        await res.send({
+            status: 200,
+            data: 'Created Month Crime Data DB Successfully',
             message: 'OK'
         });
     };
