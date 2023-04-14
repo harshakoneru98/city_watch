@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc && node lib/src/server.js"
+  },
+  "author": "Harsha Vardhan Koneru",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.15.11",
+    "aws-sdk": "^2.1358.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
+    "typescript": "^5.0.4"
+  }
+}
