@@ -8,6 +8,7 @@ import LineChart from '../../components/LineChart/LineChart';
 import PieChart from '../../components/PieChart/PieChart';
 import StackedBarChart from '../../components/StackedBarChart/StackedBarChart';
 import BarChart from '../../components/BarChart/BarChart';
+import Header from '../../components/Header/Header';
 
 interface DashboardProps {
     defaultCity: string;
@@ -75,6 +76,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
 
     return (
         <Fragment>
+            <Header />
             <div className="filter-container">
                 <div className="selectInputContainer selectInputRight">
                     <SelectInput
