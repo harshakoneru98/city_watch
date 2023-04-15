@@ -103,7 +103,7 @@ export default function SignIn(): JSX.Element {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item sx={{ textAlign: 'right' }}>
-                <Link href="#" variant="body2">
+                <Link href="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
