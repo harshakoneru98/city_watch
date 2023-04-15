@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -35,8 +36,8 @@ export default function Header() {
                     <Typography
                         variant="h6"
                         noWrap
-                        component="a"
-                        href="/dashboard"
+                        component={Link}
+                        to="/dashboard"
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
@@ -65,6 +66,8 @@ export default function Header() {
                                 color: 'white',
                                 display: 'block'
                             }}
+                            component={Link}
+                            to="/dashboard"
                         >
                             Dashboard
                         </Button>
@@ -75,6 +78,8 @@ export default function Header() {
                                 color: 'white',
                                 display: 'block'
                             }}
+                            component={Link}
+                            to="/housing"
                         >
                             Housing
                         </Button>
@@ -85,6 +90,8 @@ export default function Header() {
                                 color: 'white',
                                 display: 'block'
                             }}
+                            component={Link}
+                            to="/compare"
                         >
                             Compare
                         </Button>
@@ -122,6 +129,8 @@ export default function Header() {
                                     display: 'flex',
                                     justifyContent: 'center'
                                 }}
+                                component={Link}
+                                to="/profile"
                             >
                                 <Typography textAlign="center">
                                     Profile
@@ -134,6 +143,8 @@ export default function Header() {
                                     display: 'flex',
                                     justifyContent: 'center'
                                 }}
+                                component={Link}
+                                to="/"
                             >
                                 <Typography textAlign="center">
                                     Logout
