@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -25,6 +25,12 @@ export default function Header() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const location = useLocation();
+
+    const isActiveTab = (path: string) => {
+        return location.pathname === path;
+      };
 
     return (
         <AppBar position="static">
@@ -64,7 +70,8 @@ export default function Header() {
                                 my: 2,
                                 mr: 2,
                                 color: 'white',
-                                display: 'block'
+                                display: 'block',
+                                borderBottom: isActiveTab('/dashboard') ? '2px solid white' : ''
                             }}
                             component={Link}
                             to="/dashboard"
@@ -76,7 +83,8 @@ export default function Header() {
                                 my: 2,
                                 mr: 2,
                                 color: 'white',
-                                display: 'block'
+                                display: 'block',
+                                borderBottom: isActiveTab('/housing') ? '2px solid white' : ''
                             }}
                             component={Link}
                             to="/housing"
@@ -88,7 +96,8 @@ export default function Header() {
                                 my: 2,
                                 mr: 2,
                                 color: 'white',
-                                display: 'block'
+                                display: 'block',
+                                borderBottom: isActiveTab('/compare') ? '2px solid white' : ''
                             }}
                             component={Link}
                             to="/compare"
