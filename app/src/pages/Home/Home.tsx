@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 
-export default function Home(): JSX.Element {
+export default function Home() {
 
   return (
     <Fragment>
