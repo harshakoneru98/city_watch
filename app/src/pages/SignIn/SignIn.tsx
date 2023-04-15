@@ -1,4 +1,4 @@
-import { FormEvent, Fragment, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -47,14 +47,17 @@ export default function SignIn(): JSX.Element {
     };
 
     return (
-        <Fragment>
+        <div style={{
+            backgroundColor: '#f5f5f5',
+            height: '100vh'
+        }}>
             <AuthHeader />
             <ThemeProvider theme={theme}>
                 <Container
                     component="main"
                     maxWidth="xs"
                     sx={{
-                        backgroundColor: '#F6F7FB',
+                        backgroundColor: '#FFFFFF',
                         py: 4,
                         px: 2,
                         borderRadius: 2,
@@ -137,6 +140,6 @@ export default function SignIn(): JSX.Element {
                     </Box>
                 </Container>
             </ThemeProvider>
-        </Fragment>
+        </div>
     );
 }
