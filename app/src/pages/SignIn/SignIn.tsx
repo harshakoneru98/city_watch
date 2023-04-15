@@ -50,11 +50,25 @@ export default function SignIn(): JSX.Element {
         <Fragment>
             <AuthHeader />
             <ThemeProvider theme={theme}>
-                <Container component="main" maxWidth="xs">
+                <Container
+                    component="main"
+                    maxWidth="xs"
+                    sx={{
+                        backgroundColor: '#F6F7FB',
+                        py: 4,
+                        px: 2,
+                        borderRadius: 2,
+                        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginTop: '5rem'
+                    }}
+                >
                     <CssBaseline />
                     <Box
                         sx={{
-                            marginTop: 8,
+                            marginTop: 0,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center'

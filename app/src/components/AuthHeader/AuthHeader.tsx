@@ -58,7 +58,7 @@ export default function AuthHeader() {
                             component={Link}
                             to="/signup"
                         >
-                            SignUp
+                            Sign Up
                         </Button>
                         <Button
                             sx={{
@@ -71,7 +71,7 @@ export default function AuthHeader() {
                             component={Link}
                             to="/signin"
                         >
-                            SignIn
+                            Sign In
                         </Button>
                     </Box>
                 </Toolbar>
