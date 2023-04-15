@@ -1,10 +1,8 @@
-import * as React from 'react';
+import React, { FormEvent, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,34 +11,60 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-function Copyright(props: any) {
-    return (
-        <Typography
-            variant="body2"
-            color="text.secondary"
-            align="center"
-            {...props}
-        >
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
-
 const theme = createTheme();
 
-export default function SignUp() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+export default function SignUp(): JSX.Element {
+    const [errors, setErrors] = useState<{
+        firstName?: string;
+        lastName?: string;
+        email?: string;
+        city?: string;
+        password?: string;
+    }>({});
+
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password')
+        const firstName = data.get('firstName') as string;
+        const lastName = data.get('lastName') as string;
+        const email = data.get('email') as string;
+        const city = data.get('city') as string;
+        const password = data.get('password') as string;
+
+        const firstNameError = !firstName ? 'Please enter your first name' : '';
+        const lastNameError = !lastName ? 'Please enter your last name' : '';
+        const emailError =
+            !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+                ? 'Please enter a valid email address'
+                : '';
+        const cityError = !city ? 'Please enter your city' : '';
+        const passwordError =
+            !password ||
+            password.length < 8 ||
+            password.length > 16 ||
+            !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+=[\]{}|\\';:"<,>.?/~`]).{8,16}/.test(
+                password
+            )
+                ? 'Password must be between 8 and 16 characters long and contain at least one capital case letter, one lower case letter, one number, and one special character'
+                : '';
+
+        setErrors({
+            firstName: firstNameError,
+            lastName: lastNameError,
+            email: emailError,
+            city: cityError,
+            password: passwordError
         });
+
+        if (
+            !firstNameError &&
+            !lastNameError &&
+            !emailError &&
+            !cityError &&
+            !passwordError
+        ) {
+            console.log({ firstName, lastName, email, city, password });
+        }
     };
 
     return (
@@ -77,6 +101,8 @@ export default function SignUp() {
                                     id="firstName"
                                     label="First Name"
                                     autoFocus
+                                    error={Boolean(errors.firstName)}
+                                    helperText={errors.firstName}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -87,6 +113,8 @@ export default function SignUp() {
                                     label="Last Name"
                                     name="lastName"
                                     autoComplete="family-name"
+                                    error={Boolean(errors.lastName)}
+                                    helperText={errors.lastName}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -97,6 +125,20 @@ export default function SignUp() {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    error={Boolean(errors.email)}
+                                    helperText={errors.email}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="city"
+                                    label="City"
+                                    name="city"
+                                    autoComplete="city"
+                                    error={Boolean(errors.city)}
+                                    helperText={errors.city}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -108,17 +150,8 @@ export default function SignUp() {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            value="allowExtraEmails"
-                                            color="primary"
-                                        />
-                                    }
-                                    label="I want to receive inspiration, marketing promotions and updates via email."
+                                    error={Boolean(errors.password)}
+                                    helperText={errors.password}
                                 />
                             </Grid>
                         </Grid>
@@ -139,7 +172,6 @@ export default function SignUp() {
                         </Grid>
                     </Box>
                 </Box>
-                <Copyright sx={{ mt: 5 }} />
             </Container>
         </ThemeProvider>
     );
