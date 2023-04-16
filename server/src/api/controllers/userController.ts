@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as AWS from 'aws-sdk';
 import * as bcrypt from 'bcrypt';
 import { v4 } from 'uuid';
+import * as jwt from 'jsonwebtoken';
 import config from '../../config/config';
 
 AWS.config.update({
@@ -60,6 +61,56 @@ export default class UserController {
                     message: 'Internal Server Error'
                 });
             }
+        }
+    };
+
+    // Check User
+    public check_user = async (req: Request, res: Response) => {
+        let documentClient = new AWS.DynamoDB.DocumentClient();
+        let user = req.body
+
+        let email_check_params = {
+            TableName: config.DATABASE_NAME,
+            IndexName: config.EMAIL_INDEX,
+            KeyConditionExpression: '#email = :email',
+            ExpressionAttributeNames: { '#email': 'email' },
+            ExpressionAttributeValues: {
+                ':email': user.email
+            }
+        };
+    
+        const email_response = await documentClient
+            .query(email_check_params)
+            .promise();
+
+        if (email_response.Count === 1) {
+            const userDetails = email_response?.Items[0];
+            const isEqual = await bcrypt.compare(user.password, userDetails.password);
+            if (!isEqual) {
+                res.send({
+                    status: 200,
+                    message: 'Incorrect Password',
+                });
+            } else {
+                const token = jwt.sign(
+                    { userId: userDetails.SK, email: userDetails.email },
+                    config.AUTH_KEY,
+                    {
+                        expiresIn: '1h'
+                    }
+                );
+                res.send({
+                    status: 200,
+                    userId: userDetails.SK,
+                    token: token,
+                    tokenExpiration: 1
+                });
+            }
+        } else {
+            res.send({
+                status: 200,
+                message: 'Invalid Credentials',
+            });
         }
     };
 }

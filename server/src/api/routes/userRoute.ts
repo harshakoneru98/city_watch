@@ -8,4 +8,8 @@ const Controller = new UserController()
 // Creating Database
 router.post('/create_user', Controller.create_user)
 
+// Check User in Database
+router.post('/check_user', Controller.check_user)
+
+
 export default router;
