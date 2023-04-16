@@ -2,6 +2,9 @@ import { FormEvent, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -19,6 +22,8 @@ const theme = createTheme();
 
 export default function SignUp(): JSX.Element {
     const dispatch = useDispatch();
+    const [cities, setCities] = useState<string[]>([]);
+    const [selectedCity, setSelectedCity] = useState<string>('');
 
     const { metaData, metaDataStatus, metaDataError } = useSelector(
         (state: RootState) => state.metaDataInfo
@@ -36,9 +41,14 @@ export default function SignUp(): JSX.Element {
         console.log(metaDataError);
     }
 
-    if(metaData){
-        console.log('MetaData : ', metaData)
-    }
+    useEffect(() => {
+        if (metaData) {
+            const cities = [
+                ...new Set(metaData.map((obj: any) => obj.primary_city))
+            ].sort();
+            setCities(cities);
+        }
+    }, [metaData]);
 
     const [errors, setErrors] = useState<{
         firstName?: string;
@@ -54,7 +64,7 @@ export default function SignUp(): JSX.Element {
         const firstName = data.get('firstName') as string;
         const lastName = data.get('lastName') as string;
         const email = data.get('email') as string;
-        const city = data.get('city') as string;
+        const city = event.currentTarget.city.value as string;
         const password = data.get('password') as string;
 
         const firstNameError = !firstName ? 'Please enter your first name' : '';
@@ -177,16 +187,45 @@ export default function SignUp(): JSX.Element {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
+                                    <InputLabel id="city-label" required>
+                                        City
+                                    </InputLabel>
+                                    <Select
                                         fullWidth
                                         id="city"
-                                        label="City"
                                         name="city"
                                         autoComplete="city"
                                         error={Boolean(errors.city)}
-                                        helperText={errors.city}
-                                    />
+                                        value={selectedCity}
+                                        onChange={(event) => {
+                                            const value = event.target
+                                                .value as string;
+                                            setSelectedCity(value);
+                                            setErrors({
+                                                ...errors,
+                                                city: !value
+                                                    ? 'Please enter your city'
+                                                    : ''
+                                            });
+                                        }}
+                                        labelId="city-label"
+                                        label="City"
+                                    >
+                                        {cities?.map((city) => (
+                                            <MenuItem key={city} value={city}>
+                                                {city}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+
+                                    {Boolean(errors.city) && (
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                        >
+                                            {errors.city}
+                                        </Typography>
+                                    )}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
