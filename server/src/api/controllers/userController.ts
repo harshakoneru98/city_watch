@@ -103,7 +103,8 @@ export default class UserController {
                     status: 200,
                     userId: userDetails.SK,
                     token: token,
-                    tokenExpiration: 1
+                    tokenExpiration: 1,
+                    city_located: userDetails.city_located
                 });
             }
         } else {

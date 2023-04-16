@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,15 +11,19 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
+import {createOrCheckUser} from '../../api'
 
 const theme = createTheme();
 
 export default function SignIn(): JSX.Element {
+    let navigate = useNavigate();
+
     const [errors, setErrors] = useState<{ email?: string; password?: string }>(
         {}
     );
+    const [wrongCredentials, setWrongCredentials] = useState<string>('');
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const email = data.get('email') as string;
@@ -42,7 +46,18 @@ export default function SignIn(): JSX.Element {
         setErrors({ email: emailError, password: passwordError });
 
         if (!emailError && !passwordError) {
-            console.log({ email, password });
+            const body_data = { email, password };
+            try {
+                const user_response_message = await createOrCheckUser('user/check_user', JSON.stringify(body_data))
+                if (user_response_message.message) {
+                    setWrongCredentials(user_response_message.message)
+                }else{
+                    setWrongCredentials('')
+                    navigate('/dashboard')
+                }
+            } catch (error) {
+                console.log('Error : ', error);
+            }
         }
     };
 
@@ -121,6 +136,11 @@ export default function SignIn(): JSX.Element {
                             >
                                 Sign In
                             </Button>
+                            {wrongCredentials != '' && (
+                                <Typography color="error" variant="body1">
+                                    {wrongCredentials}
+                                </Typography>
+                            )}
                             <Grid container justifyContent="flex-end">
                                 <Grid item sx={{ textAlign: 'right' }}>
                                     <Link to="/signup">

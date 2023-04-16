@@ -12,15 +12,15 @@ export const fetchMetaData = async (endpoint: string) => {
     }
 };
 
-// Create User
-export const createUser = async (endpoint: string, data: any) => {
+// Create or Check User
+export const createOrCheckUser = async (endpoint: string, data: any) => {
     try {
         const response = await axios.post(`${API_BASE_URL}${endpoint}`, data, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-        return response.data.message;
+        return response.data;
     } catch (error) {
         throw error;
     }
