@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
-import {createOrCheckUser} from '../../api'
+import {postAxiosRequest} from '../../api'
 
 const theme = createTheme();
 
@@ -48,7 +48,7 @@ export default function SignIn(): JSX.Element {
         if (!emailError && !passwordError) {
             const body_data = { email, password };
             try {
-                const user_response_message = await createOrCheckUser('user/check_user', JSON.stringify(body_data))
+                const user_response_message = await postAxiosRequest('user/check_user', JSON.stringify(body_data))
                 if (user_response_message.message) {
                     setWrongCredentials(user_response_message.message)
                 }else{

@@ -18,7 +18,7 @@ import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
-import {createOrCheckUser} from '../../api'
+import {postAxiosRequest} from '../../api'
 
 const theme = createTheme();
 
@@ -106,7 +106,7 @@ export default function SignUp(): JSX.Element {
         ) {
             const body_data = { firstName, lastName, email, city, password };
             try {
-                const user_response_message = await createOrCheckUser('user/create_user', JSON.stringify(body_data))
+                const user_response_message = await postAxiosRequest('user/create_user', JSON.stringify(body_data))
                 if (user_response_message.message) {
                     if (user_response_message.message === 'Email already exists') {
                         setEmailExists(true);

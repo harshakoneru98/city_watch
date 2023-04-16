@@ -1,7 +1,7 @@
 // src/store/slices/mySlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { MetaDataState, MetaData } from '../../api/types';
-import { fetchMetaData } from '../../api';
+import { getAxiosRequest } from '../../api';
 
 const initialState: MetaDataState = {
   metaData: [],
@@ -12,7 +12,7 @@ const initialState: MetaDataState = {
 export const fetchMetaDataInfoData = createAsyncThunk(
   'metaDataInfo/fetchMetaDataInfoData',
   async (endpoint: string) => {
-    const response: MetaData[] = await fetchMetaData(endpoint);
+    const response: MetaData[] = await getAxiosRequest(endpoint);
     return response;
   }
 );

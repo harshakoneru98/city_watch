@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_SERVER_URL;
 
-// Fetch the Metadata Information of Zipcodes
-export const fetchMetaData = async (endpoint: string) => {
+// Get Axios Request
+export const getAxiosRequest = async (endpoint: string) => {
     try {
         const response = await axios.get(`${API_BASE_URL}${endpoint}`);
         return response.data.data;
@@ -12,8 +12,8 @@ export const fetchMetaData = async (endpoint: string) => {
     }
 };
 
-// Create or Check User
-export const createOrCheckUser = async (endpoint: string, data: any) => {
+// Post Axios Request
+export const postAxiosRequest = async (endpoint: string, data: any) => {
     try {
         const response = await axios.post(`${API_BASE_URL}${endpoint}`, data, {
             headers: {
