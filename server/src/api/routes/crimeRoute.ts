@@ -12,4 +12,7 @@ router.get('/create_crimedata_db/', Controller.create_crimedata_db)
 router.get('/create_monthdata_db/', Controller.create_monthdata_db)
 router.get('/create_weekdata_db/', Controller.create_weekdata_db)
 
+// Get Metadata Info
+router.get('/get_metadata_info/', Controller.get_metadata_info)
+
 export default router;

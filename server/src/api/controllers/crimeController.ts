@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import * as AWS from 'aws-sdk';
 import config from '../../config/config';
-import * as risk_zone from '../../config/Final_Datasets/risk_zone.json'
-import * as metadata from '../../config/Final_Datasets/metadata.json'
-import * as crime_data from '../../config/Final_Datasets/crime_data.json'
-import * as forecasted_actual_month_data from '../../config/Final_Datasets/forecasted_actual_month_data.json'
-import * as forecasted_predict_month_data from '../../config/Final_Datasets/forecasted_predict_month_data.json'
-import * as forecasted_actual_week_data from '../../config/Final_Datasets/forecasted_actual_week_data.json'
-import * as forecasted_predict_week_data from '../../config/Final_Datasets/forecasted_predict_week_data.json'
+import * as risk_zone from '../../config/Final_Datasets/risk_zone.json';
+import * as metadata from '../../config/Final_Datasets/metadata.json';
+import * as crime_data from '../../config/Final_Datasets/crime_data.json';
+import * as forecasted_actual_month_data from '../../config/Final_Datasets/forecasted_actual_month_data.json';
+import * as forecasted_predict_month_data from '../../config/Final_Datasets/forecasted_predict_month_data.json';
+import * as forecasted_actual_week_data from '../../config/Final_Datasets/forecasted_actual_week_data.json';
+import * as forecasted_predict_week_data from '../../config/Final_Datasets/forecasted_predict_week_data.json';
 
 AWS.config.update({
     region: config.AWS_REGION,
@@ -80,10 +80,18 @@ export default class CrimeController {
                 Item: {
                     PK: `CRIME#${data.zip_code}`,
                     SK: `YR#${data.year}`,
-                    gender_distribution: Object.entries(data.gender_distribution).map(([key, value]) => ({ [key]: value })),
-                    age_distribution: Object.entries(data.age_distribution).map(([key, value]) => ({ [key]: value })),
-                    ethnicity_distribution: Object.entries(data.ethnicity_distribution).map(([key, value]) => ({ [key]: value })),
-                    top5_crimes: Object.entries(data.top5_crimes).map(([key, value]) => ({ [key]: value }))
+                    gender_distribution: Object.entries(
+                        data.gender_distribution
+                    ).map(([key, value]) => ({ [key]: value })),
+                    age_distribution: Object.entries(data.age_distribution).map(
+                        ([key, value]) => ({ [key]: value })
+                    ),
+                    ethnicity_distribution: Object.entries(
+                        data.ethnicity_distribution
+                    ).map(([key, value]) => ({ [key]: value })),
+                    top5_crimes: Object.entries(data.top5_crimes).map(
+                        ([key, value]) => ({ [key]: value })
+                    )
                 }
             };
 
@@ -109,7 +117,9 @@ export default class CrimeController {
                 Item: {
                     PK: `MNT#ACT#${data.zip_code}`,
                     SK: `YR#${data.year}`,
-                    month_frequency: Object.entries(data.month_frequency).map(([key, value]) => ({ [key]: value })),
+                    month_frequency: Object.entries(data.month_frequency).map(
+                        ([key, value]) => ({ [key]: value })
+                    )
                 }
             };
 
@@ -124,7 +134,9 @@ export default class CrimeController {
                 Item: {
                     PK: `MNT#PRD#${data.zip_code}`,
                     SK: `YR#${data.year}`,
-                    month_frequency: Object.entries(data.month_frequency).map(([key, value]) => ({ [key]: value })),
+                    month_frequency: Object.entries(data.month_frequency).map(
+                        ([key, value]) => ({ [key]: value })
+                    )
                 }
             };
 
@@ -150,7 +162,9 @@ export default class CrimeController {
                 Item: {
                     PK: `WEK#ACT#${data.zip_code}`,
                     SK: `YR#${data.year}`,
-                    week_frequency: Object.entries(data.week_frequency).map(([key, value]) => ({ [key]: value })),
+                    week_frequency: Object.entries(data.week_frequency).map(
+                        ([key, value]) => ({ [key]: value })
+                    )
                 }
             };
 
@@ -165,7 +179,9 @@ export default class CrimeController {
                 Item: {
                     PK: `WEK#PRD#${data.zip_code}`,
                     SK: `YR#${data.year}`,
-                    week_frequency: Object.entries(data.week_frequency).map(([key, value]) => ({ [key]: value })),
+                    week_frequency: Object.entries(data.week_frequency).map(
+                        ([key, value]) => ({ [key]: value })
+                    )
                 }
             };
 
@@ -181,4 +197,45 @@ export default class CrimeController {
         });
     };
 
+    // Get MetaData Information
+    public get_metadata_info = async (req: Request, res: Response) => {
+        try {
+            let documentClient = new AWS.DynamoDB.DocumentClient();
+
+            let params = {
+                TableName: config.DATABASE_NAME,
+                FilterExpression: 'begins_with(PK, :pk)',
+                ExpressionAttributeValues: {
+                    ':pk': 'META'
+                },
+                ExclusiveStartKey: undefined
+            };
+
+            let items = [];
+
+            while (true) {
+                let data = await documentClient.scan(params).promise();
+                items = items.concat(data.Items);
+                params.ExclusiveStartKey = data.LastEvaluatedKey;
+                if (!params.ExclusiveStartKey) break;
+            }
+
+            const transformedData = await items.map((location) => ({
+                primary_city: location.primary_city,
+                zip_code: location.SK.split('#')[1],
+                latitude: location.latitude,
+                longitude: location.longitude
+            }));
+
+            res.send({
+                status: 200,
+                data: transformedData,
+                message: 'Fetched Metadata of Locations'
+            });
+        } catch (err) {
+            res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+    };
 }
