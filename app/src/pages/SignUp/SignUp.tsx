@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -187,37 +188,55 @@ export default function SignUp(): JSX.Element {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <InputLabel id="city-label" required>
-                                        City
-                                    </InputLabel>
-                                    <Select
-                                        fullWidth
-                                        id="city"
-                                        name="city"
-                                        autoComplete="city"
-                                        error={Boolean(errors.city)}
-                                        value={selectedCity}
-                                        onChange={(event) => {
-                                            const value = event.target
-                                                .value as string;
-                                            setSelectedCity(value);
-                                            setErrors({
-                                                ...errors,
-                                                city: !value
-                                                    ? 'Please enter your city'
-                                                    : ''
-                                            });
-                                        }}
-                                        labelId="city-label"
-                                        label="City"
-                                    >
-                                        {cities?.map((city) => (
-                                            <MenuItem key={city} value={city}>
-                                                {city}
+                                    <FormControl fullWidth>
+                                        <InputLabel
+                                            id="city-label"
+                                            required
+                                            shrink={Boolean(selectedCity)}
+                                        >
+                                            City in LA County
+                                        </InputLabel>
+                                        <Select
+                                            fullWidth
+                                            id="city"
+                                            name="city"
+                                            autoComplete="city"
+                                            error={Boolean(errors.city)}
+                                            value={selectedCity}
+                                            onChange={(event) => {
+                                                const value = event.target
+                                                    .value as string;
+                                                setSelectedCity(value);
+                                                setErrors({
+                                                    ...errors,
+                                                    city: !value
+                                                        ? 'Please enter your city'
+                                                        : ''
+                                                });
+                                            }}
+                                            placeholder="City"
+                                            labelId="city-label"
+                                            label="City in LA County"
+                                        >
+                                            <MenuItem
+                                                value="Other City"
+                                                style={{
+                                                    borderBottom:
+                                                        '1px solid #ccc'
+                                                }}
+                                            >
+                                                Other City
                                             </MenuItem>
-                                        ))}
-                                    </Select>
-
+                                            {cities?.map((city) => (
+                                                <MenuItem
+                                                    key={city}
+                                                    value={city}
+                                                >
+                                                    {city}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
                                     {Boolean(errors.city) && (
                                         <Typography
                                             color="error"
