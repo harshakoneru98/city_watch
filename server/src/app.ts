@@ -4,6 +4,7 @@ import * as bodyParser from 'body-parser'
 
 import crimeRoute from './api/routes/crimeRoute'
 import housingRoute from './api/routes/housingRoute'
+import userRoute from './api/routes/userRoute'
 
 export const app = express();
 app.use(morgan('dev'))
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 // Routes which should handle requests
 app.use('/api/crime', crimeRoute);
 app.use('/api/housing', housingRoute);
+app.use('/api/user', userRoute);
 
 app.use((req, res, next) => {
     const error = new Error('Not found')

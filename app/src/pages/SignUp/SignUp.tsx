@@ -1,5 +1,5 @@
 import { FormEvent, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
@@ -18,13 +18,17 @@ import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
+import axios from 'axios';
 
 const theme = createTheme();
 
 export default function SignUp(): JSX.Element {
     const dispatch = useDispatch();
+    let navigate = useNavigate();
+
     const [cities, setCities] = useState<string[]>([]);
     const [selectedCity, setSelectedCity] = useState<string>('');
+    const [emailExists, setEmailExists] = useState<boolean>(false);
 
     const { metaData, metaDataStatus, metaDataError } = useSelector(
         (state: RootState) => state.metaDataInfo
@@ -59,7 +63,7 @@ export default function SignUp(): JSX.Element {
         password?: string;
     }>({});
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const firstName = data.get('firstName') as string;
@@ -100,7 +104,29 @@ export default function SignUp(): JSX.Element {
             !cityError &&
             !passwordError
         ) {
-            console.log({ firstName, lastName, email, city, password });
+            const body_data = { firstName, lastName, email, city, password };
+            const API_BASE_URL = import.meta.env.VITE_SERVER_URL;
+            try {
+                const user_response = await axios.post(
+                    API_BASE_URL + 'user/create_user',
+                    JSON.stringify(body_data),
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
+                if (user_response.data.message) {
+                    if (user_response.data.message === 'Email already exists') {
+                        setEmailExists(true);
+                    } else {
+                        setEmailExists(false);
+                        navigate('/signin')
+                    }
+                }
+            } catch (error) {
+                console.log('Error : ', error);
+            }
         }
     };
 
@@ -268,6 +294,11 @@ export default function SignUp(): JSX.Element {
                             >
                                 Sign Up
                             </Button>
+                            {emailExists && (
+                                <Typography color="error" variant="body1">
+                                    Email already exists
+                                </Typography>
+                            )}
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
                                     <Link to="/signin">
