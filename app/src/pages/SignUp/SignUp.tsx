@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -11,10 +11,35 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store';
+import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
 
 const theme = createTheme();
 
 export default function SignUp(): JSX.Element {
+    const dispatch = useDispatch();
+
+    const { metaData, metaDataStatus, metaDataError } = useSelector(
+        (state: RootState) => state.metaDataInfo
+    );
+
+    useEffect(() => {
+        dispatch(fetchMetaDataInfoData('crime/get_metadata_info/'));
+    }, [dispatch]);
+
+    if (metaDataStatus === 'loading') {
+        console.log('Loading');
+    }
+
+    if (metaDataStatus === 'failed') {
+        console.log(metaDataError);
+    }
+
+    if(metaData){
+        console.log('MetaData : ', metaData)
+    }
+
     const [errors, setErrors] = useState<{
         firstName?: string;
         lastName?: string;
@@ -69,10 +94,12 @@ export default function SignUp(): JSX.Element {
     };
 
     return (
-        <div style={{
-            backgroundColor: '#f5f5f5',
-            height: '100vh'
-        }}>
+        <div
+            style={{
+                backgroundColor: '#f5f5f5',
+                height: '100vh'
+            }}
+        >
             <AuthHeader />
             <ThemeProvider theme={theme}>
                 <Container

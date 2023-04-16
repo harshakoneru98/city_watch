@@ -1,0 +1,41 @@
+// src/store/slices/mySlice.ts
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { MetaDataState, MetaData } from '../../api/types';
+import { fetchMetaData } from '../../api';
+
+const initialState: MetaDataState = {
+  metaData: [],
+  metaDataStatus: 'idle',
+  metaDataError: null,
+};
+
+export const fetchMetaDataInfoData = createAsyncThunk(
+  'metaDataInfo/fetchMetaDataInfoData',
+  async (endpoint: string) => {
+    const response: MetaData[] = await fetchMetaData(endpoint);
+    return response;
+  }
+);
+
+const metadataSlice = createSlice({
+  name: 'metaDataInfo',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchMetaDataInfoData.pending, (state) => {
+        state.metaDataStatus = 'loading';
+      })
+      .addCase(fetchMetaDataInfoData.fulfilled, (state, action) => {
+        state.metaDataStatus = 'succeeded';
+        state.metaData = action.payload;
+        state.metaDataError = null;
+      })
+      .addCase(fetchMetaDataInfoData.rejected, (state, action) => {
+        state.metaDataStatus = 'failed';
+        state.metaDataError = action.error.message || 'Fetching Metadata Failed';
+      });
+  },
+});
+
+export default metadataSlice.reducer;
