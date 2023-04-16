@@ -18,7 +18,7 @@ import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
-import axios from 'axios';
+import {createUser} from '../../api'
 
 const theme = createTheme();
 
@@ -105,19 +105,10 @@ export default function SignUp(): JSX.Element {
             !passwordError
         ) {
             const body_data = { firstName, lastName, email, city, password };
-            const API_BASE_URL = import.meta.env.VITE_SERVER_URL;
             try {
-                const user_response = await axios.post(
-                    API_BASE_URL + 'user/create_user',
-                    JSON.stringify(body_data),
-                    {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
-                );
-                if (user_response.data.message) {
-                    if (user_response.data.message === 'Email already exists') {
+                const user_response_message = await createUser('user/create_user', JSON.stringify(body_data))
+                if (user_response_message) {
+                    if (user_response_message === 'Email already exists') {
                         setEmailExists(true);
                     } else {
                         setEmailExists(false);
