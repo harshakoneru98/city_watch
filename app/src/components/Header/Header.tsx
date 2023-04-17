@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -12,8 +12,11 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
+import AuthContext from '../../context/auth-context';
 
 export default function Header() {
+    let contextType = useContext(AuthContext);
+
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
         null
     );
@@ -26,18 +29,27 @@ export default function Header() {
         setAnchorElUser(null);
     };
 
+    const clickLogout = () => {
+        handleCloseUserMenu()
+        contextType.logout()
+    }
+
     const location = useLocation();
 
     const isActiveTab = (path: string) => {
         return location.pathname === path;
-      };
+    };
 
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <LocationCityIcon
-                        sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize: 30 }}
+                        sx={{
+                            display: { xs: 'none', md: 'flex' },
+                            mr: 1,
+                            fontSize: 30
+                        }}
                     />
                     <Typography
                         variant="h6"
@@ -71,7 +83,9 @@ export default function Header() {
                                 mr: 2,
                                 color: 'white',
                                 display: 'block',
-                                borderBottom: isActiveTab('/dashboard') ? '2px solid white' : ''
+                                borderBottom: isActiveTab('/dashboard')
+                                    ? '2px solid white'
+                                    : ''
                             }}
                             component={Link}
                             to="/dashboard"
@@ -84,7 +98,9 @@ export default function Header() {
                                 mr: 2,
                                 color: 'white',
                                 display: 'block',
-                                borderBottom: isActiveTab('/housing') ? '2px solid white' : ''
+                                borderBottom: isActiveTab('/housing')
+                                    ? '2px solid white'
+                                    : ''
                             }}
                             component={Link}
                             to="/housing"
@@ -97,7 +113,9 @@ export default function Header() {
                                 mr: 2,
                                 color: 'white',
                                 display: 'block',
-                                borderBottom: isActiveTab('/compare') ? '2px solid white' : ''
+                                borderBottom: isActiveTab('/compare')
+                                    ? '2px solid white'
+                                    : ''
                             }}
                             component={Link}
                             to="/compare"
@@ -112,7 +130,9 @@ export default function Header() {
                                 onClick={handleOpenUserMenu}
                                 sx={{ p: 0 }}
                             >
-                                <AccountCircle sx={{color: 'white', fontSize: 30}}/>
+                                <AccountCircle
+                                    sx={{ color: 'white', fontSize: 30 }}
+                                />
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -146,14 +166,12 @@ export default function Header() {
                                 </Typography>
                             </MenuItem>
                             <MenuItem
-                                onClick={handleCloseUserMenu}
+                                onClick={clickLogout}
                                 sx={{
                                     width: '100px',
                                     display: 'flex',
                                     justifyContent: 'center'
                                 }}
-                                component={Link}
-                                to="/"
                             >
                                 <Typography textAlign="center">
                                     Logout

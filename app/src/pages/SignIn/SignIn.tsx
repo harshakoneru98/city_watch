@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -11,12 +11,14 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
-import {postAxiosRequest} from '../../api'
+import { postAxiosRequest } from '../../api';
+import AuthContext from '../../context/auth-context';
 
 const theme = createTheme();
 
 export default function SignIn(): JSX.Element {
     let navigate = useNavigate();
+    let contextType = useContext(AuthContext);
 
     const [errors, setErrors] = useState<{ email?: string; password?: string }>(
         {}
@@ -48,12 +50,23 @@ export default function SignIn(): JSX.Element {
         if (!emailError && !passwordError) {
             const body_data = { email, password };
             try {
-                const user_response_message = await postAxiosRequest('user/check_user', JSON.stringify(body_data))
+                const user_response_message = await postAxiosRequest(
+                    'user/check_user',
+                    JSON.stringify(body_data)
+                );
                 if (user_response_message.message) {
-                    setWrongCredentials(user_response_message.message)
-                }else{
-                    setWrongCredentials('')
-                    navigate('/dashboard')
+                    setWrongCredentials(user_response_message.message);
+                } else {
+                    setWrongCredentials('');
+                    if (user_response_message?.token) {
+                        contextType.login(
+                            user_response_message.token,
+                            user_response_message.userId,
+                            user_response_message.tokenExpiration,
+                            user_response_message.city_located
+                        );
+                    }
+                    navigate('/dashboard');
                 }
             } catch (error) {
                 console.log('Error : ', error);
@@ -62,10 +75,12 @@ export default function SignIn(): JSX.Element {
     };
 
     return (
-        <div style={{
-            backgroundColor: '#f5f5f5',
-            height: '100vh'
-        }}>
+        <div
+            style={{
+                backgroundColor: '#f5f5f5',
+                height: '100vh'
+            }}
+        >
             <AuthHeader />
             <ThemeProvider theme={theme}>
                 <Container
