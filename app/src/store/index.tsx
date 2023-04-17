@@ -1,11 +1,11 @@
 // src/store/index.ts
 import { configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
-import metaDataReducer from './slices/metadataSlice';
+import metadataReducer from './slices/metadataSlice';
 
 const store = configureStore({
   reducer: {
-    metaDataInfo: metaDataReducer,
+    metaDataInfo: metadataReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });

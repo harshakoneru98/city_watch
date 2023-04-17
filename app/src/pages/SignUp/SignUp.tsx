@@ -19,11 +19,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
 import {postAxiosRequest} from '../../api'
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from '@reduxjs/toolkit';
 
 const theme = createTheme();
 
 export default function SignUp(): JSX.Element {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
     let navigate = useNavigate();
 
     const [cities, setCities] = useState<string[]>([]);

@@ -10,7 +10,7 @@ const initialState: MetaDataState = {
 };
 
 export const fetchMetaDataInfoData = createAsyncThunk(
-  'metaDataInfo/fetchMetaDataInfoData',
+  'crime/get_metadata_info/',
   async (endpoint: string) => {
     const response: MetaData[] = await getAxiosRequest(endpoint);
     return response;
