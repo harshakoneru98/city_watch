@@ -269,40 +269,93 @@ export default class CrimeController {
                 a.zip_code.localeCompare(b.zip_code)
             );
 
+            let risk_zone_data = await Promise.all(
+                transformedData.map(async (data: any) => {
+                    var risk_zone_params = {
+                        TableName: config.DATABASE_NAME,
+                        KeyConditionExpression:
+                            '#PK = :PK and begins_with(#SK, :SK)',
+                        ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
+                        ExpressionAttributeValues: {
+                            ':PK': 'RSK#' + data.zip_code,
+                            ':SK': 'YR#'
+                        }
+                    };
 
-            let risk_zone_data = await Promise.all(transformedData.map(async (data: any) => {
-                var risk_zone_params = {
-                    TableName: config.DATABASE_NAME,
-                    KeyConditionExpression:
-                        '#PK = :PK and begins_with(#SK, :SK)',
-                    ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
-                    ExpressionAttributeValues: {
-                        ':PK': 'RSK#' + data.zip_code,
-                        ':SK': 'YR#'
-                    }
-                };
+                    const risk_zone_data = await documentClient
+                        .query(risk_zone_params)
+                        .promise();
 
-                const risk_zone_data = await documentClient
-                    .query(risk_zone_params)
-                    .promise();
-                
-                let yearly_risk_data = {}
-                
-                risk_zone_data.Items.forEach((yearly_data:any) => {
-                    yearly_risk_data[yearly_data.SK.split('#')[1]]  = {
-                        risk_zone: yearly_data.risk_zone
-                    }
+                    let yearly_risk_data = {};
+
+                    risk_zone_data.Items.forEach((yearly_data: any) => {
+                        yearly_risk_data[yearly_data.SK.split('#')[1]] = {
+                            risk_zone: yearly_data.risk_zone
+                        };
+                    });
+
+                    return {
+                        ...data,
+                        yearly_data: yearly_risk_data
+                    };
                 })
+            );
 
-                return {
-                    ...data,
-                    yearly_data: yearly_risk_data
-                }
-            }));
+            let updated_crime_data = await Promise.all(
+                risk_zone_data.slice(0, 2).map(async (data: any) => {
+                    const new_crime_data = await Promise.all(
+                        Object.keys(data.yearly_data).map(async (year) => {
+                            var crime_params = {
+                                TableName: config.DATABASE_NAME,
+                                KeyConditionExpression:
+                                    '#PK = :PK and #SK = :SK',
+                                ExpressionAttributeNames: {
+                                    '#PK': 'PK',
+                                    '#SK': 'SK'
+                                },
+                                ExpressionAttributeValues: {
+                                    ':PK': 'CRIME#' + data.zip_code,
+                                    ':SK': 'YR#' + year
+                                }
+                            };
+
+                            const crime_data = await documentClient
+                                .query(crime_params)
+                                .promise();
+                            return {
+                                year: crime_data.Items[0].SK.split('#')[1],
+                                ethnicity_distribution:
+                                    crime_data.Items[0].ethnicity_distribution,
+                                gender_distribution:
+                                    crime_data.Items[0].gender_distribution,
+                                age_distribution:
+                                    crime_data.Items[0].age_distribution,
+                                top5_crimes: crime_data.Items[0].top5_crimes
+                            };
+                        })
+                    );
+
+                    for (let i = 0; i < new_crime_data.length; i++) {
+                        const year = new_crime_data[i].year;
+
+                        if (data.yearly_data.hasOwnProperty(year)) {
+                            data.yearly_data[year].ethnicity_distribution =
+                                new_crime_data[i].ethnicity_distribution;
+                            data.yearly_data[year].gender_distribution =
+                                new_crime_data[i].gender_distribution;
+                            data.yearly_data[year].age_distribution =
+                                new_crime_data[i].age_distribution;
+                            data.yearly_data[year].top5_crimes =
+                                new_crime_data[i].top5_crimes;
+                        }
+                    }
+                    return data;
+                })
+            );
 
             res.send({
                 status: 200,
-                data: risk_zone_data,
+                data: updated_crime_data,
                 message: 'Fetched Crime Data of Locations'
             });
         } catch (err) {
