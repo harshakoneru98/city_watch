@@ -1,7 +1,7 @@
 import './LocationInfo.scss'
 
 interface DataProps {
-    zip_code: number;
+    zip_code: string;
     risk_zone: string;
     latitude: number;
     longitude: number;

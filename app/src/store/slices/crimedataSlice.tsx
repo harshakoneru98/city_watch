@@ -13,8 +13,8 @@ export const fetchCrimeDataInfoData = createAsyncThunk(
   'crime/get_crimedata_info_by_year_zipcode',
   async (payload: { endpoint: string, year: string, zipcodes: string[] }) => {
     const { endpoint, year, zipcodes } = payload;
-    const response: CrimeData[] = await postAxiosRequest(endpoint, JSON.stringify({year, zipcodes}));
-    return response;
+    const response: any = await postAxiosRequest(endpoint, JSON.stringify({year, zipcodes}));
+    return response.data;
   }
 );
 

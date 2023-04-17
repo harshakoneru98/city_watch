@@ -53,12 +53,12 @@ export default function Map({
             lng: zip_code_info['longitude']
         };
 
-        if (zip_code_info['risk_zone'] === 'Low Risk Zone') {
+        if (zip_code_info['riskZone'] === 'Low Risk Zone') {
             return {
                 color: '#007500',
                 center: center
             };
-        } else if (zip_code_info['risk_zone'] === 'Moderate Risk Zone') {
+        } else if (zip_code_info['riskZone'] === 'Medium Risk Zone') {
             return {
                 color: '#FFA500',
                 center: center
@@ -94,7 +94,7 @@ export default function Map({
                 setLocationInfo(false);
                 circle.addListener('click', () => {
                     if (onValChange) {
-                        onValChange(data[i].zip_code);
+                        onValChange(data[i].zipCode);
                     }
                 });
             }
@@ -147,8 +147,8 @@ export default function Map({
             ></GoogleMapReact>
             {locationInfo && (
                 <LocationInfo
-                    zip_code={data[0].zip_code}
-                    risk_zone={data[0].risk_zone}
+                    zip_code={data[0].zipCode}
+                    risk_zone={data[0].riskZone}
                     latitude={data[0].latitude}
                     longitude={data[0].longitude}
                 />

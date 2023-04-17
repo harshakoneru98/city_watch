@@ -41,6 +41,8 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     const [zipCodes, setZipCodes] = useState<any[]>([]);
     const [selectedZipcode, setSelectedZipcode] = useState<any>();
 
+    const [mapData, setMapData] = useState<any>();
+
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
 
@@ -92,7 +94,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     }, [metaData]);
 
     useEffect(() => {
-        console.log('Selected City : ', selectedCity)
+        console.log('Selected City : ', selectedCity);
         if (selectedCity) {
             dispatch(
                 fetchZipDataInfoData({
@@ -138,7 +140,16 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     }, [zipCodes, selectedZipcode, selectedYear]);
 
     useEffect(() => {
-        console.log('Crime Data : ', crimeData);
+        if (crimeData.length != 0) {
+            console.log('Crime Data : ', crimeData);
+            let map_filtered_data = crimeData.map((obj) => ({
+                zipCode: obj.zip_code,
+                riskZone: obj.risk_zone,
+                latitude: obj.latitude,
+                longitude: obj.longitude
+            }));
+            setMapData(map_filtered_data);
+        }
     }, [crimeData]);
 
     const handleCityChange = (city: string) => {
@@ -190,33 +201,35 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                             />
                         </div>
                     </div>
-                    {/* <Grid container spacing={2}>
-                        <Grid item xs={8}>
-                            <Map
-                                data={filteredData}
-                                onValChange={handleZipcodeChange}
-                                selectedZipCode={selectedZipcode}
-                            />
+                    {crimeData.length > 0 && (
+                        <Grid container spacing={2}>
+                            <Grid item xs={8}>
+                                <Map
+                                    data={mapData}
+                                    onValChange={handleZipcodeChange}
+                                    selectedZipCode={selectedZipcode}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <PieChart />
+                            </Grid>
+                            <Grid item xs={8}>
+                                <LineChart />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <StackedBarChart />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <PieChart />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <PieChart />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <PieChart />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={4}>
-                            <PieChart />
-                        </Grid>
-                        <Grid item xs={8}>
-                            <LineChart />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <StackedBarChart />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <PieChart />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <PieChart />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <PieChart />
-                        </Grid>
-                    </Grid> */}
+                    )}
                 </div>
             </div>
         </Fragment>
