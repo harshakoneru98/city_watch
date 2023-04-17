@@ -326,6 +326,173 @@ export default class CrimeController {
         }
     };
 
+    // Get CrimeData Information based on Year and Zipcode
+    public get_crimedata_info_by_year_zipcode = async (
+        req: Request,
+        res: Response
+    ) => {
+        try {
+            let documentClient = new AWS.DynamoDB.DocumentClient();
+            let { zipcodes, year } = req.body;
+
+            let transformedData = await Promise.all(
+                zipcodes.map(async (zip_code: any) => {
+                    let meta_data_params = {
+                        TableName: config.DATABASE_NAME,
+                        KeyConditionExpression: '#PK = :PK and #SK = :SK',
+                        ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
+                        ExpressionAttributeValues: {
+                            ':PK': 'META#' + zip_code,
+                            ':SK': 'INFO#' + zip_code
+                        }
+                    };
+
+                    let risk_zone_params = {
+                        TableName: config.DATABASE_NAME,
+                        KeyConditionExpression: '#PK = :PK and #SK = :SK',
+                        ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
+                        ExpressionAttributeValues: {
+                            ':PK': 'RSK#' + zip_code,
+                            ':SK': 'YR#' + year
+                        }
+                    };
+
+                    let crime_data_params = {
+                        TableName: config.DATABASE_NAME,
+                        KeyConditionExpression: '#PK = :PK and #SK = :SK',
+                        ExpressionAttributeNames: {
+                            '#PK': 'PK',
+                            '#SK': 'SK'
+                        },
+                        ExpressionAttributeValues: {
+                            ':PK': 'CRIME#' + zip_code,
+                            ':SK': 'YR#' + year
+                        }
+                    };
+
+                    let actual_month_crime_freq_params = {
+                        TableName: config.DATABASE_NAME,
+                        KeyConditionExpression: '#PK = :PK and #SK = :SK',
+                        ExpressionAttributeNames: {
+                            '#PK': 'PK',
+                            '#SK': 'SK'
+                        },
+                        ExpressionAttributeValues: {
+                            ':PK': 'MNT#ACT#' + zip_code,
+                            ':SK': 'YR#' + year
+                        }
+                    };
+
+                    let actual_week_crime_freq_params = {
+                        TableName: config.DATABASE_NAME,
+                        KeyConditionExpression: '#PK = :PK and #SK = :SK',
+                        ExpressionAttributeNames: {
+                            '#PK': 'PK',
+                            '#SK': 'SK'
+                        },
+                        ExpressionAttributeValues: {
+                            ':PK': 'WEK#ACT#' + zip_code,
+                            ':SK': 'YR#' + year
+                        }
+                    };
+
+                    const meta_data = await documentClient
+                        .query(meta_data_params)
+                        .promise();
+
+                    const risk_zone_data = await documentClient
+                        .query(risk_zone_params)
+                        .promise();
+
+                    const crime_data = await documentClient
+                        .query(crime_data_params)
+                        .promise();
+
+                    const actual_month_crime_freq_data = await documentClient
+                        .query(actual_month_crime_freq_params)
+                        .promise();
+
+                    const actual_week_crime_freq_data = await documentClient
+                        .query(actual_week_crime_freq_params)
+                        .promise();
+
+                    let final_data = {
+                        zip_code: risk_zone_data.Items[0].PK.split('#')[1],
+                        risk_zone: risk_zone_data.Items[0].risk_zone,
+                        latitude: meta_data.Items[0].latitude,
+                        longitude: meta_data.Items[0].longitude,
+                        ethnicity_distribution:
+                            crime_data.Items[0].ethnicity_distribution,
+                        gender_distribution:
+                            crime_data.Items[0].gender_distribution,
+                        age_distribution: crime_data.Items[0].age_distribution,
+                        top5_crimes: crime_data.Items[0].top5_crimes,
+                        actual_month_crime_freq:
+                            actual_month_crime_freq_data.Items[0]
+                                .month_frequency,
+                        actual_week_crime_freq:
+                            actual_week_crime_freq_data.Items[0].week_frequency
+                    };
+
+                    if (year === '2022') {
+                        let prediction_month_crime_freq_params = {
+                            TableName: config.DATABASE_NAME,
+                            KeyConditionExpression: '#PK = :PK and #SK = :SK',
+                            ExpressionAttributeNames: {
+                                '#PK': 'PK',
+                                '#SK': 'SK'
+                            },
+                            ExpressionAttributeValues: {
+                                ':PK': 'MNT#PRD#' + zip_code,
+                                ':SK': 'YR#' + year
+                            }
+                        };
+
+                        let prediction_week_crime_freq_params = {
+                            TableName: config.DATABASE_NAME,
+                            KeyConditionExpression: '#PK = :PK and #SK = :SK',
+                            ExpressionAttributeNames: {
+                                '#PK': 'PK',
+                                '#SK': 'SK'
+                            },
+                            ExpressionAttributeValues: {
+                                ':PK': 'WEK#PRD#' + zip_code,
+                                ':SK': 'YR#' + year
+                            }
+                        };
+
+                        const prediction_month_crime_freq_data =
+                            await documentClient
+                                .query(prediction_month_crime_freq_params)
+                                .promise();
+
+                        const prediction_week_crime_freq_data =
+                            await documentClient
+                                .query(prediction_week_crime_freq_params)
+                                .promise();
+
+                        final_data['prediction_month_crime_freq'] =
+                            prediction_month_crime_freq_data.Items[0].month_frequency;
+                        final_data['prediction_week_crime_freq'] =
+                            prediction_week_crime_freq_data.Items[0].week_frequency;
+                    }
+
+                    return final_data;
+                })
+            );
+
+            res.send({
+                status: 200,
+                data: transformedData,
+                message: 'Fetched Crime Data of Locations'
+            });
+        } catch (err) {
+            res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+    };
+
     // Get CrimeData Information based on City
     public get_crimedata_info_by_city = async (req: Request, res: Response) => {
         try {
