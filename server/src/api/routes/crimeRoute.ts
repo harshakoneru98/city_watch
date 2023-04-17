@@ -14,5 +14,6 @@ router.get('/create_weekdata_db/', Controller.create_weekdata_db)
 
 // Get Metadata Info
 router.get('/get_metadata_info/', Controller.get_metadata_info)
+router.post('/get_crimedata_info_by_city', Controller.get_crimedata_info_by_city)
 
 export default router;

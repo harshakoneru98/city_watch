@@ -238,4 +238,44 @@ export default class CrimeController {
             });
         }
     };
+
+    // Get CrimeData Information based on City
+    public get_crimedata_info_by_city = async (req: Request, res: Response) => {
+        try {
+            let documentClient = new AWS.DynamoDB.DocumentClient();
+            let primary_city = req.body.city;
+
+            let city_located_params = {
+                TableName: config.DATABASE_NAME,
+                IndexName: config.PRIMARY_CITY_INDEX,
+                KeyConditionExpression: '#primary_city = :primary_city',
+                ExpressionAttributeNames: { '#primary_city': 'primary_city' },
+                ExpressionAttributeValues: {
+                    ':primary_city': primary_city
+                }
+            };
+
+            const location_data = await documentClient
+                .query(city_located_params)
+                .promise();
+
+            let transformedData = location_data.Items.map((location_info) => ({
+                zip_code: location_info.SK.split('#')[1],
+                latitude: location_info.latitude,
+                longitude: location_info.longitude
+            }));
+
+            transformedData = transformedData.sort((a:any, b:any) => a.zip_code.localeCompare(b.zip_code))
+
+            res.send({
+                status: 200,
+                data: transformedData,
+                message: 'Fetched Crime Data of Locations'
+            });
+        } catch (err) {
+            res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+    };
 }
