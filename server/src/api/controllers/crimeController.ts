@@ -265,11 +265,44 @@ export default class CrimeController {
                 longitude: location_info.longitude
             }));
 
-            transformedData = transformedData.sort((a:any, b:any) => a.zip_code.localeCompare(b.zip_code))
+            transformedData = transformedData.sort((a: any, b: any) =>
+                a.zip_code.localeCompare(b.zip_code)
+            );
+
+
+            let risk_zone_data = await Promise.all(transformedData.map(async (data: any) => {
+                var risk_zone_params = {
+                    TableName: config.DATABASE_NAME,
+                    KeyConditionExpression:
+                        '#PK = :PK and begins_with(#SK, :SK)',
+                    ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
+                    ExpressionAttributeValues: {
+                        ':PK': 'RSK#' + data.zip_code,
+                        ':SK': 'YR#'
+                    }
+                };
+
+                const risk_zone_data = await documentClient
+                    .query(risk_zone_params)
+                    .promise();
+                
+                let yearly_risk_data = {}
+                
+                risk_zone_data.Items.forEach((yearly_data:any) => {
+                    yearly_risk_data[yearly_data.SK.split('#')[1]]  = {
+                        risk_zone: yearly_data.risk_zone
+                    }
+                })
+
+                return {
+                    ...data,
+                    yearly_data: yearly_risk_data
+                }
+            }));
 
             res.send({
                 status: 200,
-                data: transformedData,
+                data: risk_zone_data,
                 message: 'Fetched Crime Data of Locations'
             });
         } catch (err) {
