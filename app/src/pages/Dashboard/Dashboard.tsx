@@ -16,6 +16,7 @@ import { fetchZipDataInfoData } from '../../store/slices/zipdataSlice';
 import { fetchCrimeDataInfoData } from '../../store/slices/crimedataSlice';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
+import BarChart from '../../components/BarChart/BarChart';
 
 interface DashboardProps {
     defaultCity: string;
@@ -45,6 +46,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     const [top5CrimeData, setTop5CrimeData] = useState<any>();
     const [top5Ethnicity, setTop5Ethnicity] = useState<any>();
     const [top5Gender, setTop5Gender] = useState<any>();
+    const [ageDistribution, setAgeDistribution] = useState<any>();
 
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
@@ -142,7 +144,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         }
     }, [zipCodes, selectedZipcode, selectedYear]);
 
-    const get_aggregated_data = (data: any) => {
+    const get_aggregated_data = (data: any, max: number, sort_data: boolean) => {
         const aggregatedData = data.reduce((accumulator: any, current: any) => {
             current.forEach((data_type: any) => {
                 const dataTypeName = Object.keys(data_type)[0];
@@ -156,14 +158,18 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
             return accumulator;
         }, {});
 
-        const sortedData = Object.keys(aggregatedData)
+
+        let sortedData = Object.keys(aggregatedData)
             .map((dataName) => [
                 { id: dataName, value: aggregatedData[dataName] }
             ])
             .flat()
-            .sort((a, b) => b.value - a.value)
-            .slice(0, 5);
 
+        if(sort_data){
+            sortedData = sortedData.sort((a, b) => b.value - a.value)
+        }
+            
+        sortedData = sortedData.slice(0, max);
         return sortedData;
     };
 
@@ -171,17 +177,22 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         if (crimeData.length != 0) {
             console.log('Crime Data : ', crimeData);
             const top_5_crimes_data = crimeData.map((obj) => obj.top5_crimes);
-            setTop5CrimeData(get_aggregated_data(top_5_crimes_data));
+            setTop5CrimeData(get_aggregated_data(top_5_crimes_data, 5, true));
 
             const ethnicity_distribution_data = crimeData.map(
                 (obj) => obj.ethnicity_distribution
             );
-            setTop5Ethnicity(get_aggregated_data(ethnicity_distribution_data));
+            setTop5Ethnicity(get_aggregated_data(ethnicity_distribution_data, 5, true));
 
             const gender_distribution_data = crimeData.map(
                 (obj) => obj.gender_distribution
             );
-            setTop5Gender(get_aggregated_data(gender_distribution_data));
+            setTop5Gender(get_aggregated_data(gender_distribution_data, 5, true));
+
+            const age_distribution_data = crimeData.map(
+                (obj) => obj.age_distribution
+            );
+            setAgeDistribution(get_aggregated_data(age_distribution_data, 10, false))
 
             let map_filtered_data = crimeData.map((obj) => ({
                 zipCode: obj.zip_code,
@@ -210,14 +221,6 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     const handleZipcodeChange = (zip: string) => {
         setSelectedZipcode(zip);
     };
-
-    const pieChartData = [
-        { id: 'Los Angeles', value: 20 },
-        { id: 'Pasedena', value: 30 },
-        { id: 'Malibu', value: 50 },
-        { id: 'Marina Del Rey', value: 10 },
-        { id: 'La Canada Flintridge', value: 40 }
-    ];
 
     return (
         <Fragment>
@@ -278,7 +281,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                 )}
                             </Grid>
                             <Grid item xs={4}>
-                                <PieChart data={pieChartData} />
+                                <BarChart data={ageDistribution}/>
                             </Grid>
                             <Grid item xs={4}>
                                 {top5Gender && <PieChart data={top5Gender} />}

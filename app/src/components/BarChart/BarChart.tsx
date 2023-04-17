@@ -1,23 +1,22 @@
 import React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 
-export default function BarChart(){
-  const normalBarChartData = [
-    { id: 'January', value: 20 },
-    { id: 'February', value: 25 },
-    { id: 'March', value: 30 }
-  ];
+interface BarChartProps {
+  data: any[]
+}
 
-  const barChartColors = ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854']
-//   ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'];
+export default function BarChart({data} : BarChartProps){
+  const normalBarChartData = data
+
+  const barChartColors = ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854', '#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854']
 
   return (
-    <div style={{ height: '400px', width: '33%' }}>
+    <div style={{ height: '400px', width: '100%' }}>
       <ResponsiveBar
         data={normalBarChartData}
         keys={['value']}
         indexBy="id"
-        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+        margin={{ top: 50, right: 10, bottom: 50, left: 70 }}
         padding={0.3}
         valueScale={{ type: 'linear' }}
         indexScale={{ type: 'band', round: true }}
@@ -25,11 +24,12 @@ export default function BarChart(){
         borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
         axisTop={null}
         axisRight={null}
+        layout='horizontal'
         axisBottom={{
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: 'Month',
+          legend: 'Value',
           legendPosition: 'middle',
           legendOffset: 32,
         }}
@@ -37,37 +37,13 @@ export default function BarChart(){
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: 'Value',
+          legend: 'Age Range',
           legendPosition: 'middle',
-          legendOffset: -40,
+          legendOffset: -65,
         }}
         labelSkipWidth={12}
         labelSkipHeight={12}
         labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-        // legends={[
-        //   {
-        //     dataFrom: 'keys',
-        //     anchor: 'bottom-right',
-        //     direction: 'column',
-        //     justify: false,
-        //     translateX: 120,
-        //     translateY: 0,
-        //     itemsSpacing: 2,
-        //     itemWidth: 100,
-        //     itemHeight: 20,
-        //     itemDirection: 'left-to-right',
-        //     itemOpacity: 0.85,
-        //     symbolSize: 20,
-        //     effects: [
-        //       {
-        //         on: 'hover',
-        //         style: {
-        //           itemOpacity: 1,
-        //         },
-        //       },
-        //     ],
-        //   },
-        // ]}
       />
     </div>
   );
