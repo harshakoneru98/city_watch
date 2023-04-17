@@ -9,6 +9,11 @@ import PieChart from '../../components/PieChart/PieChart';
 import StackedBarChart from '../../components/StackedBarChart/StackedBarChart';
 import Header from '../../components/Header/Header';
 import Grid from '@mui/material/Grid';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store';
+import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from '@reduxjs/toolkit';
 
 interface DashboardProps {
     defaultCity: string;
@@ -23,18 +28,39 @@ Dashboard.propTypes = {
 };
 
 export default function Dashboard({ defaultCity }: DashboardProps) {
+    let city_located = localStorage.getItem('city') || defaultCity
+    city_located = city_located === 'Other City' ? defaultCity : city_located
+
     const [cities, setCities] = useState<string[]>([]);
-    const [selectedCity, setSelectedCity] = useState<string>(defaultCity);
+    const [selectedCity, setSelectedCity] = useState<string>(city_located);
     const [zipCodes, setZipCodes] = useState<any[]>([]);
     const [selectedZipcode, setSelectedZipcode] = useState<any>();
     const [filteredData, setFilteredData] = useState<any>([]);
 
+    const dispatch = useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
+
+    const { metaData, metaDataStatus, metaDataError } = useSelector(
+        (state: RootState) => state.metaDataInfo
+    );
+
+    if (metaDataStatus === 'loading') {
+        console.log('Loading');
+    }
+
+    if (metaDataStatus === 'failed') {
+        console.log(metaDataError);
+    }
+
     useEffect(() => {
-        const uniqueCities = [
-            ...new Set(map_riskzone.map((item) => item.primary_city))
-        ].sort();
-        setCities(uniqueCities);
-    }, []);
+        if (metaData.length) {
+            const cities = [
+                ...new Set(metaData.map((obj: any) => obj.primary_city))
+            ].sort();
+            setCities(cities);
+        } else{
+            dispatch(fetchMetaDataInfoData('crime/get_metadata_info/'));
+        }
+    }, [metaData]);
 
     useEffect(() => {
         const selectedCityZipCodes = map_riskzone.filter(
@@ -87,20 +113,20 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                             <SelectInput
                                 data={cities}
                                 name="City"
-                                defaultValue={defaultCity}
+                                defaultValue={city_located}
                                 onValChange={handleCityChange}
                             />
                         </div>
-                        <div className="selectInputContainer">
+                        {/* <div className="selectInputContainer">
                             <SelectInput
                                 data={zipCodes}
                                 name="Zipcode"
                                 selectedValue={selectedZipcode}
                                 onValChange={handleZipcodeChange}
                             />
-                        </div>
+                        </div> */}
                     </div>
-                    <Grid container spacing={2}>
+                    {/* <Grid container spacing={2}>
                         <Grid item xs={8}>
                             <Map
                                 data={filteredData}
@@ -126,7 +152,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                         <Grid item xs={4}>
                             <PieChart />
                         </Grid>
-                    </Grid>
+                    </Grid> */}
                 </div>
             </div>
         </Fragment>
