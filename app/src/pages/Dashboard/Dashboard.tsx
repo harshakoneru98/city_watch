@@ -40,14 +40,17 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         const selectedCityZipCodes = map_riskzone.filter(
             (item) => item.primary_city === selectedCity
         );
-        
+
         setFilteredData(selectedCityZipCodes);
-        if (selectedCityZipCodes.length == 1){
-            setZipCodes(selectedCityZipCodes.map((item) => item.zip_code))
-            setSelectedZipcode(selectedCityZipCodes[0].zip_code)
-        }else{
-            setZipCodes(["All", ...selectedCityZipCodes.map((item) => item.zip_code)]);
-            setSelectedZipcode('All')
+        if (selectedCityZipCodes.length == 1) {
+            setZipCodes(selectedCityZipCodes.map((item) => item.zip_code));
+            setSelectedZipcode(selectedCityZipCodes[0].zip_code);
+        } else {
+            setZipCodes([
+                'All',
+                ...selectedCityZipCodes.map((item) => item.zip_code)
+            ]);
+            setSelectedZipcode('All');
         }
     }, [selectedCity]);
 
@@ -56,7 +59,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
             let filterzipData = map_riskzone.filter(
                 (item) => item.primary_city === selectedCity
             );
-            if(selectedZipcode != 'All'){
+            if (selectedZipcode != 'All') {
                 filterzipData = filterzipData.filter(
                     (item: any) => item.zip_code === selectedZipcode
                 );
@@ -77,48 +80,54 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     return (
         <Fragment>
             <Header />
-            <div className='dashboard-container'>
-            <div className="filter-container">
-                <div className="selectInputContainer selectInputRight">
-                    <SelectInput
-                        data={cities}
-                        name="City"
-                        defaultValue={defaultCity}
-                        onValChange={handleCityChange}
-                    />
+            <div className="main-container">
+                <div className="dashboard-container">
+                    <div className="filter-container">
+                        <div className="selectInputContainer selectInputRight">
+                            <SelectInput
+                                data={cities}
+                                name="City"
+                                defaultValue={defaultCity}
+                                onValChange={handleCityChange}
+                            />
+                        </div>
+                        <div className="selectInputContainer">
+                            <SelectInput
+                                data={zipCodes}
+                                name="Zipcode"
+                                selectedValue={selectedZipcode}
+                                onValChange={handleZipcodeChange}
+                            />
+                        </div>
+                    </div>
+                    <Grid container spacing={2}>
+                        <Grid item xs={8}>
+                            <Map
+                                data={filteredData}
+                                onValChange={handleZipcodeChange}
+                                selectedZipCode={selectedZipcode}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <PieChart />
+                        </Grid>
+                        <Grid item xs={8}>
+                            <LineChart />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <StackedBarChart />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <PieChart />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <PieChart />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <PieChart />
+                        </Grid>
+                    </Grid>
                 </div>
-                <div className="selectInputContainer">
-                    <SelectInput
-                        data={zipCodes}
-                        name="Zipcode"
-                        selectedValue={selectedZipcode}
-                        onValChange={handleZipcodeChange}
-                    />
-                </div>
-            </div>
-            <Grid container spacing={2}>
-                <Grid item xs={8}>
-                    <Map data={filteredData} onValChange={handleZipcodeChange} selectedZipCode={selectedZipcode}/>
-                </Grid>
-                <Grid item xs={4}>
-                    <PieChart />
-                </Grid>
-                <Grid item xs={8}>
-                    <LineChart />
-                </Grid>
-                <Grid item xs={4}>
-                    <StackedBarChart />
-                </Grid>
-                <Grid item xs={4}>
-                    <PieChart />
-                </Grid>
-                <Grid item xs={4}>
-                    <PieChart />
-                </Grid>
-                <Grid item xs={4}>
-                    <PieChart />
-                </Grid>
-            </Grid>
             </div>
         </Fragment>
     );
