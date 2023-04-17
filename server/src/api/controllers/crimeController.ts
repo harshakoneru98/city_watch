@@ -302,10 +302,10 @@ export default class CrimeController {
             );
 
             let updated_crime_data = await Promise.all(
-                risk_zone_data.slice(0, 2).map(async (data: any) => {
+                risk_zone_data.map(async (data: any) => {
                     const new_crime_data = await Promise.all(
                         Object.keys(data.yearly_data).map(async (year) => {
-                            var crime_params = {
+                            let crime_params = {
                                 TableName: config.DATABASE_NAME,
                                 KeyConditionExpression:
                                     '#PK = :PK and #SK = :SK',
@@ -319,9 +319,46 @@ export default class CrimeController {
                                 }
                             };
 
+                            let actual_month_crime_freq_params = {
+                                TableName: config.DATABASE_NAME,
+                                KeyConditionExpression:
+                                    '#PK = :PK and #SK = :SK',
+                                ExpressionAttributeNames: {
+                                    '#PK': 'PK',
+                                    '#SK': 'SK'
+                                },
+                                ExpressionAttributeValues: {
+                                    ':PK': 'MNT#ACT#' + data.zip_code,
+                                    ':SK': 'YR#' + year
+                                }
+                            };
+
+                            let actual_week_crime_freq_params = {
+                                TableName: config.DATABASE_NAME,
+                                KeyConditionExpression:
+                                    '#PK = :PK and #SK = :SK',
+                                ExpressionAttributeNames: {
+                                    '#PK': 'PK',
+                                    '#SK': 'SK'
+                                },
+                                ExpressionAttributeValues: {
+                                    ':PK': 'WEK#ACT#' + data.zip_code,
+                                    ':SK': 'YR#' + year
+                                }
+                            };
+
                             const crime_data = await documentClient
                                 .query(crime_params)
                                 .promise();
+
+                            const actual_month_crime_freq_data = await documentClient
+                                .query(actual_month_crime_freq_params)
+                                .promise();
+
+                            const actual_week_crime_freq_data = await documentClient
+                                .query(actual_week_crime_freq_params)
+                                .promise();
+
                             return {
                                 year: crime_data.Items[0].SK.split('#')[1],
                                 ethnicity_distribution:
@@ -330,7 +367,9 @@ export default class CrimeController {
                                     crime_data.Items[0].gender_distribution,
                                 age_distribution:
                                     crime_data.Items[0].age_distribution,
-                                top5_crimes: crime_data.Items[0].top5_crimes
+                                top5_crimes: crime_data.Items[0].top5_crimes,
+                                actual_month_crime_freq: actual_month_crime_freq_data.Items[0].month_frequency,
+                                actual_week_crime_freq: actual_week_crime_freq_data.Items[0].week_frequency
                             };
                         })
                     );
@@ -347,6 +386,10 @@ export default class CrimeController {
                                 new_crime_data[i].age_distribution;
                             data.yearly_data[year].top5_crimes =
                                 new_crime_data[i].top5_crimes;
+                            data.yearly_data[year].actual_month_crime_freq =
+                                new_crime_data[i].actual_month_crime_freq;
+                            data.yearly_data[year].actual_week_crime_freq =
+                                new_crime_data[i].actual_week_crime_freq;
                         }
                     }
                     return data;
