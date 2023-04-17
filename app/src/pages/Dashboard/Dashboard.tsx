@@ -7,8 +7,8 @@ import './Dashboard.scss';
 import LineChart from '../../components/LineChart/LineChart';
 import PieChart from '../../components/PieChart/PieChart';
 import StackedBarChart from '../../components/StackedBarChart/StackedBarChart';
-import BarChart from '../../components/BarChart/BarChart';
 import Header from '../../components/Header/Header';
+import Grid from '@mui/material/Grid';
 
 interface DashboardProps {
     defaultCity: string;
@@ -77,6 +77,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     return (
         <Fragment>
             <Header />
+            <div className='dashboard-container'>
             <div className="filter-container">
                 <div className="selectInputContainer selectInputRight">
                     <SelectInput
@@ -95,11 +96,30 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                     />
                 </div>
             </div>
-            <Map data={filteredData} onValChange={handleZipcodeChange} selectedZipCode={selectedZipcode}/>
-            <LineChart />
-            <PieChart />
-            <StackedBarChart />
-            <BarChart />
+            <Grid container spacing={2}>
+                <Grid item xs={8}>
+                    <Map data={filteredData} onValChange={handleZipcodeChange} selectedZipCode={selectedZipcode}/>
+                </Grid>
+                <Grid item xs={4}>
+                    <PieChart />
+                </Grid>
+                <Grid item xs={8}>
+                    <LineChart />
+                </Grid>
+                <Grid item xs={4}>
+                    <StackedBarChart />
+                </Grid>
+                <Grid item xs={4}>
+                    <PieChart />
+                </Grid>
+                <Grid item xs={4}>
+                    <PieChart />
+                </Grid>
+                <Grid item xs={4}>
+                    <PieChart />
+                </Grid>
+            </Grid>
+            </div>
         </Fragment>
     );
 }

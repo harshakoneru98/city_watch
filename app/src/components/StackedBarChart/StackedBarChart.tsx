@@ -10,7 +10,7 @@ export default function StackedBarChart(){
   const stackedBarChartColors = ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854']
 
   return (
-    <div style={{ height: '400px', width: '33%' }}>
+    <div style={{ height: '400px', width: '100%' }}>
       <ResponsiveBar
         data={stackedBarChartData}
         keys={['A', 'B', 'C', 'D', 'E']}
