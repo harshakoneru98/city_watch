@@ -239,6 +239,93 @@ export default class CrimeController {
         }
     };
 
+    // Get Yearly Zipcodes based on City
+    public get_yearly_zipcodes_info_by_city = async (
+        req: Request,
+        res: Response
+    ) => {
+        try {
+            let documentClient = new AWS.DynamoDB.DocumentClient();
+            let primary_city = req.body.city;
+
+            let city_located_params = {
+                TableName: config.DATABASE_NAME,
+                IndexName: config.PRIMARY_CITY_INDEX,
+                KeyConditionExpression: '#primary_city = :primary_city',
+                ExpressionAttributeNames: { '#primary_city': 'primary_city' },
+                ExpressionAttributeValues: {
+                    ':primary_city': primary_city
+                }
+            };
+
+            const location_data = await documentClient
+                .query(city_located_params)
+                .promise();
+
+            const zip_codes = location_data.Items.map(
+                (item) => item.SK.split('#')[1]
+            );
+            zip_codes.sort();
+
+            const zip_code_yearly_data = await Promise.all(
+                zip_codes.map(async (zip_code) => {
+                    let risk_zone_params = {
+                        TableName: config.DATABASE_NAME,
+                        KeyConditionExpression:
+                            '#PK = :PK and begins_with(#SK, :SK)',
+                        ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
+                        ExpressionAttributeValues: {
+                            ':PK': 'RSK#' + zip_code,
+                            ':SK': 'YR#'
+                        }
+                    };
+
+                    const risk_data = await documentClient
+                        .query(risk_zone_params)
+                        .promise();
+
+                    let yearly_zip_data = risk_data.Items.map(
+                        (yearly_data: any) => yearly_data.SK.split('#')[1]
+                    );
+
+                    return {
+                        [zip_code]: yearly_zip_data
+                    };
+                })
+            );
+
+            const output = {};
+
+            zip_code_yearly_data.forEach((item) => {
+                const [zipCode, values] = Object.entries(item)[0];
+                values.forEach((value) => {
+                    if (!output[value]) {
+                        output[value] = [zipCode];
+                    } else {
+                        output[value].push(zipCode);
+                    }
+                });
+            });
+
+            const sortedOutput = {};
+            Object.keys(output)
+                .sort()
+                .forEach((key) => {
+                    sortedOutput[key] = output[key].sort();
+                });
+
+            res.send({
+                status: 200,
+                data: output,
+                message: 'Fetched Yearly Zipcodes by City'
+            });
+        } catch (err) {
+            res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+    };
+
     // Get CrimeData Information based on City
     public get_crimedata_info_by_city = async (req: Request, res: Response) => {
         try {
@@ -351,13 +438,15 @@ export default class CrimeController {
                                 .query(crime_params)
                                 .promise();
 
-                            const actual_month_crime_freq_data = await documentClient
-                                .query(actual_month_crime_freq_params)
-                                .promise();
+                            const actual_month_crime_freq_data =
+                                await documentClient
+                                    .query(actual_month_crime_freq_params)
+                                    .promise();
 
-                            const actual_week_crime_freq_data = await documentClient
-                                .query(actual_week_crime_freq_params)
-                                .promise();
+                            const actual_week_crime_freq_data =
+                                await documentClient
+                                    .query(actual_week_crime_freq_params)
+                                    .promise();
 
                             return {
                                 year: crime_data.Items[0].SK.split('#')[1],
@@ -368,8 +457,12 @@ export default class CrimeController {
                                 age_distribution:
                                     crime_data.Items[0].age_distribution,
                                 top5_crimes: crime_data.Items[0].top5_crimes,
-                                actual_month_crime_freq: actual_month_crime_freq_data.Items[0].month_frequency,
-                                actual_week_crime_freq: actual_week_crime_freq_data.Items[0].week_frequency
+                                actual_month_crime_freq:
+                                    actual_month_crime_freq_data.Items[0]
+                                        .month_frequency,
+                                actual_week_crime_freq:
+                                    actual_week_crime_freq_data.Items[0]
+                                        .week_frequency
                             };
                         })
                     );
