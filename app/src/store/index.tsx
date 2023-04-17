@@ -3,12 +3,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import metadataReducer from './slices/metadataSlice';
-import zipdataReducer from './slices/zipdataSlice'
+import zipdataReducer from './slices/zipdataSlice';
+import crimedataReducer from './slices/crimedataSlice'
 
 const store = configureStore({
   reducer: {
     metaDataInfo: metadataReducer,
-    zipDataInfo: zipdataReducer
+    zipDataInfo: zipdataReducer,
+    crimeDataInfo: crimedataReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });
