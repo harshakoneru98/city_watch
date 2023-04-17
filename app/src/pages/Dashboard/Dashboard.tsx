@@ -43,6 +43,8 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
 
     const [mapData, setMapData] = useState<any>();
     const [top5CrimeData, setTop5CrimeData] = useState<any>();
+    const [top5Ethnicity, setTop5Ethnicity] = useState<any>();
+    const [top5Gender, setTop5Gender] = useState<any>();
 
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
@@ -140,7 +142,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         }
     }, [zipCodes, selectedZipcode, selectedYear]);
 
-    const get_top_5_crimes = (data: any) => {
+    const get_aggregated_data = (data: any) => {
         const aggregatedData = data.reduce((accumulator: any, current: any) => {
             current.forEach((data_type: any) => {
                 const dataTypeName = Object.keys(data_type)[0];
@@ -169,7 +171,18 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         if (crimeData.length != 0) {
             console.log('Crime Data : ', crimeData);
             const top_5_crimes_data = crimeData.map((obj) => obj.top5_crimes);
-            setTop5CrimeData(get_top_5_crimes(top_5_crimes_data))
+            setTop5CrimeData(get_aggregated_data(top_5_crimes_data));
+
+            const ethnicity_distribution_data = crimeData.map(
+                (obj) => obj.ethnicity_distribution
+            );
+            setTop5Ethnicity(get_aggregated_data(ethnicity_distribution_data));
+
+            const gender_distribution_data = crimeData.map(
+                (obj) => obj.gender_distribution
+            );
+            setTop5Gender(get_aggregated_data(gender_distribution_data));
+
             let map_filtered_data = crimeData.map((obj) => ({
                 zipCode: obj.zip_code,
                 riskZone: obj.risk_zone,
@@ -249,7 +262,9 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                 )}
                             </Grid>
                             <Grid item xs={4}>
-                                {top5CrimeData && <PieChart data={top5CrimeData} />}
+                                {top5CrimeData && (
+                                    <PieChart data={top5CrimeData} />
+                                )}
                             </Grid>
                             <Grid item xs={8}>
                                 <LineChart />
@@ -258,13 +273,15 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                 <StackedBarChart />
                             </Grid>
                             <Grid item xs={4}>
-                                <PieChart data={pieChartData} />
+                                {top5Ethnicity && (
+                                    <PieChart data={top5Ethnicity} />
+                                )}
                             </Grid>
                             <Grid item xs={4}>
                                 <PieChart data={pieChartData} />
                             </Grid>
                             <Grid item xs={4}>
-                                <PieChart data={pieChartData} />
+                                {top5Gender && <PieChart data={top5Gender} />}
                             </Grid>
                         </Grid>
                     )}
