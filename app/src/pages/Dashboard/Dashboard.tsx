@@ -34,11 +34,11 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
 
     const [cities, setCities] = useState<string[]>([]);
     const [selectedCity, setSelectedCity] = useState<string>(city_located);
+    const [zipYearData, setZipYearData] = useState<any>();
     const [years, setYears] = useState<string[]>([]);
     const [selectedYear, setSelectedYear] = useState<string>('');
     const [zipCodes, setZipCodes] = useState<any[]>([]);
     const [selectedZipcode, setSelectedZipcode] = useState<any>();
-    const [filteredData, setFilteredData] = useState<any>([]);
 
     const dispatch = useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
 
@@ -85,61 +85,42 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
 
     useEffect(() => {
         if(zipData.data){
-            console.log('Zip Data : ', zipData.data)
+            setZipYearData(zipData.data)
             let new_years = Object.keys(zipData.data)
             new_years.sort((a, b) => b.localeCompare(a))
             setYears(new_years)
             setSelectedYear(new_years[0])
-            setZipCodes(zipData.data[new_years[0]])
+            let new_zip_codes = zipData.data[new_years[0]]
+            if(new_zip_codes.length != 1){
+                new_zip_codes = ['All', ...new_zip_codes]
+            }
+            setZipCodes(new_zip_codes)
+            setSelectedZipcode(new_zip_codes[0])
         }
     }, [zipData])
 
     useEffect(() => {
-        console.log('ZipCodes : ', zipCodes)
-        console.log('Years : ', years)
         console.log('Selected Year : ', selectedYear)
-    }, [zipCodes])
-
-    // useEffect(() => {
-    //     const selectedCityZipCodes = map_riskzone.filter(
-    //         (item) => item.primary_city === selectedCity
-    //     );
-
-    //     setFilteredData(selectedCityZipCodes);
-    //     if (selectedCityZipCodes.length == 1) {
-    //         setZipCodes(selectedCityZipCodes.map((item) => item.zip_code));
-    //         setSelectedZipcode(selectedCityZipCodes[0].zip_code);
-    //     } else {
-    //         setZipCodes([
-    //             'All',
-    //             ...selectedCityZipCodes.map((item) => item.zip_code)
-    //         ]);
-    //         setSelectedZipcode('All');
-    //     }
-    // }, [selectedCity]);
-
-    // useEffect(() => {
-    //     if (selectedZipcode) {
-    //         let filterzipData = map_riskzone.filter(
-    //             (item) => item.primary_city === selectedCity
-    //         );
-    //         if (selectedZipcode != 'All') {
-    //             filterzipData = filterzipData.filter(
-    //                 (item: any) => item.zip_code === selectedZipcode
-    //             );
-    //         }
-    //         setFilteredData(filterzipData);
-    //     }
-    // }, [selectedZipcode]);
+        console.log('Selected Zipcode : ', selectedZipcode)
+    }, [selectedZipcode])
 
     const handleCityChange = (city: string) => {
         setSelectedCity(city);
-        // setSelectedZipcode(undefined);
     };
 
-    // const handleZipcodeChange = (zip: number) => {
-    //     setSelectedZipcode(zip);
-    // };
+    const handleYearChange = (year: string) => {
+        setSelectedYear(year);
+        let new_zip_codes = zipYearData[year]
+        if(new_zip_codes.length != 1){
+            new_zip_codes = ['All', ...new_zip_codes]
+        }
+        setZipCodes(new_zip_codes)
+        setSelectedZipcode(new_zip_codes[0])
+    };
+
+    const handleZipcodeChange = (zip: string) => {
+        setSelectedZipcode(zip);
+    };
 
     return (
         <Fragment>
@@ -155,14 +136,22 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                 onValChange={handleCityChange}
                             />
                         </div>
-                        {/* <div className="selectInputContainer">
+                        <div className="selectInputContainer">
+                            <SelectInput
+                                data={years}
+                                name="Year"
+                                selectedValue={selectedYear}
+                                onValChange={handleYearChange}
+                            />
+                        </div>
+                        <div className="selectInputContainer">
                             <SelectInput
                                 data={zipCodes}
                                 name="Zipcode"
                                 selectedValue={selectedZipcode}
                                 onValChange={handleZipcodeChange}
                             />
-                        </div> */}
+                        </div>
                     </div>
                     {/* <Grid container spacing={2}>
                         <Grid item xs={8}>
