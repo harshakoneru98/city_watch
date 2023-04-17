@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
+import { fetchZipDataInfoData } from '../../store/slices/zipdataSlice';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 
@@ -33,6 +34,8 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
 
     const [cities, setCities] = useState<string[]>([]);
     const [selectedCity, setSelectedCity] = useState<string>(city_located);
+    const [years, setYears] = useState<string[]>([]);
+    const [selectedYear, setSelectedYear] = useState<string>('');
     const [zipCodes, setZipCodes] = useState<any[]>([]);
     const [selectedZipcode, setSelectedZipcode] = useState<any>();
     const [filteredData, setFilteredData] = useState<any>([]);
@@ -44,11 +47,23 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     );
 
     if (metaDataStatus === 'loading') {
-        console.log('Loading');
+        console.log('Meta Data Loading');
     }
 
     if (metaDataStatus === 'failed') {
         console.log(metaDataError);
+    }
+
+    const { zipData, zipDataStatus, zipDataError } = useSelector(
+        (state: RootState) => state.zipDataInfo
+    );
+
+    if (zipDataStatus === 'loading') {
+        console.log('ZipData Loading');
+    }
+
+    if (zipDataError === 'failed') {
+        console.log(zipDataError);
     }
 
     useEffect(() => {
@@ -63,45 +78,68 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     }, [metaData]);
 
     useEffect(() => {
-        const selectedCityZipCodes = map_riskzone.filter(
-            (item) => item.primary_city === selectedCity
-        );
-
-        setFilteredData(selectedCityZipCodes);
-        if (selectedCityZipCodes.length == 1) {
-            setZipCodes(selectedCityZipCodes.map((item) => item.zip_code));
-            setSelectedZipcode(selectedCityZipCodes[0].zip_code);
-        } else {
-            setZipCodes([
-                'All',
-                ...selectedCityZipCodes.map((item) => item.zip_code)
-            ]);
-            setSelectedZipcode('All');
+        if (selectedCity){
+            dispatch(fetchZipDataInfoData({ endpoint: 'crime/get_yearly_zipcodes_info_by_city', city: selectedCity }));
         }
     }, [selectedCity]);
 
     useEffect(() => {
-        if (selectedZipcode) {
-            let filterzipData = map_riskzone.filter(
-                (item) => item.primary_city === selectedCity
-            );
-            if (selectedZipcode != 'All') {
-                filterzipData = filterzipData.filter(
-                    (item: any) => item.zip_code === selectedZipcode
-                );
-            }
-            setFilteredData(filterzipData);
+        if(zipData.data){
+            console.log('Zip Data : ', zipData.data)
+            let new_years = Object.keys(zipData.data)
+            new_years.sort((a, b) => b.localeCompare(a))
+            setYears(new_years)
+            setSelectedYear(new_years[0])
+            setZipCodes(zipData.data[new_years[0]])
         }
-    }, [selectedZipcode]);
+    }, [zipData])
+
+    useEffect(() => {
+        console.log('ZipCodes : ', zipCodes)
+        console.log('Years : ', years)
+        console.log('Selected Year : ', selectedYear)
+    }, [zipCodes])
+
+    // useEffect(() => {
+    //     const selectedCityZipCodes = map_riskzone.filter(
+    //         (item) => item.primary_city === selectedCity
+    //     );
+
+    //     setFilteredData(selectedCityZipCodes);
+    //     if (selectedCityZipCodes.length == 1) {
+    //         setZipCodes(selectedCityZipCodes.map((item) => item.zip_code));
+    //         setSelectedZipcode(selectedCityZipCodes[0].zip_code);
+    //     } else {
+    //         setZipCodes([
+    //             'All',
+    //             ...selectedCityZipCodes.map((item) => item.zip_code)
+    //         ]);
+    //         setSelectedZipcode('All');
+    //     }
+    // }, [selectedCity]);
+
+    // useEffect(() => {
+    //     if (selectedZipcode) {
+    //         let filterzipData = map_riskzone.filter(
+    //             (item) => item.primary_city === selectedCity
+    //         );
+    //         if (selectedZipcode != 'All') {
+    //             filterzipData = filterzipData.filter(
+    //                 (item: any) => item.zip_code === selectedZipcode
+    //             );
+    //         }
+    //         setFilteredData(filterzipData);
+    //     }
+    // }, [selectedZipcode]);
 
     const handleCityChange = (city: string) => {
         setSelectedCity(city);
-        setSelectedZipcode(undefined);
+        // setSelectedZipcode(undefined);
     };
 
-    const handleZipcodeChange = (zip: number) => {
-        setSelectedZipcode(zip);
-    };
+    // const handleZipcodeChange = (zip: number) => {
+    //     setSelectedZipcode(zip);
+    // };
 
     return (
         <Fragment>

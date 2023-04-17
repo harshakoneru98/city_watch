@@ -11,3 +11,10 @@ export interface MetaDataState {
     metaDataStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
     metaDataError: string | null;
 }
+
+// Zipcode Data by Year and City Types
+export interface ZipDataState {
+    zipData: any;
+    zipDataStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    zipDataError: string | null;
+}
