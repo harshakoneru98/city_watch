@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
 import { fetchZipDataInfoData } from '../../store/slices/zipdataSlice';
+import { fetchCrimeDataInfoData } from '../../store/slices/crimedataSlice';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 
@@ -29,8 +30,8 @@ Dashboard.propTypes = {
 };
 
 export default function Dashboard({ defaultCity }: DashboardProps) {
-    let city_located = localStorage.getItem('city') || defaultCity
-    city_located = city_located === 'Other City' ? defaultCity : city_located
+    let city_located = localStorage.getItem('city') || defaultCity;
+    city_located = city_located === 'Other City' ? defaultCity : city_located;
 
     const [cities, setCities] = useState<string[]>([]);
     const [selectedCity, setSelectedCity] = useState<string>(city_located);
@@ -40,7 +41,8 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     const [zipCodes, setZipCodes] = useState<any[]>([]);
     const [selectedZipcode, setSelectedZipcode] = useState<any>();
 
-    const dispatch = useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
+    const dispatch =
+        useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
 
     const { metaData, metaDataStatus, metaDataError } = useSelector(
         (state: RootState) => state.metaDataInfo
@@ -66,43 +68,78 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         console.log(zipDataError);
     }
 
+    const { crimeData, crimeDataStatus, crimeDataError } = useSelector(
+        (state: RootState) => state.crimeDataInfo
+    );
+
+    if (crimeDataStatus === 'loading') {
+        console.log('CrimeData Loading');
+    }
+
+    if (crimeDataError === 'failed') {
+        console.log(crimeDataError);
+    }
+
     useEffect(() => {
         if (metaData.length) {
             const cities = [
                 ...new Set(metaData.map((obj: any) => obj.primary_city))
             ].sort();
             setCities(cities);
-        } else{
+        } else {
             dispatch(fetchMetaDataInfoData('crime/get_metadata_info/'));
         }
     }, [metaData]);
 
     useEffect(() => {
-        if (selectedCity){
-            dispatch(fetchZipDataInfoData({ endpoint: 'crime/get_yearly_zipcodes_info_by_city', city: selectedCity }));
+        console.log('Selected City : ', selectedCity)
+        if (selectedCity) {
+            dispatch(
+                fetchZipDataInfoData({
+                    endpoint: 'crime/get_yearly_zipcodes_info_by_city',
+                    city: selectedCity
+                })
+            );
         }
     }, [selectedCity]);
 
     useEffect(() => {
-        if(zipData.data){
-            setZipYearData(zipData.data)
-            let new_years = Object.keys(zipData.data)
-            new_years.sort((a, b) => b.localeCompare(a))
-            setYears(new_years)
-            setSelectedYear(new_years[0])
-            let new_zip_codes = zipData.data[new_years[0]]
-            if(new_zip_codes.length != 1){
-                new_zip_codes = ['All', ...new_zip_codes]
+        if (zipData.data) {
+            setZipYearData(zipData.data);
+            let new_years = Object.keys(zipData.data);
+            new_years.sort((a, b) => b.localeCompare(a));
+            setYears(new_years);
+            setSelectedYear(new_years[0]);
+            let new_zip_codes = zipData.data[new_years[0]];
+            if (new_zip_codes.length != 1) {
+                new_zip_codes = ['All', ...new_zip_codes];
             }
-            setZipCodes(new_zip_codes)
-            setSelectedZipcode(new_zip_codes[0])
+            setZipCodes(new_zip_codes);
+            setSelectedZipcode(new_zip_codes[0]);
         }
-    }, [zipData])
+    }, [zipData]);
 
     useEffect(() => {
-        console.log('Selected Year : ', selectedYear)
-        console.log('Selected Zipcode : ', selectedZipcode)
-    }, [selectedZipcode])
+        if (selectedYear) {
+            let new_zip_codes_api = [];
+            if (selectedZipcode === 'All') {
+                new_zip_codes_api = zipCodes.filter((elem) => elem !== 'All');
+            } else {
+                new_zip_codes_api = [selectedZipcode];
+            }
+            dispatch(
+                fetchCrimeDataInfoData({
+                    endpoint: 'crime/get_crimedata_info_by_year_zipcode',
+                    year: selectedYear,
+                    zipcodes: new_zip_codes_api
+                })
+            );
+        }
+    }, [zipCodes, selectedZipcode, selectedYear]);
+
+    useEffect(() => {
+        console.log('Crime Data : ', crimeData);
+    }, [crimeData]);
 
     const handleCityChange = (city: string) => {
         setSelectedCity(city);
@@ -110,12 +147,12 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
 
     const handleYearChange = (year: string) => {
         setSelectedYear(year);
-        let new_zip_codes = zipYearData[year]
-        if(new_zip_codes.length != 1){
-            new_zip_codes = ['All', ...new_zip_codes]
+        let new_zip_codes = zipYearData[year];
+        if (new_zip_codes.length != 1) {
+            new_zip_codes = ['All', ...new_zip_codes];
         }
-        setZipCodes(new_zip_codes)
-        setSelectedZipcode(new_zip_codes[0])
+        setZipCodes(new_zip_codes);
+        setSelectedZipcode(new_zip_codes[0]);
     };
 
     const handleZipcodeChange = (zip: string) => {
