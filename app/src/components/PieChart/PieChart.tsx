@@ -1,15 +1,13 @@
 import { ResponsivePie } from '@nivo/pie';
 
-export default function PieChart() {
-  const pieChartData = [
-    { id: 'Los Angeles', value: 20 },
-    { id: 'Pasedena', value: 30 },
-    { id: 'Malibu', value: 50 },
-    { id: 'Marina Del Rey', value: 10 },
-    { id: 'La Canada Flintridge', value: 40 },
-  ];
+interface PieChartProps {
+  data: any[]
+}
 
-  const pieChartColors = ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854']
+export default function PieChart({data} : PieChartProps) {
+  const pieChartData = data
+  const pieChartColors = ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854'];
+  const selectedColors = pieChartColors.slice(0, pieChartData.length);
 
   return (
     <div style={{ height: '400px' }}>
@@ -19,7 +17,7 @@ export default function PieChart() {
         innerRadius={0.5}
         padAngle={0.7}
         cornerRadius={3}
-        colors={pieChartColors}
+        colors={selectedColors}
         borderWidth={1}
         borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
         arcLinkLabelsSkipAngle={10}

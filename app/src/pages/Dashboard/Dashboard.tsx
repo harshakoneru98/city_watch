@@ -42,6 +42,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     const [selectedZipcode, setSelectedZipcode] = useState<any>();
 
     const [mapData, setMapData] = useState<any>();
+    const [top5CrimeData, setTop5CrimeData] = useState<any>();
 
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
@@ -139,9 +140,36 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         }
     }, [zipCodes, selectedZipcode, selectedYear]);
 
+    const get_top_5_crimes = (data: any) => {
+        const aggregatedData = data.reduce((accumulator: any, current: any) => {
+            current.forEach((data_type: any) => {
+                const dataTypeName = Object.keys(data_type)[0];
+                const dataTypeCount = data_type[dataTypeName];
+                if (accumulator[dataTypeName]) {
+                    accumulator[dataTypeName] += dataTypeCount;
+                } else {
+                    accumulator[dataTypeName] = dataTypeCount;
+                }
+            });
+            return accumulator;
+        }, {});
+
+        const sortedData = Object.keys(aggregatedData)
+            .map((dataName) => [
+                { id: dataName, value: aggregatedData[dataName] }
+            ])
+            .flat()
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 5);
+
+        return sortedData;
+    };
+
     useEffect(() => {
         if (crimeData.length != 0) {
             console.log('Crime Data : ', crimeData);
+            const top_5_crimes_data = crimeData.map((obj) => obj.top5_crimes);
+            setTop5CrimeData(get_top_5_crimes(top_5_crimes_data))
             let map_filtered_data = crimeData.map((obj) => ({
                 zipCode: obj.zip_code,
                 riskZone: obj.risk_zone,
@@ -169,6 +197,14 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     const handleZipcodeChange = (zip: string) => {
         setSelectedZipcode(zip);
     };
+
+    const pieChartData = [
+        { id: 'Los Angeles', value: 20 },
+        { id: 'Pasedena', value: 30 },
+        { id: 'Malibu', value: 50 },
+        { id: 'Marina Del Rey', value: 10 },
+        { id: 'La Canada Flintridge', value: 40 }
+    ];
 
     return (
         <Fragment>
@@ -204,14 +240,16 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                     {crimeData.length > 0 && (
                         <Grid container spacing={2}>
                             <Grid item xs={8}>
-                                <Map
-                                    data={mapData}
-                                    onValChange={handleZipcodeChange}
-                                    selectedZipCode={selectedZipcode}
-                                />
+                                {mapData && (
+                                    <Map
+                                        data={mapData}
+                                        onValChange={handleZipcodeChange}
+                                        selectedZipCode={selectedZipcode}
+                                    />
+                                )}
                             </Grid>
                             <Grid item xs={4}>
-                                <PieChart />
+                                {top5CrimeData && <PieChart data={top5CrimeData} />}
                             </Grid>
                             <Grid item xs={8}>
                                 <LineChart />
@@ -220,13 +258,13 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                 <StackedBarChart />
                             </Grid>
                             <Grid item xs={4}>
-                                <PieChart />
+                                <PieChart data={pieChartData} />
                             </Grid>
                             <Grid item xs={4}>
-                                <PieChart />
+                                <PieChart data={pieChartData} />
                             </Grid>
                             <Grid item xs={4}>
-                                <PieChart />
+                                <PieChart data={pieChartData} />
                             </Grid>
                         </Grid>
                     )}
