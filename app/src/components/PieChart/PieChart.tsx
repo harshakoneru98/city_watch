@@ -18,12 +18,11 @@ export default function PieChart({data} : PieChartProps) {
         padAngle={0.7}
         cornerRadius={3}
         colors={selectedColors}
+        activeOuterRadiusOffset={8}
+        sortByValue={true}
         borderWidth={1}
         borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
-        arcLinkLabelsSkipAngle={10}
-        arcLinkLabelsTextColor="#333333"
-        arcLinkLabelsThickness={2}
-        arcLinkLabelsColor={{ from: 'color' }}
+        enableArcLinkLabels={false}
         arcLabelsSkipAngle={10}
         arcLabelsTextColor={{
             from: 'color',
