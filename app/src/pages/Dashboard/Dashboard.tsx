@@ -8,6 +8,8 @@ import PieChart from '../../components/PieChart/PieChart';
 import StackedBarChart from '../../components/StackedBarChart/StackedBarChart';
 import Header from '../../components/Header/Header';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
@@ -192,13 +194,13 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                 return { x: months[monthIndex], y: d.y };
             });
             return newData;
-        } else if(weekly_line_chart){
+        } else if (weekly_line_chart) {
             let lineChartData = Object.keys(aggregatedData)
                 .map((dataName) => [
                     { x: dataName, y: aggregatedData[dataName] }
                 ])
                 .flat();
-            return lineChartData
+            return lineChartData;
         } else {
             let sortedData = Object.keys(aggregatedData)
                 .map((dataName) => [
@@ -225,36 +227,70 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                 (obj) => obj.ethnicity_distribution
             );
             setTop5Ethnicity(
-                get_aggregated_data(ethnicity_distribution_data, 5, true, false, false)
+                get_aggregated_data(
+                    ethnicity_distribution_data,
+                    5,
+                    true,
+                    false,
+                    false
+                )
             );
 
             const gender_distribution_data = crimeData.map(
                 (obj) => obj.gender_distribution
             );
             setTop5Gender(
-                get_aggregated_data(gender_distribution_data, 5, true, false, false)
+                get_aggregated_data(
+                    gender_distribution_data,
+                    5,
+                    true,
+                    false,
+                    false
+                )
             );
 
             const age_distribution_data = crimeData.map(
                 (obj) => obj.age_distribution
             );
             setAgeDistribution(
-                get_aggregated_data(age_distribution_data, 10, false, false, false)
+                get_aggregated_data(
+                    age_distribution_data,
+                    10,
+                    false,
+                    false,
+                    false
+                )
             );
 
             let actual_monthly_data = crimeData.map(
                 (obj) => obj.actual_month_crime_freq
             );
 
-            actual_monthly_data = get_aggregated_data(actual_monthly_data, 12, false, true, false)
+            actual_monthly_data = get_aggregated_data(
+                actual_monthly_data,
+                12,
+                false,
+                true,
+                false
+            );
 
             let actual_weekly_data = crimeData.map(
                 (obj) => obj.actual_week_crime_freq
             );
 
-            actual_weekly_data = get_aggregated_data(actual_weekly_data, 52, false, false, true)
+            actual_weekly_data = get_aggregated_data(
+                actual_weekly_data,
+                52,
+                false,
+                false,
+                true
+            );
 
-            if (crimeData && (crimeData[0]?.prediction_month_crime_freq|| crimeData[0]?.prediction_week_crime_freq)) {
+            if (
+                crimeData &&
+                (crimeData[0]?.prediction_month_crime_freq ||
+                    crimeData[0]?.prediction_week_crime_freq)
+            ) {
                 let prediction_monthly_data = crimeData.map(
                     (obj) => obj.prediction_month_crime_freq
                 );
@@ -265,7 +301,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                     false,
                     true,
                     false
-                )
+                );
 
                 let prediction_weekly_data = crimeData.map(
                     (obj) => obj.prediction_week_crime_freq
@@ -277,7 +313,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                     false,
                     false,
                     true
-                )
+                );
 
                 let complete_montly_data = [
                     {
@@ -285,7 +321,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                         data: actual_monthly_data
                     },
                     { id: 'Forecasted', data: prediction_monthly_data }
-                ]
+                ];
                 setMontlyFrequency(complete_montly_data);
 
                 let complete_weekly_data = [
@@ -294,15 +330,15 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                         data: actual_weekly_data
                     },
                     { id: 'Forecasted', data: prediction_weekly_data }
-                ]
+                ];
                 setWeeklyFrequency(complete_weekly_data);
-            }else{
+            } else {
                 let complete_montly_data = [
                     {
                         id: 'Actual',
                         data: actual_monthly_data
                     }
-                ]
+                ];
                 setMontlyFrequency(complete_montly_data);
 
                 let complete_weekly_data = [
@@ -310,7 +346,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                         id: 'Actual',
                         data: actual_weekly_data
                     }
-                ]
+                ];
                 setMontlyFrequency(complete_weekly_data);
             }
 
@@ -374,44 +410,129 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                         </div>
                     </div>
                     {crimeData.length > 0 && (
-                        <Grid container spacing={2}>
-                            <Grid item xs={8}>
-                                {mapData && (
-                                    <Map
-                                        data={mapData}
-                                        onValChange={handleZipcodeChange}
-                                        selectedZipCode={selectedZipcode}
-                                    />
-                                )}
+                        <Fragment>
+                            <Grid container spacing={2}>
+                                <Grid item xs={8}>
+                                    <Grid container direction="column">
+                                        <Grid>
+                                            <Box bgcolor="white">
+                                                <Typography
+                                                    className="demographics_header"
+                                                    variant="h5"
+                                                >
+                                                    Geographic Analysis
+                                                </Typography>
+                                                {mapData && (
+                                                    <Map
+                                                        data={mapData}
+                                                        onValChange={
+                                                            handleZipcodeChange
+                                                        }
+                                                        selectedZipCode={
+                                                            selectedZipcode
+                                                        }
+                                                    />
+                                                )}
+                                            </Box>
+                                        </Grid>
+                                        <Grid className="linechart_container">
+                                            <Box bgcolor="white">
+                                                <Typography
+                                                    className="demographics_header"
+                                                    variant="h5"
+                                                >
+                                                    Crime Forecasting
+                                                </Typography>
+                                                {(weeklyFrequency ||
+                                                    montlyFrequency) && (
+                                                    <LineChart
+                                                        data={montlyFrequency}
+                                                        line_type={'montly'}
+                                                    />
+                                                )}
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Grid
+                                        container
+                                        direction="column"
+                                        bgcolor="white"
+                                    >
+                                        <Grid item>
+                                            <Box>
+                                                <Typography
+                                                    className="demographics_header"
+                                                    variant="h6"
+                                                >
+                                                    Top 5 Crime Statistics
+                                                </Typography>
+                                                {top5CrimeData && (
+                                                    <PieChart
+                                                        data={top5CrimeData}
+                                                    />
+                                                )}
+                                            </Box>
+                                        </Grid>
+                                        <Grid item>
+                                            <Box>
+                                                <StackedBarChart />
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={4}>
-                                {top5CrimeData && (
-                                    <PieChart data={top5CrimeData} />
-                                )}
-                            </Grid>
-                            <Grid item xs={8}>
-                                {(weeklyFrequency || montlyFrequency) && (
-                                    <LineChart
-                                        data={montlyFrequency}
-                                        line_type={'montly'}
-                                    />
-                                )}
-                            </Grid>
-                            <Grid item xs={4}>
-                                <StackedBarChart />
-                            </Grid>
-                            <Grid item xs={4}>
+                            <Grid container className="demographics_container">
+                                <Grid xs={12}>
+                                    <Typography
+                                        className="demographics_header"
+                                        variant="h4"
+                                    >
+                                        Victim Demographic Insights
+                                    </Typography>
+                                </Grid>
                                 {top5Ethnicity && (
-                                    <PieChart data={top5Ethnicity} />
+                                    <Grid item xs={4}>
+                                        <Box>
+                                            <Typography
+                                                className="demographics_header"
+                                                variant="h6"
+                                            >
+                                                Ethnicity Insights
+                                            </Typography>
+                                            <PieChart data={top5Ethnicity} />
+                                        </Box>
+                                    </Grid>
+                                )}
+                                {ageDistribution && (
+                                    <Grid item xs={4}>
+                                        <Box>
+                                            <Typography
+                                                className="demographics_header"
+                                                variant="h6"
+                                            >
+                                                Age Insights
+                                            </Typography>
+                                            <BarChart data={ageDistribution} />
+                                        </Box>
+                                    </Grid>
+                                )}
+                                {top5Gender && (
+                                    <Grid item xs={4}>
+                                        <Box>
+                                            <Typography
+                                                className="demographics_header"
+                                                variant="h6"
+                                            >
+                                                Gender Insights
+                                            </Typography>
+                                            <PieChart data={top5Gender} />
+                                        </Box>
+                                    </Grid>
                                 )}
                             </Grid>
-                            <Grid item xs={4}>
-                                <BarChart data={ageDistribution} />
-                            </Grid>
-                            <Grid item xs={4}>
-                                {top5Gender && <PieChart data={top5Gender} />}
-                            </Grid>
-                        </Grid>
+                        </Fragment>
                     )}
                 </div>
             </div>
