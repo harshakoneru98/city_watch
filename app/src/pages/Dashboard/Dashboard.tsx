@@ -2,7 +2,6 @@ import { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SelectInput from '../../components/SelectInput/SelectInput';
 import Map from '../../components/Map/Map';
-import map_riskzone from '../../assets/data/map_riskzone.json';
 import './Dashboard.scss';
 import LineChart from '../../components/LineChart/LineChart';
 import PieChart from '../../components/PieChart/PieChart';
@@ -47,6 +46,8 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     const [top5Ethnicity, setTop5Ethnicity] = useState<any>();
     const [top5Gender, setTop5Gender] = useState<any>();
     const [ageDistribution, setAgeDistribution] = useState<any>();
+
+    const [montlyFrequency, setMontlyFrequency] = useState<any>();
 
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
@@ -144,7 +145,12 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         }
     }, [zipCodes, selectedZipcode, selectedYear]);
 
-    const get_aggregated_data = (data: any, max: number, sort_data: boolean) => {
+    const get_aggregated_data = (
+        data: any,
+        max: number,
+        sort_data: boolean,
+        line_chart: boolean
+    ) => {
         const aggregatedData = data.reduce((accumulator: any, current: any) => {
             current.forEach((data_type: any) => {
                 const dataTypeName = Object.keys(data_type)[0];
@@ -158,41 +164,110 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
             return accumulator;
         }, {});
 
+        if (line_chart) {
+            let lineChartData = Object.keys(aggregatedData)
+                .map((dataName) => [
+                    { x: dataName, y: aggregatedData[dataName] }
+                ])
+                .flat();
+            const months = [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May',
+                'Jun',
+                'Jul',
+                'Aug',
+                'Sep',
+                'Oct',
+                'Nov',
+                'Dec'
+            ];
 
-        let sortedData = Object.keys(aggregatedData)
-            .map((dataName) => [
-                { id: dataName, value: aggregatedData[dataName] }
-            ])
-            .flat()
-
-        if(sort_data){
-            sortedData = sortedData.sort((a, b) => b.value - a.value)
+            const newData = lineChartData.map((d) => {
+                const monthIndex = parseInt(d.x) - 1; // subtract 1 to convert from 1-based to 0-based indexing
+                return { x: months[monthIndex], y: d.y };
+            });
+            return newData;
+        } else {
+            let sortedData = Object.keys(aggregatedData)
+                .map((dataName) => [
+                    { id: dataName, value: aggregatedData[dataName] }
+                ])
+                .flat();
+            if (sort_data) {
+                sortedData = sortedData.sort((a, b) => b.value - a.value);
+            }
+            sortedData = sortedData.slice(0, max);
+            return sortedData;
         }
-            
-        sortedData = sortedData.slice(0, max);
-        return sortedData;
     };
 
     useEffect(() => {
         if (crimeData.length != 0) {
             console.log('Crime Data : ', crimeData);
             const top_5_crimes_data = crimeData.map((obj) => obj.top5_crimes);
-            setTop5CrimeData(get_aggregated_data(top_5_crimes_data, 5, true));
+            setTop5CrimeData(
+                get_aggregated_data(top_5_crimes_data, 5, true, false)
+            );
 
             const ethnicity_distribution_data = crimeData.map(
                 (obj) => obj.ethnicity_distribution
             );
-            setTop5Ethnicity(get_aggregated_data(ethnicity_distribution_data, 5, true));
+            setTop5Ethnicity(
+                get_aggregated_data(ethnicity_distribution_data, 5, true, false)
+            );
 
             const gender_distribution_data = crimeData.map(
                 (obj) => obj.gender_distribution
             );
-            setTop5Gender(get_aggregated_data(gender_distribution_data, 5, true));
+            setTop5Gender(
+                get_aggregated_data(gender_distribution_data, 5, true, false)
+            );
 
             const age_distribution_data = crimeData.map(
                 (obj) => obj.age_distribution
             );
-            setAgeDistribution(get_aggregated_data(age_distribution_data, 10, false))
+            setAgeDistribution(
+                get_aggregated_data(age_distribution_data, 10, false, false)
+            );
+
+            let actual_monthly_data = crimeData.map(
+                (obj) => obj.actual_month_crime_freq
+            );
+
+            actual_monthly_data = get_aggregated_data(actual_monthly_data, 12, false, true)
+
+            if (crimeData && crimeData[0]?.prediction_month_crime_freq) {
+                let prediction_monthly_data = crimeData.map(
+                    (obj) => obj.prediction_month_crime_freq
+                );
+
+                prediction_monthly_data = get_aggregated_data(
+                    prediction_monthly_data,
+                    12,
+                    false,
+                    true
+                )
+
+                let complete_montly_data = [
+                    {
+                        id: 'Actual',
+                        data: actual_monthly_data
+                    },
+                    { id: 'Forecasted', data: prediction_monthly_data }
+                ]
+                setMontlyFrequency(complete_montly_data);
+            }else{
+                let complete_montly_data = [
+                    {
+                        id: 'Actual',
+                        data: actual_monthly_data
+                    }
+                ]
+                setMontlyFrequency(complete_montly_data);
+            }
 
             let map_filtered_data = crimeData.map((obj) => ({
                 zipCode: obj.zip_code,
@@ -270,7 +345,11 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                 )}
                             </Grid>
                             <Grid item xs={8}>
-                                <LineChart />
+                                {montlyFrequency && (
+                                    <LineChart
+                                        data={montlyFrequency}
+                                    />
+                                )}
                             </Grid>
                             <Grid item xs={4}>
                                 <StackedBarChart />
@@ -281,7 +360,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                 )}
                             </Grid>
                             <Grid item xs={4}>
-                                <BarChart data={ageDistribution}/>
+                                <BarChart data={ageDistribution} />
                             </Grid>
                             <Grid item xs={4}>
                                 {top5Gender && <PieChart data={top5Gender} />}
