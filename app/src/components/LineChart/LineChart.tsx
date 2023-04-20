@@ -35,7 +35,7 @@ export default function LineChart({data, line_type} : LineChartProps) {
         <div className="linechart-container" style={{ height: '400px' }}>
             <ResponsiveLine
                 data={line_data}
-                margin={{ top: 20, right: 30, bottom: 50, left: 60 }}
+                margin={{ top: 20, right: 30, bottom: 60, left: 60 }}
                 xScale={{ type: 'point' }}
                 yScale={{
                     type: 'linear',

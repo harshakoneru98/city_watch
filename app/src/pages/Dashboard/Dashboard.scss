@@ -27,11 +27,6 @@
   margin-top: 16px;
 }
 
-.demographics_header{
-  text-align: center;
-  padding-top: 16px;
-}
-
 .linechart_container{
   margin-top: 16px;
 }
@@ -39,4 +34,15 @@
 .header_grid{
   padding-bottom: 16px !important;
   border-bottom: 1px #cacaca solid;
+}
+
+.freq_input{
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 30px;
+}
+
+.demographics_header{
+  text-align: center !important;
+  padding-top: 16px;
 }

@@ -51,6 +51,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
 
     const [montlyFrequency, setMontlyFrequency] = useState<any>();
     const [weeklyFrequency, setWeeklyFrequency] = useState<any>();
+    const [crimeFrequency, setCrimeFrequency] = useState<string>('Monthly');
 
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
@@ -204,7 +205,10 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         } else {
             let sortedData = Object.keys(aggregatedData)
                 .map((dataName) => [
-                    { id: dataName.toUpperCase(), value: aggregatedData[dataName] }
+                    {
+                        id: dataName.toUpperCase(),
+                        value: aggregatedData[dataName]
+                    }
                 ])
                 .flat();
             if (sort_data) {
@@ -364,6 +368,10 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         setSelectedCity(city);
     };
 
+    const handleCrimeFrequencyChange = (type: string) => {
+        setCrimeFrequency(type);
+    };
+
     const handleYearChange = (year: string) => {
         setSelectedYear(year);
         let new_zip_codes = zipYearData[year];
@@ -443,10 +451,33 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                                 >
                                                     Crime Forecasting
                                                 </Typography>
+
+                                                <div className="freq_input">
+                                                    <SelectInput
+                                                        data={[
+                                                            'Monthly',
+                                                            'Weekly'
+                                                        ]}
+                                                        name="Frequency"
+                                                        selectedValue={
+                                                            crimeFrequency
+                                                        }
+                                                        onValChange={
+                                                            handleCrimeFrequencyChange
+                                                        }
+                                                    />
+                                                </div>
+                                            </Box>
+                                            <Box bgcolor="white">
                                                 {(weeklyFrequency ||
                                                     montlyFrequency) && (
                                                     <LineChart
-                                                        data={montlyFrequency}
+                                                        data={
+                                                            crimeFrequency ===
+                                                            'Monthly'
+                                                                ? montlyFrequency
+                                                                : weeklyFrequency
+                                                        }
                                                         line_type={'montly'}
                                                     />
                                                 )}
@@ -485,7 +516,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                 </Grid>
                             </Grid>
                             <Grid container className="demographics_container">
-                                <Grid item xs={12} className='header_grid'>
+                                <Grid item xs={12} className="header_grid">
                                     <Typography
                                         className="demographics_header"
                                         variant="h4"
@@ -502,7 +533,10 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                             >
                                                 Ethnicity Insights
                                             </Typography>
-                                            <PieChart data={top5Ethnicity} type="ethnicity" />
+                                            <PieChart
+                                                data={top5Ethnicity}
+                                                type="ethnicity"
+                                            />
                                         </Box>
                                     </Grid>
                                 )}
@@ -528,7 +562,10 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                             >
                                                 Gender Insights
                                             </Typography>
-                                            <PieChart data={top5Gender} type="gender" />
+                                            <PieChart
+                                                data={top5Gender}
+                                                type="gender"
+                                            />
                                         </Box>
                                     </Grid>
                                 )}
