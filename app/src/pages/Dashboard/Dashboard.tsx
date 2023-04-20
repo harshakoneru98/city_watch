@@ -390,10 +390,10 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                 )}
                             </Grid>
                             <Grid item xs={8}>
-                                {weeklyFrequency && (
+                                {(weeklyFrequency || montlyFrequency) && (
                                     <LineChart
-                                        data={weeklyFrequency}
-                                        line_type={'weekly'}
+                                        data={montlyFrequency}
+                                        line_type={'montly'}
                                     />
                                 )}
                             </Grid>
