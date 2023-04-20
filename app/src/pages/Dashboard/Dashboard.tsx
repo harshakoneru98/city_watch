@@ -204,7 +204,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         } else {
             let sortedData = Object.keys(aggregatedData)
                 .map((dataName) => [
-                    { id: dataName, value: aggregatedData[dataName] }
+                    { id: dataName.toUpperCase(), value: aggregatedData[dataName] }
                 ])
                 .flat();
             if (sort_data) {
@@ -471,6 +471,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                                 {top5CrimeData && (
                                                     <PieChart
                                                         data={top5CrimeData}
+                                                        type="top5crimes"
                                                     />
                                                 )}
                                             </Box>
@@ -484,7 +485,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                 </Grid>
                             </Grid>
                             <Grid container className="demographics_container">
-                                <Grid xs={12}>
+                                <Grid item xs={12} className='header_grid'>
                                     <Typography
                                         className="demographics_header"
                                         variant="h4"
@@ -501,7 +502,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                             >
                                                 Ethnicity Insights
                                             </Typography>
-                                            <PieChart data={top5Ethnicity} />
+                                            <PieChart data={top5Ethnicity} type="ethnicity" />
                                         </Box>
                                     </Grid>
                                 )}
@@ -527,7 +528,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                             >
                                                 Gender Insights
                                             </Typography>
-                                            <PieChart data={top5Gender} />
+                                            <PieChart data={top5Gender} type="gender" />
                                         </Box>
                                     </Grid>
                                 )}
