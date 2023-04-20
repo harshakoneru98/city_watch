@@ -3,15 +3,16 @@ import { AxisProps } from '@nivo/axes';
 import './LineChart.scss';
 
 interface LineChartProps {
-    data: any[]
+    data: any[];
+    line_type: string;
 }
 
-export default function LineChart({data} : LineChartProps) {
+export default function LineChart({data, line_type} : LineChartProps) {
     const axisBottom: AxisProps = {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: 'Month',
+        legend: line_type === 'weekly' ? 'Week' : 'Month',
         legendOffset: 36,
         legendPosition: 'middle'
     };

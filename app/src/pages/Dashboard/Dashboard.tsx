@@ -48,6 +48,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     const [ageDistribution, setAgeDistribution] = useState<any>();
 
     const [montlyFrequency, setMontlyFrequency] = useState<any>();
+    const [weeklyFrequency, setWeeklyFrequency] = useState<any>();
 
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
@@ -149,7 +150,8 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         data: any,
         max: number,
         sort_data: boolean,
-        line_chart: boolean
+        montly_line_chart: boolean,
+        weekly_line_chart: boolean
     ) => {
         const aggregatedData = data.reduce((accumulator: any, current: any) => {
             current.forEach((data_type: any) => {
@@ -164,7 +166,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
             return accumulator;
         }, {});
 
-        if (line_chart) {
+        if (montly_line_chart) {
             let lineChartData = Object.keys(aggregatedData)
                 .map((dataName) => [
                     { x: dataName, y: aggregatedData[dataName] }
@@ -190,6 +192,13 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                 return { x: months[monthIndex], y: d.y };
             });
             return newData;
+        } else if(weekly_line_chart){
+            let lineChartData = Object.keys(aggregatedData)
+                .map((dataName) => [
+                    { x: dataName, y: aggregatedData[dataName] }
+                ])
+                .flat();
+            return lineChartData
         } else {
             let sortedData = Object.keys(aggregatedData)
                 .map((dataName) => [
@@ -209,37 +218,43 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
             console.log('Crime Data : ', crimeData);
             const top_5_crimes_data = crimeData.map((obj) => obj.top5_crimes);
             setTop5CrimeData(
-                get_aggregated_data(top_5_crimes_data, 5, true, false)
+                get_aggregated_data(top_5_crimes_data, 5, true, false, false)
             );
 
             const ethnicity_distribution_data = crimeData.map(
                 (obj) => obj.ethnicity_distribution
             );
             setTop5Ethnicity(
-                get_aggregated_data(ethnicity_distribution_data, 5, true, false)
+                get_aggregated_data(ethnicity_distribution_data, 5, true, false, false)
             );
 
             const gender_distribution_data = crimeData.map(
                 (obj) => obj.gender_distribution
             );
             setTop5Gender(
-                get_aggregated_data(gender_distribution_data, 5, true, false)
+                get_aggregated_data(gender_distribution_data, 5, true, false, false)
             );
 
             const age_distribution_data = crimeData.map(
                 (obj) => obj.age_distribution
             );
             setAgeDistribution(
-                get_aggregated_data(age_distribution_data, 10, false, false)
+                get_aggregated_data(age_distribution_data, 10, false, false, false)
             );
 
             let actual_monthly_data = crimeData.map(
                 (obj) => obj.actual_month_crime_freq
             );
 
-            actual_monthly_data = get_aggregated_data(actual_monthly_data, 12, false, true)
+            actual_monthly_data = get_aggregated_data(actual_monthly_data, 12, false, true, false)
 
-            if (crimeData && crimeData[0]?.prediction_month_crime_freq) {
+            let actual_weekly_data = crimeData.map(
+                (obj) => obj.actual_week_crime_freq
+            );
+
+            actual_weekly_data = get_aggregated_data(actual_weekly_data, 52, false, false, true)
+
+            if (crimeData && (crimeData[0]?.prediction_month_crime_freq|| crimeData[0]?.prediction_week_crime_freq)) {
                 let prediction_monthly_data = crimeData.map(
                     (obj) => obj.prediction_month_crime_freq
                 );
@@ -247,6 +262,19 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                 prediction_monthly_data = get_aggregated_data(
                     prediction_monthly_data,
                     12,
+                    false,
+                    true,
+                    false
+                )
+
+                let prediction_weekly_data = crimeData.map(
+                    (obj) => obj.prediction_week_crime_freq
+                );
+
+                prediction_weekly_data = get_aggregated_data(
+                    prediction_weekly_data,
+                    52,
+                    false,
                     false,
                     true
                 )
@@ -259,6 +287,15 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                     { id: 'Forecasted', data: prediction_monthly_data }
                 ]
                 setMontlyFrequency(complete_montly_data);
+
+                let complete_weekly_data = [
+                    {
+                        id: 'Actual',
+                        data: actual_weekly_data
+                    },
+                    { id: 'Forecasted', data: prediction_weekly_data }
+                ]
+                setWeeklyFrequency(complete_weekly_data);
             }else{
                 let complete_montly_data = [
                     {
@@ -267,6 +304,14 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                     }
                 ]
                 setMontlyFrequency(complete_montly_data);
+
+                let complete_weekly_data = [
+                    {
+                        id: 'Actual',
+                        data: actual_weekly_data
+                    }
+                ]
+                setMontlyFrequency(complete_weekly_data);
             }
 
             let map_filtered_data = crimeData.map((obj) => ({
@@ -345,9 +390,10 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                 )}
                             </Grid>
                             <Grid item xs={8}>
-                                {montlyFrequency && (
+                                {weeklyFrequency && (
                                     <LineChart
-                                        data={montlyFrequency}
+                                        data={weeklyFrequency}
+                                        line_type={'weekly'}
                                     />
                                 )}
                             </Grid>
