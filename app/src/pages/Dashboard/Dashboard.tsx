@@ -588,7 +588,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                                 className="demographics_header"
                                                 variant="h6"
                                             >
-                                                Ethnicity Insights
+                                                Ethnicity Breakdown
                                             </Typography>
                                             <PieChart
                                                 data={top5Ethnicity}
@@ -604,7 +604,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                                 className="demographics_header"
                                                 variant="h6"
                                             >
-                                                Age Insights
+                                                Age Range Analysis
                                             </Typography>
                                             <BarChart data={ageDistribution} />
                                         </Box>
@@ -617,7 +617,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                                 className="demographics_header"
                                                 variant="h6"
                                             >
-                                                Gender Insights
+                                                Gender Distribution
                                             </Typography>
                                             <PieChart
                                                 data={top5Gender}
