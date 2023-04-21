@@ -386,6 +386,8 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         setSelectedZipcode(zip);
     };
 
+    console.log('Top 5 Crimes : ', top5CrimeData?.map((crime: any) => crime.id))
+
     return (
         <Fragment>
             <Header />
@@ -509,6 +511,12 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                         </Grid>
                                         <Grid item>
                                             <Box>
+                                            <Typography
+                                                    className="demographics_header"
+                                                    variant="h6"
+                                                >
+                                                    Recent Years Insights
+                                                </Typography>
                                                 <StackedBarChart />
                                             </Box>
                                         </Grid>

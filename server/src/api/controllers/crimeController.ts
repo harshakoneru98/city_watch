@@ -493,6 +493,114 @@ export default class CrimeController {
         }
     };
 
+    public get_top5_crimedata_by_zipcode = async (
+        req: Request,
+        res: Response
+    ) => {
+        try {
+            let documentClient = new AWS.DynamoDB.DocumentClient();
+            let { zipcodes, desiredCrimes } = req.body;
+
+            let transformedData = await Promise.all(
+                zipcodes.map(async (zip_code: any) => {
+                    let crime_data_params = {
+                        TableName: config.DATABASE_NAME,
+                        KeyConditionExpression:
+                            '#PK = :PK and begins_with(#SK, :SK)',
+                        ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
+                        ExpressionAttributeValues: {
+                            ':PK': 'CRIME#' + zip_code,
+                            ':SK': 'YR#'
+                        }
+                    };
+
+                    const crime_data = await documentClient
+                        .query(crime_data_params)
+                        .promise();
+
+                    let filtered_data = crime_data.Items.map((data) => {
+                        return {
+                            year: data.SK.split('#')[1],
+                            top5_crimes: data.top5_crimes
+                        };
+                    });
+
+                    const filteredData = [];
+
+                    filtered_data.forEach((yearData) => {
+                        const year = yearData.year;
+                        const topCrimes = yearData.top5_crimes;
+
+                        // Filter top crimes to only include desired crimes
+                        const filteredTopCrimes = topCrimes.reduce(
+                            (filtered, crimeObj) => {
+                                const crime = Object.keys(crimeObj)[0];
+                                if (desiredCrimes.includes(crime)) {
+                                    filtered.push({[crime]: crimeObj[crime]});
+                                }
+                                return filtered;
+                            },
+                            []
+                        );
+
+                        filteredData.push({
+                            year: year,
+                            top5_crimes: filteredTopCrimes
+                        });
+                    });
+
+                    return filteredData
+                })
+            );
+
+            const combined_data = {};
+
+            transformedData.forEach(sublist => {
+                sublist.forEach(item => {
+                    const year = item.year;
+                    if (!combined_data[year]) {
+                        combined_data[year] = {};
+                    }
+                    item.top5_crimes.forEach(crime => {
+                        const crime_type = Object.keys(crime)[0];
+                        const crime_count = crime[crime_type];
+                        if (!combined_data[year][crime_type]) {
+                            combined_data[year][crime_type] = crime_count;
+                        } else {
+                            combined_data[year][crime_type] += crime_count;
+                        }
+                    });
+                });
+            });
+
+            const last_5_data = Object.keys(combined_data).sort().slice(-5).reverse()
+
+            const final_data = []
+
+            last_5_data.forEach((year) => {
+                let year_data = {id: year}
+                desiredCrimes.forEach((crime) => {
+                    if(combined_data[year][crime]){
+                        year_data[crime] = combined_data[year][crime]
+                    }else{
+                        year_data[crime] = 0
+                    }
+                })
+                final_data.push(year_data)
+            })
+
+            res.send({
+                status: 200,
+                data: final_data,
+                message: 'Fetched last few years Crime Data'
+            });
+        } catch (err) {
+            res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+    };
+
     // Get CrimeData Information based on City
     public get_crimedata_info_by_city = async (req: Request, res: Response) => {
         try {
