@@ -57,9 +57,9 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     const [top5RecentData, setTop5RecentData] = useState<any>();
 
     const [totalCrimes, setTotalCrimes] = useState<number>();
-    const [vunerableGender, setVunerableGender] = useState<string>();
-    const [vunerableAgeRange, setVunerableAgeRange] = useState<string>();
-    const [vunerableEthnicity, setVunerableEthnicity] = useState<string>();
+    const [vulnerableGender, setVulnerableGender] = useState<string>();
+    const [vulnerableAgeRange, setVulnerableAgeRange] = useState<string>();
+    const [vulnerableEthnicity, setVulnerableEthnicity] = useState<string>();
 
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
@@ -261,7 +261,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
 
             setTop5Ethnicity(agg_ethnicity_data);
 
-            // Get Vunerable Ethnicity
+            // Get Vulnerable Ethnicity
             const filtered_ethnicity_data = [];
             for (let i = 0; i < agg_ethnicity_data.length; i++) {
                 const obj = agg_ethnicity_data[i] as {
@@ -273,13 +273,13 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                 }
             }
             if (filtered_ethnicity_data.length > 0) {
-                setVunerableEthnicity(filtered_ethnicity_data[0].id);
+                setVulnerableEthnicity(filtered_ethnicity_data[0].id);
             } else {
                 let first_ethnicity_data = agg_ethnicity_data[0] as {
                     id: string;
                     value: number;
                 };
-                setVunerableEthnicity(first_ethnicity_data.id);
+                setVulnerableEthnicity(first_ethnicity_data.id);
             }
 
             const gender_distribution_data = crimeData.map(
@@ -296,7 +296,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
 
             setTop5Gender(agg_gender_data);
 
-            // Get Vunerable Gender
+            // Get Vulnerable Gender
             let gender_max = (
                 agg_gender_data[0] as { id: string; value: number }
             ).value;
@@ -318,7 +318,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                 }
             }
 
-            setVunerableGender(gender_max_id);
+            setVulnerableGender(gender_max_id);
 
             // Total Crimes
             let total_crimes = 0;
@@ -345,7 +345,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
 
             setAgeDistribution(agg_age_data);
 
-            // Get Vunerable Age Range
+            // Get Vulnerable Age Range
             let age_max = (agg_age_data[0] as { id: string; value: number })
                 .value;
             let age_max_id = (agg_age_data[0] as { id: string; value: number })
@@ -364,7 +364,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                 }
             }
 
-            setVunerableAgeRange(age_max_id);
+            setVulnerableAgeRange(age_max_id);
 
             let actual_monthly_data = crimeData.map(
                 (obj) => obj.actual_month_crime_freq
@@ -574,13 +574,13 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                             className="demographics_header"
                                             variant="h6"
                                         >
-                                            Vunerable Ethnicity
+                                            Vulnerable Ethnicity
                                         </Typography>
                                         <Typography
                                             className="demographics_header summary_value"
                                             variant="h6"
                                         >
-                                            {vunerableEthnicity}
+                                            {vulnerableEthnicity}
                                         </Typography>
                                     </Box>
                                 </Grid>
@@ -590,13 +590,13 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                             className="demographics_header"
                                             variant="h6"
                                         >
-                                            Vunerable Age Range
+                                            Vulnerable Age Range
                                         </Typography>
                                         <Typography
                                             className="demographics_header summary_value"
                                             variant="h6"
                                         >
-                                            {vunerableAgeRange}
+                                            {vulnerableAgeRange}
                                         </Typography>
                                     </Box>
                                 </Grid>
@@ -606,13 +606,13 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                             className="demographics_header"
                                             variant="h6"
                                         >
-                                            Vunerable Gender
+                                            Vulnerable Gender
                                         </Typography>
                                         <Typography
                                             className="demographics_header summary_value"
                                             variant="h6"
                                         >
-                                            {vunerableGender}
+                                            {vulnerableGender}
                                         </Typography>
                                     </Box>
                                 </Grid>
