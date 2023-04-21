@@ -56,6 +56,11 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
 
     const [top5RecentData, setTop5RecentData] = useState<any>();
 
+    const [totalCrimes, setTotalCrimes] = useState<number>();
+    const [vunerableGender, setVunerableGender] = useState<string>();
+    const [vunerableAgeRange, setVunerableAgeRange] = useState<string>();
+    const [vunerableEthnicity, setVunerableEthnicity] = useState<string>();
+
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
 
@@ -245,41 +250,121 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
             const ethnicity_distribution_data = crimeData.map(
                 (obj) => obj.ethnicity_distribution
             );
-            setTop5Ethnicity(
-                get_aggregated_data(
-                    ethnicity_distribution_data,
-                    5,
-                    true,
-                    false,
-                    false
-                )
+
+            let agg_ethnicity_data = get_aggregated_data(
+                ethnicity_distribution_data,
+                5,
+                true,
+                false,
+                false
             );
+
+            setTop5Ethnicity(agg_ethnicity_data);
+
+            // Get Vunerable Ethnicity
+            const filtered_ethnicity_data = [];
+            for (let i = 0; i < agg_ethnicity_data.length; i++) {
+                const obj = agg_ethnicity_data[i] as {
+                    id: string;
+                    value: number;
+                };
+                if (obj.id !== 'UNKNOWN' && obj.id !== 'OTHER') {
+                    filtered_ethnicity_data.push(obj);
+                }
+            }
+            if (filtered_ethnicity_data.length > 0) {
+                setVunerableEthnicity(filtered_ethnicity_data[0].id);
+            } else {
+                let first_ethnicity_data = agg_ethnicity_data[0] as {
+                    id: string;
+                    value: number;
+                };
+                setVunerableEthnicity(first_ethnicity_data.id);
+            }
 
             const gender_distribution_data = crimeData.map(
                 (obj) => obj.gender_distribution
             );
-            setTop5Gender(
-                get_aggregated_data(
-                    gender_distribution_data,
-                    5,
-                    true,
-                    false,
-                    false
-                )
+
+            let agg_gender_data = get_aggregated_data(
+                gender_distribution_data,
+                5,
+                true,
+                false,
+                false
             );
+
+            setTop5Gender(agg_gender_data);
+
+            // Get Vunerable Gender
+            let gender_max = (
+                agg_gender_data[0] as { id: string; value: number }
+            ).value;
+            let gender_max_id = (
+                agg_gender_data[0] as { id: string; value: number }
+            ).id;
+
+            for (let i = 1; i < agg_gender_data.length; i++) {
+                if (
+                    (agg_gender_data[i] as { id: string; value: number })
+                        .value > gender_max
+                ) {
+                    gender_max = (
+                        agg_gender_data[i] as { id: string; value: number }
+                    ).value;
+                    gender_max_id = (
+                        agg_gender_data[i] as { id: string; value: number }
+                    ).id;
+                }
+            }
+
+            setVunerableGender(gender_max_id);
+
+            // Total Crimes
+            let total_crimes = 0;
+            if (agg_gender_data.length > 0) {
+                agg_gender_data.forEach((item) => {
+                    if ('value' in item) {
+                        total_crimes += item.value;
+                    }
+                });
+            }
+            setTotalCrimes(total_crimes);
 
             const age_distribution_data = crimeData.map(
                 (obj) => obj.age_distribution
             );
-            setAgeDistribution(
-                get_aggregated_data(
-                    age_distribution_data,
-                    10,
-                    false,
-                    false,
-                    false
-                )
+
+            let agg_age_data = get_aggregated_data(
+                age_distribution_data,
+                10,
+                false,
+                false,
+                false
             );
+
+            setAgeDistribution(agg_age_data);
+
+            // Get Vunerable Age Range
+            let age_max = (agg_age_data[0] as { id: string; value: number })
+                .value;
+            let age_max_id = (agg_age_data[0] as { id: string; value: number })
+                .id;
+
+            for (let i = 1; i < agg_age_data.length; i++) {
+                if (
+                    (agg_age_data[i] as { id: string; value: number }).value >
+                    age_max
+                ) {
+                    age_max = (agg_age_data[i] as { id: string; value: number })
+                        .value;
+                    age_max_id = (
+                        agg_age_data[i] as { id: string; value: number }
+                    ).id;
+                }
+            }
+
+            setVunerableAgeRange(age_max_id);
 
             let actual_monthly_data = crimeData.map(
                 (obj) => obj.actual_month_crime_freq
@@ -305,7 +390,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                 true
             );
 
-            setCrimeFrequency('Monthly')
+            setCrimeFrequency('Monthly');
 
             if (
                 crimeData &&
@@ -466,6 +551,72 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                     </div>
                     {crimeData.length > 0 && (
                         <Fragment>
+                            <Grid container spacing={2} className="summary">
+                                <Grid item xs={3}>
+                                    <Box bgcolor="white" height="120px">
+                                        <Typography
+                                            className="demographics_header"
+                                            variant="h6"
+                                        >
+                                            Total Crimes
+                                        </Typography>
+                                        <Typography
+                                            className="demographics_header summary_value"
+                                            variant="h6"
+                                        >
+                                            {totalCrimes}
+                                        </Typography>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Box bgcolor="white" height="120px">
+                                        <Typography
+                                            className="demographics_header"
+                                            variant="h6"
+                                        >
+                                            Vunerable Ethnicity
+                                        </Typography>
+                                        <Typography
+                                            className="demographics_header summary_value"
+                                            variant="h6"
+                                        >
+                                            {vunerableEthnicity}
+                                        </Typography>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Box bgcolor="white" height="120px">
+                                        <Typography
+                                            className="demographics_header"
+                                            variant="h6"
+                                        >
+                                            Vunerable Age Range
+                                        </Typography>
+                                        <Typography
+                                            className="demographics_header summary_value"
+                                            variant="h6"
+                                        >
+                                            {vunerableAgeRange}
+                                        </Typography>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Box bgcolor="white" height="120px">
+                                        <Typography
+                                            className="demographics_header"
+                                            variant="h6"
+                                        >
+                                            Vunerable Gender
+                                        </Typography>
+                                        <Typography
+                                            className="demographics_header summary_value"
+                                            variant="h6"
+                                        >
+                                            {vunerableGender}
+                                        </Typography>
+                                    </Box>
+                                </Grid>
+                            </Grid>
                             <Grid container spacing={2}>
                                 <Grid item xs={8}>
                                     <Grid container direction="column">
