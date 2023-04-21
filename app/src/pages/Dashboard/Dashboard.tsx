@@ -15,6 +15,7 @@ import { RootState } from '../../store';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
 import { fetchZipDataInfoData } from '../../store/slices/zipdataSlice';
 import { fetchCrimeDataInfoData } from '../../store/slices/crimedataSlice';
+import { fetchTop5CrimeDataInfoData } from '../../store/slices/topcrimedataSlice';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import BarChart from '../../components/BarChart/BarChart';
@@ -52,6 +53,8 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     const [montlyFrequency, setMontlyFrequency] = useState<any>();
     const [weeklyFrequency, setWeeklyFrequency] = useState<any>();
     const [crimeFrequency, setCrimeFrequency] = useState<string>('Monthly');
+
+    const [top5RecentData, setTop5RecentData] = useState<any>();
 
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
@@ -92,6 +95,20 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         console.log(crimeDataError);
     }
 
+    const {
+        top5RecentCrimeData,
+        top5RecentCrimeDataStatus,
+        top5RecentCrimeDataError
+    } = useSelector((state: RootState) => state.topCrimeDataInfo);
+
+    if (top5RecentCrimeDataStatus === 'loading') {
+        console.log('Top 5 Crime Data Loading');
+    }
+
+    if (top5RecentCrimeDataError === 'failed') {
+        console.log(top5RecentCrimeDataError);
+    }
+
     useEffect(() => {
         if (metaData.length) {
             const cities = [
@@ -104,7 +121,6 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     }, [metaData]);
 
     useEffect(() => {
-        console.log('Selected City : ', selectedCity);
         if (selectedCity) {
             dispatch(
                 fetchZipDataInfoData({
@@ -386,7 +402,35 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         setSelectedZipcode(zip);
     };
 
-    console.log('Top 5 Crimes : ', top5CrimeData?.map((crime: any) => crime.id))
+    useEffect(() => {
+        if (top5CrimeData) {
+            if (selectedYear) {
+                let new_zip_codes_api = [];
+                if (selectedZipcode === 'All') {
+                    new_zip_codes_api = zipCodes.filter(
+                        (elem) => elem !== 'All'
+                    );
+                } else {
+                    new_zip_codes_api = [selectedZipcode];
+                }
+                dispatch(
+                    fetchTop5CrimeDataInfoData({
+                        endpoint: 'crime/get_top5_crimedata_by_zipcode',
+                        desiredCrimes: top5CrimeData?.map(
+                            (crime: any) => crime.id
+                        ),
+                        zipcodes: new_zip_codes_api
+                    })
+                );
+            }
+        }
+    }, [top5CrimeData, zipCodes, selectedZipcode, selectedYear]);
+
+    useEffect(() => {
+        if (top5RecentCrimeData?.data) {
+            setTop5RecentData(top5RecentCrimeData.data);
+        }
+    }, [top5RecentCrimeData]);
 
     return (
         <Fragment>
@@ -511,13 +555,17 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                         </Grid>
                                         <Grid item>
                                             <Box>
-                                            <Typography
+                                                <Typography
                                                     className="demographics_header"
                                                     variant="h6"
                                                 >
                                                     Recent Years Insights
                                                 </Typography>
-                                                <StackedBarChart />
+                                                {top5RecentData && (
+                                                    <StackedBarChart
+                                                        data={top5RecentData}
+                                                    />
+                                                )}
                                             </Box>
                                         </Grid>
                                     </Grid>

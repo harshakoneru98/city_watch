@@ -40,3 +40,10 @@ export interface CrimeDataState {
     crimeDataStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
     crimeDataError: string | null;
 }
+
+// Top 5 Recent Crime Data by Zipcodes
+export interface Top5RecentCrimeDataState {
+    top5RecentCrimeData: any;
+    top5RecentCrimeDataStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    top5RecentCrimeDataError: string | null;
+}
