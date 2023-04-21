@@ -237,7 +237,6 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
 
     useEffect(() => {
         if (crimeData.length != 0) {
-            console.log('Crime Data : ', crimeData);
             const top_5_crimes_data = crimeData.map((obj) => obj.top5_crimes);
             setTop5CrimeData(
                 get_aggregated_data(top_5_crimes_data, 5, true, false, false)
@@ -306,6 +305,8 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                 true
             );
 
+            setCrimeFrequency('Monthly')
+
             if (
                 crimeData &&
                 (crimeData[0]?.prediction_month_crime_freq ||
@@ -367,7 +368,7 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                         data: actual_weekly_data
                     }
                 ];
-                setMontlyFrequency(complete_weekly_data);
+                setWeeklyFrequency(complete_weekly_data);
             }
 
             let map_filtered_data = crimeData.map((obj) => ({
