@@ -676,7 +676,10 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                                                 ? montlyFrequency
                                                                 : weeklyFrequency
                                                         }
-                                                        line_type={'montly'}
+                                                        line_type={crimeFrequency ===
+                                                            'Monthly'
+                                                                ? 'Monthly'
+                                                                : 'Weekly'}
                                                     />
                                                 )}
                                             </Box>

@@ -12,7 +12,7 @@ export default function LineChart({data, line_type} : LineChartProps) {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: line_type === 'weekly' ? 'Week' : 'Month',
+        legend: line_type === 'Monthly' ? 'Month' : 'Week',
         legendOffset: 36,
         legendPosition: 'middle'
     };
