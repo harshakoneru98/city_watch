@@ -39,4 +39,41 @@ export default class HousingController {
             message: 'OK'
         });
     };
+
+    // Get Housing Cities Information
+    public get_housing_cities_info = async (req: Request, res: Response) => {
+        try {
+            let documentClient = new AWS.DynamoDB.DocumentClient();
+
+            let params = {
+                TableName: config.DATABASE_NAME,
+                FilterExpression: 'begins_with(PK, :pk)',
+                ExpressionAttributeValues: {
+                    ':pk': 'HSG'
+                },
+                ExclusiveStartKey: undefined
+            };
+
+            let items = [];
+
+            while (true) {
+                let data = await documentClient.scan(params).promise();
+                items = items.concat(data.Items);
+                params.ExclusiveStartKey = data.LastEvaluatedKey;
+                if (!params.ExclusiveStartKey) break;
+            }
+
+            const transformedData = await items.map((location) =>  location.primary_city);
+
+            res.send({
+                status: 200,
+                data: [...new Set(transformedData)].sort(),
+                message: 'Fetched Cities of Housing Locations'
+            });
+        } catch (err) {
+            res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+    };
 }

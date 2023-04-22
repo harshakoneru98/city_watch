@@ -47,3 +47,10 @@ export interface Top5RecentCrimeDataState {
     top5RecentCrimeDataStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
     top5RecentCrimeDataError: string | null;
 }
+
+// Housing Cities
+export interface HousingCitiesDataState {
+    housingCitiesData: string[];
+    housingCitiesDataStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    housingCitiesDataError: string | null;
+}
