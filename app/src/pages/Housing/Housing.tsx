@@ -11,6 +11,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import RangeSlider from '../../components/RangeSlider/RangeSlider';
+import SingleSlider from '../../components/SingleSlider/SingleSlider';
 import './Housing.scss';
 
 interface HousingProps {
@@ -29,7 +30,7 @@ export default function Housing({defaultCity}: HousingProps) {
     const [cities, setCities] = useState<string[]>([]);
     const [selectedCity, setSelectedCity] = useState<string>(defaultCity);
     const [priceRange, setPriceRange] = useState<[number, number]>([100, 1000]);
-    const [areaRange, setAreaRange] = useState<[number, number]>([1000, 10000]);
+    const [areaRange, setAreaRange] = useState<number>(1000);
 
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
@@ -68,7 +69,7 @@ export default function Housing({defaultCity}: HousingProps) {
         setPriceRange(value);
     };
 
-    const handleAreaRangeChange = (value: [number, number]) => {
+    const handleAreaRangeChange = (value: number) => {
         setAreaRange(value);
     };
 
@@ -146,13 +147,12 @@ export default function Housing({defaultCity}: HousingProps) {
                                                 className="housing_filter_header"
                                                 variant="h6"
                                             >
-                                                Area Range
+                                                House Area 
                                             </Typography>
                                         </Grid>
                                         <Grid item>
-                                            <RangeSlider
-                                                min_value={1000}
-                                                max_value={10000}
+                                            <SingleSlider
+                                                defaultValue={1000}
                                                 step={1000}
                                                 min={1000}
                                                 max={10000}
