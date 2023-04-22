@@ -1,7 +1,6 @@
 import { Fragment, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Header from '../../components/Header/Header';
-import SelectInput from '../../components/SelectInput/SelectInput';
+import AutoComplete from '../../components/AutoComplete/AutoComplete'
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { ThunkDispatch } from 'redux-thunk';
@@ -14,21 +13,9 @@ import RangeSlider from '../../components/RangeSlider/RangeSlider';
 import SingleSlider from '../../components/SingleSlider/SingleSlider';
 import './Housing.scss';
 
-interface HousingProps {
-  defaultCity: string;
-}
-
-Housing.defaultProps = {
-  defaultCity: 'All Cities'
-};
-
-Housing.propTypes = {
-  defaultCity: PropTypes.string
-};
-
-export default function Housing({defaultCity}: HousingProps) {
+export default function Housing() {
     const [cities, setCities] = useState<string[]>([]);
-    const [selectedCity, setSelectedCity] = useState<string>(defaultCity);
+    const [selectedCities, setSelectedCities] = useState<string[]>();
     const [priceRange, setPriceRange] = useState<[number, number]>([100, 1000]);
     const [areaRange, setAreaRange] = useState<number>(1000);
 
@@ -51,7 +38,7 @@ export default function Housing({defaultCity}: HousingProps) {
 
     useEffect(() => {
         if (housingCitiesData.length) {
-            setCities(['All Cities', ...housingCitiesData]);
+            setCities(housingCitiesData);
         } else {
             dispatch(
                 fetchHousingCitiesDataInfoData(
@@ -61,8 +48,8 @@ export default function Housing({defaultCity}: HousingProps) {
         }
     }, [housingCitiesData]);
 
-    const handleCityChange = (city: string) => {
-        setSelectedCity(city);
+    const handleCityChange = (cities: string[]) => {
+        setSelectedCities(cities);
     };
 
     const handlePriceRangeChange = (value: [number, number]) => {
@@ -74,13 +61,8 @@ export default function Housing({defaultCity}: HousingProps) {
     };
 
     const handleGetResults = () => {
-        if(selectedCity === defaultCity){
-          console.log('Selected Cities : ', cities.filter((elem) => elem !== defaultCity));
-        }else {
-          console.log('Selected Cities : ', [selectedCity])
-        }
-        console.log('Price Range Multiply : ', priceRange.map(item => item*1000));
-        console.log('Area Range : ', areaRange);
+        console.log('Selected Cities : ', selectedCities)
+        console.log('Price Range Multiply : ', priceRange.map(item => (item*1000)/areaRange));
     };
 
     return (
@@ -103,17 +85,12 @@ export default function Housing({defaultCity}: HousingProps) {
                             bgcolor="white"
                         >
                             <Grid item xs={2}>
-                                <div className="selectInputContainer girdItemCenter">
-                                    <SelectInput
-                                        data={cities}
-                                        name="City"
-                                        selectedValue={
-                                            selectedCity
-                                                ? selectedCity
-                                                : defaultCity
-                                        }
-                                        onValChange={handleCityChange}
-                                    />
+                                <div className="girdItemCenter">
+                                  <AutoComplete
+                                          data={cities}
+                                          selectedValues={selectedCities}
+                                          onSelectionChange={handleCityChange}
+                                      />
                                 </div>
                             </Grid>
                             <Grid item xs={4}>
