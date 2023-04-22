@@ -1,0 +1,30 @@
+.home_header {
+    background-color: #f5f5f5 !important;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home_summary {
+    text-align: justify
+}
+
+.girdItemCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin: auto;
+    margin-bottom: 8px !important;
+}
+
+.home_grid-item {
+    position: relative;
+
+}
+
+.home_box {
+    border: 2px solid #CACACA;
+    margin: auto 5%;
+}
