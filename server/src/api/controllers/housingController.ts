@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as AWS from 'aws-sdk';
 import config from '../../config/config';
-import * as housing from '../../config/Final_Datasets/housing.json'
+import * as housing from '../../config/Final_Datasets/housing.json';
 
 AWS.config.update({
     region: config.AWS_REGION,
@@ -23,8 +23,8 @@ export default class HousingController {
                     persqrt_price: data.persqrt_price,
                     risk_zone: data.risk_zone,
                     crime_count: data.crime_count,
-                    primary_city: data.primary_city,
-                    house_crime_correlation: data.house_crime_correlation,
+                    housing_city: data.primary_city,
+                    house_crime_correlation: data.house_crime_correlation
                 }
             };
 
@@ -63,12 +63,95 @@ export default class HousingController {
                 if (!params.ExclusiveStartKey) break;
             }
 
-            const transformedData = await items.map((location) =>  location.primary_city);
+            const transformedData = await items.map(
+                (location) => location.housing_city
+            );
 
             res.send({
                 status: 200,
                 data: [...new Set(transformedData)].sort(),
                 message: 'Fetched Cities of Housing Locations'
+            });
+        } catch (err) {
+            res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+    };
+
+    // Get Housing Recommendation Information
+    public get_housing_recommendation_info = async (
+        req: Request,
+        res: Response
+    ) => {
+        try {
+            let documentClient = new AWS.DynamoDB.DocumentClient();
+            let { cities, persqrt_range } = req.body;
+
+            let items = [];
+
+            for (let i = 0; i < cities.length; i++) {
+                let params = {
+                    TableName: config.DATABASE_NAME,
+                    FilterExpression:
+                        'housing_city = :city AND persqrt_price >= :min_persqrt AND persqrt_price <= :max_persqrt',
+                    ExpressionAttributeValues: {
+                        ':city': cities[i],
+                        ':min_persqrt': persqrt_range[0],
+                        ':max_persqrt': persqrt_range[1]
+                    },
+                    ExclusiveStartKey: undefined
+                };
+
+                while (true) {
+                    let data = await documentClient.scan(params).promise();
+                    items = items.concat(data.Items);
+                    params.ExclusiveStartKey = data.LastEvaluatedKey;
+                    if (!params.ExclusiveStartKey) break;
+                }
+            }
+
+            const transformedData = await items.map((location) => ({
+                zip_code: location.PK.split('#')[1],
+                year: location.SK.split('#')[1],
+                housing_city: location.housing_city,
+                crime_count: location.crime_count,
+                house_crime_correlation: location.house_crime_correlation,
+                persqrt_price: location.persqrt_price,
+                risk_zone: location.risk_zone
+            }));
+
+            const combinedData = [];
+            const tempData = {};
+
+            for (let i = 0; i < transformedData.length; i++) {
+            const obj = transformedData[i];
+            if (!tempData[obj.zip_code]) {
+                tempData[obj.zip_code] = {
+                zip_code: obj.zip_code,
+                housing_city: obj.housing_city,
+                year_data: []
+                };
+            }
+            tempData[obj.zip_code].year_data.push({
+                year: obj.year,
+                crime_count: obj.crime_count,
+                house_crime_correlation: obj.house_crime_correlation,
+                persqrt_price: obj.persqrt_price,
+                risk_zone: obj.risk_zone
+            });
+            }
+
+            for (const key in tempData) {
+            const obj = tempData[key];
+            obj.year_data.sort((a, b) => parseInt(b.year) - parseInt(a.year));
+            combinedData.push(obj);
+            }
+
+            res.send({
+                status: 200,
+                data: combinedData,
+                message: 'Fetched Housing Info'
             });
         } catch (err) {
             res.status(500).json({

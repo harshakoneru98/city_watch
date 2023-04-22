@@ -74,8 +74,12 @@ export default function Housing({defaultCity}: HousingProps) {
     };
 
     const handleGetResults = () => {
-        console.log('Selected City : ', selectedCity);
-        console.log('Price Range : ', priceRange);
+        if(selectedCity === defaultCity){
+          console.log('Selected Cities : ', cities.filter((elem) => elem !== defaultCity));
+        }else {
+          console.log('Selected Cities : ', [selectedCity])
+        }
+        console.log('Price Range Multiply : ', priceRange.map(item => item*1000));
         console.log('Area Range : ', areaRange);
     };
 
