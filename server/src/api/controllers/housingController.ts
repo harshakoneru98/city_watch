@@ -20,7 +20,11 @@ export default class HousingController {
                 Item: {
                     PK: `HSG#${data.zip_code}`,
                     SK: `YR#${data.year}`,
-                    persqrt_price: data.persqrt_price
+                    persqrt_price: data.persqrt_price,
+                    risk_zone: data.risk_zone,
+                    crime_count: data.crime_count,
+                    primary_city: data.primary_city,
+                    house_crime_correlation: data.house_crime_correlation,
                 }
             };
 
