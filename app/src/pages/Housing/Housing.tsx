@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import RangeSlider from '../../components/RangeSlider/RangeSlider';
 import SingleSlider from '../../components/SingleSlider/SingleSlider';
 import './Housing.scss';
+import HousingTable from '../../components/HousingTable/HousingTable';
 
 export default function Housing() {
     const [cities, setCities] = useState<string[]>([]);
@@ -20,8 +21,14 @@ export default function Housing() {
     const [priceRange, setPriceRange] = useState<[number, number]>([100, 1000]);
     const [areaRange, setAreaRange] = useState<number>(1000);
 
+    const [housingData, setHousingData] = useState<any>({});
+
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
+
+    useEffect(() => {
+      setHousingData({})
+    }, [])
 
     const {
         housingCitiesData,
@@ -87,7 +94,7 @@ export default function Housing() {
 
     useEffect(() => {
       if(housingInfoData.data){
-        console.log(housingInfoData.data)
+        setHousingData(housingInfoData.data)
       }
     }, [housingInfoData])
 
@@ -186,6 +193,9 @@ export default function Housing() {
                                 </div>
                             </Grid>
                         </Grid>
+                        {housingData.length && (
+                          <HousingTable data={housingData} sqrt_selected={areaRange} />
+                        )}
                     </Fragment>
                 </div>
             </div>
