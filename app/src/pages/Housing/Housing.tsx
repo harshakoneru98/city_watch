@@ -76,9 +76,6 @@ export default function Housing() {
     };
 
     const handleGetResults = () => {
-        console.log('Selected Cities : ', selectedCities)
-        console.log('Price Range Multiply : ', priceRange.map(item => (item*1000)/areaRange));
-
         dispatch(
           fetchHousingDataInfoData({
               endpoint: 'housing/get_housing_recommendation_info',

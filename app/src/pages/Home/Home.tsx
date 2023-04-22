@@ -6,12 +6,11 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import './Home.scss';
+import crime_housing from '../../assets/crime_housing.gif';
 
 const Img = styled('img')({
-    margin: 'auto',
     display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%'
+    height: '100%'
 });
 
 export default function Home() {
@@ -53,14 +52,13 @@ export default function Home() {
                         </div>
                     </Box>
                 </Grid>
-                <Grid item xs={8}>
-                    <Typography
-                        className="housing_filter_header"
-                        variant="body1"
-                    >
-                        Image
-                    </Typography>
-                    {/* <Img alt="complex" src="/static/images/grid/complex.jpg" /> */}
+                <Grid
+                    item
+                    xs={8}
+                    className="home_image"
+                    sx={{ padding: 0, height: '100vh' }}
+                >
+                    <Img alt="complex" src={crime_housing} />
                 </Grid>
             </Grid>
         </Fragment>
