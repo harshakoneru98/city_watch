@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Header from '../../components/Header/Header';
 import SelectInput from '../../components/SelectInput/SelectInput';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,13 +8,26 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { fetchHousingCitiesDataInfoData } from '../../store/slices/housingcitiesdataSlice';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import RangeSlider from '../../components/RangeSlider/RangeSlider';
 import './Housing.scss';
 
-export default function Housing() {
+interface HousingProps {
+  defaultCity: string;
+}
+
+Housing.defaultProps = {
+  defaultCity: 'All Cities'
+};
+
+Housing.propTypes = {
+  defaultCity: PropTypes.string
+};
+
+export default function Housing({defaultCity}: HousingProps) {
     const [cities, setCities] = useState<string[]>([]);
-    const [selectedCity, setSelectedCity] = useState<string>();
+    const [selectedCity, setSelectedCity] = useState<string>(defaultCity);
     const [priceRange, setPriceRange] = useState<[number, number]>([100, 1000]);
     const [areaRange, setAreaRange] = useState<[number, number]>([1000, 10000]);
 
@@ -59,9 +73,9 @@ export default function Housing() {
     };
 
     const handleGetResults = () => {
-      console.log("Selected City : ", selectedCity);
-      console.log("Price Range : ", priceRange);
-      console.log("Area Range : ", areaRange);
+        console.log('Selected City : ', selectedCity);
+        console.log('Price Range : ', priceRange);
+        console.log('Area Range : ', areaRange);
     };
 
     return (
@@ -69,10 +83,17 @@ export default function Housing() {
             <Header />
             <div className="main-container">
                 <div className="housing-container">
-                    <div className="filter-container">
+                    <Fragment>
+                        <Grid container bgcolor="white" className='housing_header'>
+                            <Grid item xs={12} className="header_grid">
+                                <Typography variant="h4">
+                                  Let's Find Your Next Home Together
+                                </Typography>
+                            </Grid>
+                        </Grid>
+
                         <Grid
                             container
-                            spacing={2}
                             className="housing_summary"
                             bgcolor="white"
                         >
@@ -81,35 +102,67 @@ export default function Housing() {
                                     <SelectInput
                                         data={cities}
                                         name="City"
-                                        selectedValue={selectedCity? selectedCity : 'All Cities'}
+                                        selectedValue={
+                                            selectedCity
+                                                ? selectedCity
+                                                : defaultCity
+                                        }
                                         onValChange={handleCityChange}
                                     />
                                 </div>
                             </Grid>
                             <Grid item xs={4}>
                                 <div className="sliderContainer girdItemCenter">
-                                    <RangeSlider
-                                        min_value={100}
-                                        max_value={1000}
-                                        step={100}
-                                        min={100}
-                                        max={1000}
-                                        alias="k"
-                                        onValChange={handlePriceRangeChange}
-                                    />
+                                    <Grid container direction="column">
+                                        <Grid item>
+                                            <Typography
+                                                className="housing_filter_header"
+                                                variant="h6"
+                                            >
+                                                Price Range
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <RangeSlider
+                                                min_value={100}
+                                                max_value={1000}
+                                                step={100}
+                                                min={100}
+                                                max={1000}
+                                                alias="k"
+                                                onValChange={
+                                                    handlePriceRangeChange
+                                                }
+                                            />
+                                        </Grid>
+                                    </Grid>
                                 </div>
                             </Grid>
                             <Grid item xs={4}>
                                 <div className="sliderContainer girdItemCenter">
-                                    <RangeSlider
-                                        min_value={1000}
-                                        max_value={10000}
-                                        step={1000}
-                                        min={1000}
-                                        max={10000}
-                                        alias="sqft"
-                                        onValChange={handleAreaRangeChange}
-                                    />
+                                    <Grid container direction="column">
+                                        <Grid item>
+                                            <Typography
+                                                className="housing_filter_header"
+                                                variant="h6"
+                                            >
+                                                Area Range
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <RangeSlider
+                                                min_value={1000}
+                                                max_value={10000}
+                                                step={1000}
+                                                min={1000}
+                                                max={10000}
+                                                alias="sqft"
+                                                onValChange={
+                                                    handleAreaRangeChange
+                                                }
+                                            />
+                                        </Grid>
+                                    </Grid>
                                 </div>
                             </Grid>
                             <Grid item xs={2}>
@@ -126,7 +179,7 @@ export default function Housing() {
                                 </div>
                             </Grid>
                         </Grid>
-                    </div>
+                    </Fragment>
                 </div>
             </div>
         </Fragment>

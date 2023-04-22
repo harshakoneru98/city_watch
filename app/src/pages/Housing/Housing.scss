@@ -9,8 +9,8 @@
 }
 
 .housing_summary {
-    padding-bottom: 16px;
-    margin-left: 0px !important;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .sliderContainer{
@@ -23,4 +23,13 @@
     justify-content: center;
     height: 100%;
     margin: auto;
+}
+
+.housing_filter_header{
+    text-align: center !important;
+}
+
+.housing_header{
+    text-align: center !important;
+    padding-top: 20px;
 }
