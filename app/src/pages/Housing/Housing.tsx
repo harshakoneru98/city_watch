@@ -6,6 +6,7 @@ import { RootState } from '../../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { fetchHousingCitiesDataInfoData } from '../../store/slices/housingcitiesdataSlice';
+import { fetchHousingDataInfoData } from '../../store/slices/housingdataSlice';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -36,6 +37,20 @@ export default function Housing() {
         console.log(housingCitiesDataError);
     }
 
+    const {
+      housingInfoData,
+      housingInfoDataStatus,
+      housingInfoDataError
+  } = useSelector((state: RootState) => state.housingDataInfo);
+
+  if (housingInfoDataStatus === 'loading') {
+      console.log('Housing Data Loading');
+  }
+
+  if (housingInfoDataError === 'failed') {
+      console.log(housingInfoDataError);
+  }
+
     useEffect(() => {
         if (housingCitiesData.length) {
             setCities(housingCitiesData);
@@ -63,7 +78,21 @@ export default function Housing() {
     const handleGetResults = () => {
         console.log('Selected Cities : ', selectedCities)
         console.log('Price Range Multiply : ', priceRange.map(item => (item*1000)/areaRange));
+
+        dispatch(
+          fetchHousingDataInfoData({
+              endpoint: 'housing/get_housing_recommendation_info',
+              cities: selectedCities,
+              persqrt_range: priceRange.map(item => (item*1000)/areaRange)
+          })
+      );
     };
+
+    useEffect(() => {
+      if(housingInfoData.data){
+        console.log(housingInfoData.data)
+      }
+    }, [housingInfoData])
 
     return (
         <Fragment>

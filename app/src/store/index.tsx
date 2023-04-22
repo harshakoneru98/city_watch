@@ -7,6 +7,7 @@ import zipdataReducer from './slices/zipdataSlice';
 import crimedataReducer from './slices/crimedataSlice'
 import topcrimedataReducer from './slices/topcrimedataSlice'
 import housingcitiesdataReducer from './slices/housingcitiesdataSlice';
+import housingdataReducer from './slices/housingdataSlice'
 
 const store = configureStore({
   reducer: {
@@ -14,7 +15,8 @@ const store = configureStore({
     zipDataInfo: zipdataReducer,
     crimeDataInfo: crimedataReducer,
     topCrimeDataInfo: topcrimedataReducer,
-    housingCitiesDataInfo: housingcitiesdataReducer
+    housingCitiesDataInfo: housingcitiesdataReducer,
+    housingDataInfo: housingdataReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });

@@ -54,3 +54,10 @@ export interface HousingCitiesDataState {
     housingCitiesDataStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
     housingCitiesDataError: string | null;
 }
+
+// Housing Information Based on Filters
+export interface HousingInfoDataState {
+    housingInfoData: any;
+    housingInfoDataStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    housingInfoDataError: string | null;
+}

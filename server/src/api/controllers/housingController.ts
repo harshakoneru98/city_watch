@@ -125,27 +125,29 @@ export default class HousingController {
             const tempData = {};
 
             for (let i = 0; i < transformedData.length; i++) {
-            const obj = transformedData[i];
-            if (!tempData[obj.zip_code]) {
-                tempData[obj.zip_code] = {
-                zip_code: obj.zip_code,
-                housing_city: obj.housing_city,
-                year_data: []
-                };
-            }
-            tempData[obj.zip_code].year_data.push({
-                year: obj.year,
-                crime_count: obj.crime_count,
-                house_crime_correlation: obj.house_crime_correlation,
-                persqrt_price: obj.persqrt_price,
-                risk_zone: obj.risk_zone
-            });
+                const obj = transformedData[i];
+                if (!tempData[obj.zip_code]) {
+                    tempData[obj.zip_code] = {
+                        zip_code: obj.zip_code,
+                        housing_city: obj.housing_city,
+                        year_data: []
+                    };
+                }
+                tempData[obj.zip_code].year_data.push({
+                    year: obj.year,
+                    crime_count: obj.crime_count,
+                    house_crime_correlation: obj.house_crime_correlation,
+                    persqrt_price: obj.persqrt_price,
+                    risk_zone: obj.risk_zone
+                });
             }
 
             for (const key in tempData) {
-            const obj = tempData[key];
-            obj.year_data.sort((a, b) => parseInt(b.year) - parseInt(a.year));
-            combinedData.push(obj);
+                const obj = tempData[key];
+                obj.year_data.sort(
+                    (a, b) => parseInt(b.year) - parseInt(a.year)
+                );
+                combinedData.push(obj);
             }
 
             res.send({
