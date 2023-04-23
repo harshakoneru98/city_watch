@@ -15,7 +15,7 @@ export default class UserController {
     // Create User
     public create_user = async (req: Request, res: Response) => {
         let documentClient = new AWS.DynamoDB.DocumentClient();
-        let user = req.body
+        let user = req.body;
 
         let email_check_params = {
             TableName: config.DATABASE_NAME,
@@ -26,7 +26,7 @@ export default class UserController {
                 ':email': user.email
             }
         };
-    
+
         const email_response = await documentClient
             .query(email_check_params)
             .promise();
@@ -34,11 +34,11 @@ export default class UserController {
         if (email_response.Count === 1) {
             res.send({
                 status: 200,
-                message: 'Email already exists',
+                message: 'Email already exists'
             });
         } else {
             const hashedPassword = await bcrypt.hash(user.password, 12);
-            const user_id = v4()
+            const user_id = v4();
             let params = {
                 TableName: config.DATABASE_NAME,
                 Item: {
@@ -51,12 +51,12 @@ export default class UserController {
                     lastName: user.lastName
                 }
             };
-    
+
             try {
                 await documentClient.put(params).promise();
                 await res.send({
                     status: 200,
-                    message: 'Created User Successfully',
+                    message: 'Created User Successfully'
                 });
             } catch (err) {
                 res.status(500).json({
@@ -69,7 +69,7 @@ export default class UserController {
     // Check User
     public check_user = async (req: Request, res: Response) => {
         let documentClient = new AWS.DynamoDB.DocumentClient();
-        let user = req.body
+        let user = req.body;
 
         let email_check_params = {
             TableName: config.DATABASE_NAME,
@@ -80,18 +80,21 @@ export default class UserController {
                 ':email': user.email
             }
         };
-    
+
         const email_response = await documentClient
             .query(email_check_params)
             .promise();
 
         if (email_response.Count === 1) {
             const userDetails = email_response?.Items[0];
-            const isEqual = await bcrypt.compare(user.password, userDetails.password);
+            const isEqual = await bcrypt.compare(
+                user.password,
+                userDetails.password
+            );
             if (!isEqual) {
                 res.send({
                     status: 200,
-                    message: 'Incorrect Password',
+                    message: 'Incorrect Password'
                 });
             } else {
                 const token = jwt.sign(
@@ -112,43 +115,76 @@ export default class UserController {
         } else {
             res.send({
                 status: 200,
-                message: 'Invalid Credentials',
+                message: 'Invalid Credentials'
             });
         }
     };
 
     // Get User Info By UserID
     public get_user_data = async (req: Request, res: Response) => {
-        let documentClient = new AWS.DynamoDB.DocumentClient();
-        let {userId} = req.body
+        try {
+            let documentClient = new AWS.DynamoDB.DocumentClient();
+            let { userId } = req.body;
 
-        let params = {
-            TableName: config.DATABASE_NAME,
-            KeyConditionExpression: '#PK = :PK and #SK = :SK',
-            ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
-            ExpressionAttributeValues: {
-                ':PK': 'AUTH#' + userId,
-                ':SK': userId
-            }
-        };
-    
-        const response = await documentClient
-            .query(params)
-            .promise();
+            let params = {
+                TableName: config.DATABASE_NAME,
+                KeyConditionExpression: '#PK = :PK and #SK = :SK',
+                ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
+                ExpressionAttributeValues: {
+                    ':PK': 'AUTH#' + userId,
+                    ':SK': userId
+                }
+            };
 
-        let user_meta_data = {
-            firstName: response.Items[0].firstName,
-            lastName: response.Items[0].lastName,
-            email: response.Items[0].email,
-            city_located: response.Items[0].city_located
+            const response = await documentClient.query(params).promise();
+
+            let user_meta_data = {
+                firstName: response.Items[0].firstName,
+                lastName: response.Items[0].lastName,
+                email: response.Items[0].email,
+                city_located: response.Items[0].city_located
+            };
+
+            res.send({
+                status: 200,
+                data: user_meta_data,
+                message: 'Fetched User Metadata'
+            });
+        } catch (err) {
+            res.status(500).json({
+                message: 'Internal Server Error'
+            });
         }
+    };
 
-        res.send({
-            status: 200,
-            data: user_meta_data,
-            message: 'Fetched User Metadata'
-        });
-            
-        
+    // Update User Info By UserID
+    public update_user_data = async (req: Request, res: Response) => {
+        try {
+            let documentClient = new AWS.DynamoDB.DocumentClient();
+            let { userId, firstName, lastName, city_located } = req.body;
+
+            let params = {
+                TableName: config.DATABASE_NAME,
+                Key: { PK: 'AUTH#' + userId, SK: userId },
+                UpdateExpression:
+                    'set firstName = :firstName, lastName = :lastName, city_located = :city_located',
+                ExpressionAttributeValues: {
+                    ':firstName': firstName,
+                    ':lastName': lastName,
+                    ':city_located': city_located
+                }
+            };
+
+            await documentClient.update(params).promise();
+
+            res.send({
+                status: 200,
+                message: 'Updated User Metadata Successfully'
+            });
+        } catch (err) {
+            res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
     };
 }
