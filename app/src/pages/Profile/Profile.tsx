@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { FormEvent,useState, useEffect } from 'react';
 import { Fragment } from 'react';
 import Header from '../../components/Header/Header';
 import Typography from '@mui/material/Typography';
@@ -91,8 +91,32 @@ export default function Profile() {
     }, [userData]);
 
     const handleEdit = () => {
-      setDisabledStatus(false);
+        setDisabledStatus(false);
     };
+
+    const handleCancel = () => {
+        setFirstName(userData.data.firstName);
+        setLastName(userData.data.lastName);
+        setSelectedCity(userData.data.city_located);
+        setDisabledStatus(true);
+    };
+
+    const handleFirstNameChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+      setFirstName(event.target.value);
+    }
+    const handleLastNameChange = (event2:React.ChangeEvent<HTMLInputElement>) => {
+      setLastName(event2.target.value);
+    }
+
+    const handleSave = (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const city = event.currentTarget.city.value as string;
+
+      console.log('First Name : ', firstName)
+      console.log('Last Name : ', lastName)
+      console.log('City : ', city)
+      // Set Localhost city item
+    }
 
     return (
         <Fragment>
@@ -134,7 +158,7 @@ export default function Profile() {
                             <Box
                                 component="form"
                                 noValidate
-                                // onSubmit={handleSave}
+                                onSubmit={handleSave}
                                 sx={{ mt: 3 }}
                             >
                                 <Grid container spacing={2}>
@@ -144,6 +168,7 @@ export default function Profile() {
                                             value={firstName}
                                             fullWidth
                                             id="firstName"
+                                            onChange={handleFirstNameChange}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -152,6 +177,7 @@ export default function Profile() {
                                             fullWidth
                                             id="lastName"
                                             value={lastName}
+                                            onChange={handleLastNameChange}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -179,7 +205,8 @@ export default function Profile() {
                                                     value={selectedCity || ''}
                                                     disabled={disabledStatus}
                                                     onChange={(event) => {
-                                                        const value = event.target
+                                                        const value = event
+                                                            .target
                                                             .value as string;
                                                         setSelectedCity(value);
                                                     }}
@@ -210,7 +237,7 @@ export default function Profile() {
                                     </Grid>
                                 </Grid>
 
-                                {disabledStatus && (
+                                {disabledStatus ? (
                                     <Button
                                         fullWidth
                                         variant="contained"
@@ -219,6 +246,45 @@ export default function Profile() {
                                     >
                                         EDIT
                                     </Button>
+                                ) : (
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Button
+                                                fullWidth
+                                                variant="contained"
+                                                sx={{
+                                                    mt: 3,
+                                                    mb: 2,
+                                                    backgroundColor: 'green',
+                                                    '&:hover': {
+                                                        backgroundColor:
+                                                            'darkgreen'
+                                                    }
+                                                }}
+                                                type="submit"
+                                            >
+                                                Save
+                                            </Button>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Button
+                                                fullWidth
+                                                variant="contained"
+                                                sx={{
+                                                    mt: 3,
+                                                    mb: 2,
+                                                    backgroundColor: 'red',
+                                                    '&:hover': {
+                                                        backgroundColor:
+                                                            'darkred'
+                                                    }
+                                                }}
+                                                onClick={handleCancel}
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
                                 )}
                             </Box>
                         </Box>
