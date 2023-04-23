@@ -10,9 +10,9 @@ import * as forecasted_actual_week_data from '../../config/Final_Datasets/foreca
 import * as forecasted_predict_week_data from '../../config/Final_Datasets/forecasted_predict_week_data.json';
 
 AWS.config.update({
-    region: config.AWS_REGION,
-    accessKeyId: config.AWS_ACCESS_KEY,
-    secretAccessKey: config.AWS_SECRET_KEY
+    region: config.CITY_WATCH_AWS_REGION,
+    accessKeyId: config.CITY_WATCH_AWS_ACCESS_KEY,
+    secretAccessKey: config.CITY_WATCH_AWS_SECRET_KEY
 });
 
 export default class CrimeController {
@@ -22,7 +22,7 @@ export default class CrimeController {
 
         await risk_zone.forEach(async (data) => {
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 Item: {
                     PK: `RSK#${data.zip_code}`,
                     SK: `YR#${data.year}`,
@@ -48,7 +48,7 @@ export default class CrimeController {
 
         await metadata.forEach(async (data) => {
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 Item: {
                     PK: `META#${data.zip_code}`,
                     SK: `INFO#${data.zip_code}`,
@@ -76,7 +76,7 @@ export default class CrimeController {
 
         await crime_data.forEach(async (data) => {
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 Item: {
                     PK: `CRIME#${data.zip_code}`,
                     SK: `YR#${data.year}`,
@@ -113,7 +113,7 @@ export default class CrimeController {
 
         await forecasted_actual_month_data.forEach(async (data) => {
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 Item: {
                     PK: `MNT#ACT#${data.zip_code}`,
                     SK: `YR#${data.year}`,
@@ -130,7 +130,7 @@ export default class CrimeController {
 
         await forecasted_predict_month_data.forEach(async (data) => {
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 Item: {
                     PK: `MNT#PRD#${data.zip_code}`,
                     SK: `YR#${data.year}`,
@@ -158,7 +158,7 @@ export default class CrimeController {
 
         await forecasted_actual_week_data.forEach(async (data) => {
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 Item: {
                     PK: `WEK#ACT#${data.zip_code}`,
                     SK: `YR#${data.year}`,
@@ -175,7 +175,7 @@ export default class CrimeController {
 
         await forecasted_predict_week_data.forEach(async (data) => {
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 Item: {
                     PK: `WEK#PRD#${data.zip_code}`,
                     SK: `YR#${data.year}`,
@@ -203,7 +203,7 @@ export default class CrimeController {
             let documentClient = new AWS.DynamoDB.DocumentClient();
 
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 FilterExpression: 'begins_with(PK, :pk)',
                 ExpressionAttributeValues: {
                     ':pk': 'META'
@@ -249,7 +249,7 @@ export default class CrimeController {
             let primary_city = req.body.city;
 
             let city_located_params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 IndexName: config.PRIMARY_CITY_INDEX,
                 KeyConditionExpression: '#primary_city = :primary_city',
                 ExpressionAttributeNames: { '#primary_city': 'primary_city' },
@@ -270,7 +270,7 @@ export default class CrimeController {
             const zip_code_yearly_data = await Promise.all(
                 zip_codes.map(async (zip_code) => {
                     let risk_zone_params = {
-                        TableName: config.DATABASE_NAME,
+                        TableName: config.CITY_WATCH_DATABASE_NAME,
                         KeyConditionExpression:
                             '#PK = :PK and begins_with(#SK, :SK)',
                         ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
@@ -338,7 +338,7 @@ export default class CrimeController {
             let transformedData = await Promise.all(
                 zipcodes.map(async (zip_code: any) => {
                     let meta_data_params = {
-                        TableName: config.DATABASE_NAME,
+                        TableName: config.CITY_WATCH_DATABASE_NAME,
                         KeyConditionExpression: '#PK = :PK and #SK = :SK',
                         ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
                         ExpressionAttributeValues: {
@@ -348,7 +348,7 @@ export default class CrimeController {
                     };
 
                     let risk_zone_params = {
-                        TableName: config.DATABASE_NAME,
+                        TableName: config.CITY_WATCH_DATABASE_NAME,
                         KeyConditionExpression: '#PK = :PK and #SK = :SK',
                         ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
                         ExpressionAttributeValues: {
@@ -358,7 +358,7 @@ export default class CrimeController {
                     };
 
                     let crime_data_params = {
-                        TableName: config.DATABASE_NAME,
+                        TableName: config.CITY_WATCH_DATABASE_NAME,
                         KeyConditionExpression: '#PK = :PK and #SK = :SK',
                         ExpressionAttributeNames: {
                             '#PK': 'PK',
@@ -371,7 +371,7 @@ export default class CrimeController {
                     };
 
                     let actual_month_crime_freq_params = {
-                        TableName: config.DATABASE_NAME,
+                        TableName: config.CITY_WATCH_DATABASE_NAME,
                         KeyConditionExpression: '#PK = :PK and #SK = :SK',
                         ExpressionAttributeNames: {
                             '#PK': 'PK',
@@ -384,7 +384,7 @@ export default class CrimeController {
                     };
 
                     let actual_week_crime_freq_params = {
-                        TableName: config.DATABASE_NAME,
+                        TableName: config.CITY_WATCH_DATABASE_NAME,
                         KeyConditionExpression: '#PK = :PK and #SK = :SK',
                         ExpressionAttributeNames: {
                             '#PK': 'PK',
@@ -436,7 +436,7 @@ export default class CrimeController {
 
                     if (year === '2022') {
                         let prediction_month_crime_freq_params = {
-                            TableName: config.DATABASE_NAME,
+                            TableName: config.CITY_WATCH_DATABASE_NAME,
                             KeyConditionExpression: '#PK = :PK and #SK = :SK',
                             ExpressionAttributeNames: {
                                 '#PK': 'PK',
@@ -449,7 +449,7 @@ export default class CrimeController {
                         };
 
                         let prediction_week_crime_freq_params = {
-                            TableName: config.DATABASE_NAME,
+                            TableName: config.CITY_WATCH_DATABASE_NAME,
                             KeyConditionExpression: '#PK = :PK and #SK = :SK',
                             ExpressionAttributeNames: {
                                 '#PK': 'PK',
@@ -504,7 +504,7 @@ export default class CrimeController {
             let transformedData = await Promise.all(
                 zipcodes.map(async (zip_code: any) => {
                     let crime_data_params = {
-                        TableName: config.DATABASE_NAME,
+                        TableName: config.CITY_WATCH_DATABASE_NAME,
                         KeyConditionExpression:
                             '#PK = :PK and begins_with(#SK, :SK)',
                         ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
@@ -608,7 +608,7 @@ export default class CrimeController {
             let primary_city = req.body.city;
 
             let city_located_params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 IndexName: config.PRIMARY_CITY_INDEX,
                 KeyConditionExpression: '#primary_city = :primary_city',
                 ExpressionAttributeNames: { '#primary_city': 'primary_city' },
@@ -634,7 +634,7 @@ export default class CrimeController {
             let risk_zone_data = await Promise.all(
                 transformedData.map(async (data: any) => {
                     var risk_zone_params = {
-                        TableName: config.DATABASE_NAME,
+                        TableName: config.CITY_WATCH_DATABASE_NAME,
                         KeyConditionExpression:
                             '#PK = :PK and begins_with(#SK, :SK)',
                         ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
@@ -668,7 +668,7 @@ export default class CrimeController {
                     const new_crime_data = await Promise.all(
                         Object.keys(data.yearly_data).map(async (year) => {
                             let crime_params = {
-                                TableName: config.DATABASE_NAME,
+                                TableName: config.CITY_WATCH_DATABASE_NAME,
                                 KeyConditionExpression:
                                     '#PK = :PK and #SK = :SK',
                                 ExpressionAttributeNames: {
@@ -682,7 +682,7 @@ export default class CrimeController {
                             };
 
                             let actual_month_crime_freq_params = {
-                                TableName: config.DATABASE_NAME,
+                                TableName: config.CITY_WATCH_DATABASE_NAME,
                                 KeyConditionExpression:
                                     '#PK = :PK and #SK = :SK',
                                 ExpressionAttributeNames: {
@@ -696,7 +696,7 @@ export default class CrimeController {
                             };
 
                             let actual_week_crime_freq_params = {
-                                TableName: config.DATABASE_NAME,
+                                TableName: config.CITY_WATCH_DATABASE_NAME,
                                 KeyConditionExpression:
                                     '#PK = :PK and #SK = :SK',
                                 ExpressionAttributeNames: {

@@ -4,9 +4,9 @@ import config from '../../config/config';
 import * as housing from '../../config/Final_Datasets/housing.json';
 
 AWS.config.update({
-    region: config.AWS_REGION,
-    accessKeyId: config.AWS_ACCESS_KEY,
-    secretAccessKey: config.AWS_SECRET_KEY
+    region: config.CITY_WATCH_AWS_REGION,
+    accessKeyId: config.CITY_WATCH_AWS_ACCESS_KEY,
+    secretAccessKey: config.CITY_WATCH_AWS_SECRET_KEY
 });
 
 export default class HousingController {
@@ -16,7 +16,7 @@ export default class HousingController {
 
         await housing.forEach(async (data) => {
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 Item: {
                     PK: `HSG#${data.zip_code}`,
                     SK: `YR#${data.year}`,
@@ -46,7 +46,7 @@ export default class HousingController {
             let documentClient = new AWS.DynamoDB.DocumentClient();
 
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 FilterExpression: 'begins_with(PK, :pk)',
                 ExpressionAttributeValues: {
                     ':pk': 'HSG'
@@ -92,7 +92,7 @@ export default class HousingController {
 
             for (let i = 0; i < cities.length; i++) {
                 let params = {
-                    TableName: config.DATABASE_NAME,
+                    TableName: config.CITY_WATCH_DATABASE_NAME,
                     FilterExpression:
                         'housing_city = :city AND persqrt_price >= :min_persqrt AND persqrt_price <= :max_persqrt',
                     ExpressionAttributeValues: {

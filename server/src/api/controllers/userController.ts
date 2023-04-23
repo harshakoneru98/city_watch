@@ -6,9 +6,9 @@ import * as jwt from 'jsonwebtoken';
 import config from '../../config/config';
 
 AWS.config.update({
-    region: config.AWS_REGION,
-    accessKeyId: config.AWS_ACCESS_KEY,
-    secretAccessKey: config.AWS_SECRET_KEY
+    region: config.CITY_WATCH_AWS_REGION,
+    accessKeyId: config.CITY_WATCH_AWS_ACCESS_KEY,
+    secretAccessKey: config.CITY_WATCH_AWS_SECRET_KEY
 });
 
 export default class UserController {
@@ -18,7 +18,7 @@ export default class UserController {
         let user = req.body;
 
         let email_check_params = {
-            TableName: config.DATABASE_NAME,
+            TableName: config.CITY_WATCH_DATABASE_NAME,
             IndexName: config.EMAIL_INDEX,
             KeyConditionExpression: '#email = :email',
             ExpressionAttributeNames: { '#email': 'email' },
@@ -40,7 +40,7 @@ export default class UserController {
             const hashedPassword = await bcrypt.hash(user.password, 12);
             const user_id = v4();
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 Item: {
                     PK: `AUTH#${user_id}`,
                     SK: user_id,
@@ -72,7 +72,7 @@ export default class UserController {
         let user = req.body;
 
         let email_check_params = {
-            TableName: config.DATABASE_NAME,
+            TableName: config.CITY_WATCH_DATABASE_NAME,
             IndexName: config.EMAIL_INDEX,
             KeyConditionExpression: '#email = :email',
             ExpressionAttributeNames: { '#email': 'email' },
@@ -127,7 +127,7 @@ export default class UserController {
             let { userId } = req.body;
 
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 KeyConditionExpression: '#PK = :PK and #SK = :SK',
                 ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
                 ExpressionAttributeValues: {
@@ -164,7 +164,7 @@ export default class UserController {
             let { userId, firstName, lastName, city_located } = req.body;
 
             let params = {
-                TableName: config.DATABASE_NAME,
+                TableName: config.CITY_WATCH_DATABASE_NAME,
                 Key: { PK: 'AUTH#' + userId, SK: userId },
                 UpdateExpression:
                     'set firstName = :firstName, lastName = :lastName, city_located = :city_located',
