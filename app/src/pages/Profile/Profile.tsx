@@ -1,19 +1,21 @@
 import { FormEvent, useState, useEffect } from 'react';
 import { Fragment } from 'react';
 import Header from '../../components/Header/Header';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+import {
+    Avatar,
+    Button,
+    Select,
+    MenuItem,
+    InputLabel,
+    FormControl,
+    CssBaseline,
+    TextField,
+    Grid,
+    Box,
+    Typography,
+    Container
+} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
 import { fetchUserDataInfoData } from '../../store/slices/userdataSlice';
@@ -22,7 +24,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
-import './Profile.scss'
+import './Profile.scss';
 
 const theme = createTheme();
 

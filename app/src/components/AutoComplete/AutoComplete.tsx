@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
+import { Autocomplete, TextField } from '@mui/material';
 import './AutoComplete.scss';
 
 interface AutoCompleteProps {
@@ -31,7 +30,11 @@ export default function AutoComplete({
                 value={selectedValues}
                 getOptionLabel={(option) => option}
                 renderInput={(params) => (
-                    <TextField {...params} label="Cities" value={selectedValues} />
+                    <TextField
+                        {...params}
+                        label="Cities"
+                        value={selectedValues}
+                    />
                 )}
                 className="dropdown-autocomplete"
                 onChange={handleSelectionChange}

@@ -1,10 +1,7 @@
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import { Button, Grid, Box, Typography } from '@mui/material';
 import './Home.scss';
 import crime_housing from '../../assets/crime_housing.gif';
 

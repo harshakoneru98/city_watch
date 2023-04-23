@@ -1,31 +1,34 @@
 import { FormEvent, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import {
+    Avatar,
+    Button,
+    Select,
+    MenuItem,
+    InputLabel,
+    FormControl,
+    CssBaseline,
+    TextField,
+    Grid,
+    Box,
+    Typography,
+    Container
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
-import {postAxiosRequest} from '../../api'
+import { postAxiosRequest } from '../../api';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 
 const theme = createTheme();
 
 export default function SignUp(): JSX.Element {
-    const dispatch = useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
+    const dispatch =
+        useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
     let navigate = useNavigate();
 
     const [cities, setCities] = useState<string[]>([]);
@@ -108,13 +111,18 @@ export default function SignUp(): JSX.Element {
         ) {
             const body_data = { firstName, lastName, email, city, password };
             try {
-                const user_response_message = await postAxiosRequest('user/create_user', JSON.stringify(body_data))
+                const user_response_message = await postAxiosRequest(
+                    'user/create_user',
+                    JSON.stringify(body_data)
+                );
                 if (user_response_message.message) {
-                    if (user_response_message.message === 'Email already exists') {
+                    if (
+                        user_response_message.message === 'Email already exists'
+                    ) {
                         setEmailExists(true);
                     } else {
                         setEmailExists(false);
-                        navigate('/signin')
+                        navigate('/signin');
                     }
                 }
             } catch (error) {

@@ -1,15 +1,17 @@
 import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
+import {
+    AppBar,
+    Box,
+    Toolbar,
+    IconButton,
+    Typography,
+    Menu,
+    Container,
+    Button,
+    Tooltip,
+    MenuItem
+} from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import AuthContext from '../../context/auth-context';
@@ -30,9 +32,9 @@ export default function Header() {
     };
 
     const clickLogout = () => {
-        handleCloseUserMenu()
-        contextType.logout()
-    }
+        handleCloseUserMenu();
+        contextType.logout();
+    };
 
     const location = useLocation();
 
@@ -41,7 +43,7 @@ export default function Header() {
     };
 
     return (
-        <AppBar position="static" style={{height: '9vh'}}>
+        <AppBar position="static" style={{ height: '9vh' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <LocationCityIcon

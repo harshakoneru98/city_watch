@@ -1,15 +1,13 @@
 import { Fragment, useState, useEffect } from 'react';
 import Header from '../../components/Header/Header';
-import AutoComplete from '../../components/AutoComplete/AutoComplete'
+import AutoComplete from '../../components/AutoComplete/AutoComplete';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { fetchHousingCitiesDataInfoData } from '../../store/slices/housingcitiesdataSlice';
 import { fetchHousingDataInfoData } from '../../store/slices/housingdataSlice';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import { Button, Grid, Typography } from '@mui/material';
 import RangeSlider from '../../components/RangeSlider/RangeSlider';
 import SingleSlider from '../../components/SingleSlider/SingleSlider';
 import './Housing.scss';
@@ -27,8 +25,8 @@ export default function Housing() {
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
 
     useEffect(() => {
-      setHousingData({})
-    }, [])
+        setHousingData({});
+    }, []);
 
     const {
         housingCitiesData,
@@ -44,19 +42,16 @@ export default function Housing() {
         console.log(housingCitiesDataError);
     }
 
-    const {
-      housingInfoData,
-      housingInfoDataStatus,
-      housingInfoDataError
-  } = useSelector((state: RootState) => state.housingDataInfo);
+    const { housingInfoData, housingInfoDataStatus, housingInfoDataError } =
+        useSelector((state: RootState) => state.housingDataInfo);
 
-  if (housingInfoDataStatus === 'loading') {
-      console.log('Housing Data Loading');
-  }
+    if (housingInfoDataStatus === 'loading') {
+        console.log('Housing Data Loading');
+    }
 
-  if (housingInfoDataError === 'failed') {
-      console.log(housingInfoDataError);
-  }
+    if (housingInfoDataError === 'failed') {
+        console.log(housingInfoDataError);
+    }
 
     useEffect(() => {
         if (housingCitiesData.length) {
@@ -83,23 +78,25 @@ export default function Housing() {
     };
 
     const handleGetResults = () => {
-        let cities_selected = selectedCities ? selectedCities : ['Los Angeles']
-        handleCityChange(cities_selected)
+        let cities_selected = selectedCities ? selectedCities : ['Los Angeles'];
+        handleCityChange(cities_selected);
         dispatch(
-          fetchHousingDataInfoData({
-              endpoint: 'housing/get_housing_recommendation_info',
-              cities: cities_selected,
-              persqrt_range: priceRange.map(item => (item*1000)/areaRange)
-          })
-      );
+            fetchHousingDataInfoData({
+                endpoint: 'housing/get_housing_recommendation_info',
+                cities: cities_selected,
+                persqrt_range: priceRange.map(
+                    (item) => (item * 1000) / areaRange
+                )
+            })
+        );
     };
 
     useEffect(() => {
-      if(housingInfoData.data){
-        console.log('Housing Data : ', housingInfoData.data)
-        setHousingData(housingInfoData.data)
-      }
-    }, [housingInfoData])
+        if (housingInfoData.data) {
+            console.log('Housing Data : ', housingInfoData.data);
+            setHousingData(housingInfoData.data);
+        }
+    }, [housingInfoData]);
 
     return (
         <Fragment>
@@ -107,10 +104,14 @@ export default function Housing() {
             <div className="main-container">
                 <div className="housing-container">
                     <Fragment>
-                        <Grid container bgcolor="white" className='housing_header'>
+                        <Grid
+                            container
+                            bgcolor="white"
+                            className="housing_header"
+                        >
                             <Grid item xs={12} className="header_grid">
                                 <Typography variant="h4">
-                                  Let's Find Your Next Home Together
+                                    Let's Find Your Next Home Together
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -122,11 +123,11 @@ export default function Housing() {
                         >
                             <Grid item xs={2}>
                                 <div className="girdItemCenter">
-                                  <AutoComplete
-                                          data={cities}
-                                          selectedValues={selectedCities}
-                                          onSelectionChange={handleCityChange}
-                                      />
+                                    <AutoComplete
+                                        data={cities}
+                                        selectedValues={selectedCities}
+                                        onSelectionChange={handleCityChange}
+                                    />
                                 </div>
                             </Grid>
                             <Grid item xs={4}>
@@ -164,7 +165,7 @@ export default function Housing() {
                                                 className="housing_filter_header"
                                                 variant="h6"
                                             >
-                                                House Area 
+                                                House Area
                                             </Typography>
                                         </Grid>
                                         <Grid item>
@@ -197,7 +198,10 @@ export default function Housing() {
                             </Grid>
                         </Grid>
                         {housingData.length && (
-                          <HousingTable data={housingData} sqrt_selected={areaRange} />
+                            <HousingTable
+                                data={housingData}
+                                sqrt_selected={areaRange}
+                            />
                         )}
                     </Fragment>
                 </div>
