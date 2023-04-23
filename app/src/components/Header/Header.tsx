@@ -41,7 +41,7 @@ export default function Header() {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="static" style={{height: '9vh'}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <LocationCityIcon

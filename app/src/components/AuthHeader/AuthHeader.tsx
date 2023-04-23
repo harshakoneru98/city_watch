@@ -15,7 +15,7 @@ export default function AuthHeader() {
       };
 
     return (
-        <AppBar position="static">
+        <AppBar position="static" style={{height: '9vh'}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <LocationCityIcon
