@@ -78,6 +78,12 @@ export default function Profile() {
         console.log(updateUserDataError);
     }
 
+    const [errors, setErrors] = useState<{
+        firstName?: string;
+        lastName?: string;
+        city?: string;
+    }>({});
+
     useEffect(() => {
         if (metaData) {
             const cities = [
@@ -111,6 +117,11 @@ export default function Profile() {
         setLastName(userData.data.lastName);
         setSelectedCity(userData.data.city_located);
         setDisabledStatus(true);
+        setErrors({
+          firstName: '',
+          lastName: '',
+          city: ''
+      });
     };
 
     const handleFirstNameChange = (
@@ -128,23 +139,35 @@ export default function Profile() {
         event.preventDefault();
         const city = event.currentTarget.city.value as string;
 
-        dispatch(
-          fetchUpdateUserDataInfoData({
-              endpoint: 'user/update_user_data',
-              userId: user_id || '',
-              firstName: firstName || '',
-              lastName: lastName || '',
-              city_located: city
-          })
-      );
+        const firstNameError = !firstName ? 'Please enter your first name' : '';
+        const lastNameError = !lastName ? 'Please enter your last name' : '';
+        const cityError = !city ? 'Please enter your city' : '';
+
+        setErrors({
+            firstName: firstNameError,
+            lastName: lastNameError,
+            city: cityError
+        });
+
+        if (!firstNameError && !lastNameError && !cityError) {
+            dispatch(
+                fetchUpdateUserDataInfoData({
+                    endpoint: 'user/update_user_data',
+                    userId: user_id || '',
+                    firstName: firstName || '',
+                    lastName: lastName || '',
+                    city_located: city
+                })
+            );
+        }
     };
 
     useEffect(() => {
-      if(updateUserData.message){
-        localStorage.setItem('city', selectedCity || '');
-        setDisabledStatus(true)
-      }
-    }, [updateUserData])
+        if (updateUserData.message) {
+            localStorage.setItem('city', selectedCity || '');
+            setDisabledStatus(true);
+        }
+    }, [updateUserData]);
 
     return (
         <Fragment>
@@ -197,6 +220,8 @@ export default function Profile() {
                                             fullWidth
                                             id="firstName"
                                             onChange={handleFirstNameChange}
+                                            error={Boolean(errors.firstName)}
+                                            helperText={errors.firstName}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -206,6 +231,8 @@ export default function Profile() {
                                             id="lastName"
                                             value={lastName}
                                             onChange={handleLastNameChange}
+                                            error={Boolean(errors.lastName)}
+                                            helperText={errors.lastName}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -237,6 +264,12 @@ export default function Profile() {
                                                             .target
                                                             .value as string;
                                                         setSelectedCity(value);
+                                                        setErrors({
+                                                            ...errors,
+                                                            city: !value
+                                                                ? 'Please enter your city'
+                                                                : ''
+                                                        });
                                                     }}
                                                     placeholder="City"
                                                     labelId="city-label"
@@ -261,6 +294,14 @@ export default function Profile() {
                                                     ))}
                                                 </Select>
                                             </FormControl>
+                                        )}
+                                        {Boolean(errors.city) && (
+                                            <Typography
+                                                color="error"
+                                                variant="caption"
+                                            >
+                                                {errors.city}
+                                            </Typography>
                                         )}
                                     </Grid>
                                 </Grid>
