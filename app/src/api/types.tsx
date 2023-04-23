@@ -68,3 +68,10 @@ export interface UserDataState {
     userDataStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
     userDataError: string | null;
 }
+
+// Update User Data
+export interface UpdateUserDataState {
+    updateUserData: any;
+    updateUserDataStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    updateUserDataError: string | null;
+}

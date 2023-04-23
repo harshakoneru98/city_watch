@@ -1,4 +1,4 @@
-import { FormEvent,useState, useEffect } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import { Fragment } from 'react';
 import Header from '../../components/Header/Header';
 import Typography from '@mui/material/Typography';
@@ -17,6 +17,7 @@ import Box from '@mui/material/Box';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
 import { fetchUserDataInfoData } from '../../store/slices/userdataSlice';
+import { fetchUpdateUserDataInfoData } from '../../store/slices/updateuserdataSlice';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
@@ -66,6 +67,17 @@ export default function Profile() {
         console.log(userDataError);
     }
 
+    const { updateUserData, updateUserDataStatus, updateUserDataError } =
+        useSelector((state: RootState) => state.updateUserDataInfo);
+
+    if (updateUserDataStatus === 'loading') {
+        console.log('update user Loading');
+    }
+
+    if (updateUserDataError === 'failed') {
+        console.log(updateUserDataError);
+    }
+
     useEffect(() => {
         if (metaData) {
             const cities = [
@@ -101,22 +113,38 @@ export default function Profile() {
         setDisabledStatus(true);
     };
 
-    const handleFirstNameChange = (event:React.ChangeEvent<HTMLInputElement>) => {
-      setFirstName(event.target.value);
-    }
-    const handleLastNameChange = (event2:React.ChangeEvent<HTMLInputElement>) => {
-      setLastName(event2.target.value);
-    }
+    const handleFirstNameChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setFirstName(event.target.value);
+    };
+    const handleLastNameChange = (
+        event2: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setLastName(event2.target.value);
+    };
 
     const handleSave = (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      const city = event.currentTarget.city.value as string;
+        event.preventDefault();
+        const city = event.currentTarget.city.value as string;
 
-      console.log('First Name : ', firstName)
-      console.log('Last Name : ', lastName)
-      console.log('City : ', city)
-      // Set Localhost city item
-    }
+        dispatch(
+          fetchUpdateUserDataInfoData({
+              endpoint: 'user/update_user_data',
+              userId: user_id || '',
+              firstName: firstName || '',
+              lastName: lastName || '',
+              city_located: city
+          })
+      );
+    };
+
+    useEffect(() => {
+      if(updateUserData.message){
+        localStorage.setItem('city', selectedCity || '');
+        setDisabledStatus(true)
+      }
+    }, [updateUserData])
 
     return (
         <Fragment>
