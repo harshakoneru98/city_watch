@@ -1,4 +1,4 @@
-import { FormEvent, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Fragment } from 'react';
 import Header from '../../components/Header/Header';
 import Typography from '@mui/material/Typography';
@@ -14,7 +14,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
 import { fetchUserDataInfoData } from '../../store/slices/userdataSlice';
@@ -32,6 +31,12 @@ export default function Profile() {
     const user_id = localStorage.getItem('userId');
 
     const [cities, setCities] = useState<string[]>([]);
+    const [firstName, setFirstName] = useState<string>();
+    const [lastName, setLastName] = useState<string>();
+    const [email, setEmail] = useState<string>();
+    const [selectedCity, setSelectedCity] = useState<string>();
+
+    const [disabledStatus, setDisabledStatus] = useState<boolean>(true);
 
     const { metaData, metaDataStatus, metaDataError } = useSelector(
         (state: RootState) => state.metaDataInfo
@@ -77,132 +82,148 @@ export default function Profile() {
     }, [metaData]);
 
     useEffect(() => {
-      if(userData.data){
-        console.log('User Data : ', userData.data)
-      }
-    }, [userData])
+        if (userData.data) {
+            setFirstName(userData.data.firstName);
+            setLastName(userData.data.lastName);
+            setEmail(userData.data.email);
+            setSelectedCity(userData.data.city_located);
+        }
+    }, [userData]);
+
+    const handleEdit = () => {
+      setDisabledStatus(false);
+    };
 
     return (
         <Fragment>
             <Header />
             <ThemeProvider theme={theme}>
-                <Container
-                    component="main"
-                    maxWidth="xs"
-                    sx={{
-                        backgroundColor: '#FFFFFF',
-                        py: 4,
-                        px: 2,
-                        borderRadius: 2,
-                        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: '2.5rem'
-                    }}
-                >
-                    <CssBaseline />
-                    {/* <Box
+                {userData.data && (
+                    <Container
+                        component="main"
+                        maxWidth="xs"
                         sx={{
-                            marginTop: 0,
+                            backgroundColor: '#FFFFFF',
+                            py: 4,
+                            px: 2,
+                            borderRadius: 2,
+                            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
                             display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center'
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: '2.5rem'
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                            <AccountCircle
-                                sx={{ color: 'white', fontSize: 30 }}
-                            />
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            User Details
-                        </Typography>
+                        <CssBaseline />
                         <Box
-                            component="form"
-                            noValidate
-                            onSubmit={handleSave}
-                            sx={{ mt: 3 }}
+                            sx={{
+                                marginTop: 0,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center'
+                            }}
                         >
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        disabled={disableStatus}
-                                        value={firstName}
-                                        fullWidth
-                                        id="firstName"
-                                        onChange={handleFirstNameChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        disabled={disableStatus}
-                                        fullWidth
-                                        id="lastName"
-                                        value={lastName}
-                                        onChange={handleLastNameChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        disabled
-                                        value="hvusc"
-                                        fullWidth
-                                        id="email"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        disabled={disableStatus}
-                                        value={selectedCity}
-                                        fullWidth
-                                        id="city-label"
-                                        onChange={handleSelectedCityChange}
-                                    />
-                                </Grid>
-                            </Grid>
-                            {disableStatus && (
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    sx={{ mt: 3, mb: 2 }}
-                                    onClick={handleEdit}
-                                >
-                                    Edit
-                                </Button>
-                            )}
-                            {!disableStatus && (
+                            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                                <AccountCircle
+                                    sx={{ color: 'white', fontSize: 30 }}
+                                />
+                            </Avatar>
+                            <Typography component="h1" variant="h5">
+                                User Details
+                            </Typography>
+                            <Box
+                                component="form"
+                                noValidate
+                                // onSubmit={handleSave}
+                                sx={{ mt: 3 }}
+                            >
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <Button
-                                            type="submit"
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            disabled={disabledStatus}
+                                            value={firstName}
                                             fullWidth
-                                            variant="contained"
-                                            color="success"
-                                            sx={{ mt: 3, mb: 2 }}
-                                            // onClick={handleSave}
-                                        >
-                                            Save
-                                        </Button>
+                                            id="firstName"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            disabled={disabledStatus}
+                                            fullWidth
+                                            id="lastName"
+                                            value={lastName}
+                                        />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Button
-                                            type="submit"
+                                        <TextField
+                                            disabled
+                                            value={email}
                                             fullWidth
-                                            variant="contained"
-                                            color="warning"
-                                            sx={{ mt: 3, mb: 2 }}
-                                            onClick={handleCancel}
-                                        >
-                                            Cancel
-                                        </Button>
+                                            id="email"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        {cities && (
+                                            <FormControl fullWidth>
+                                                <InputLabel
+                                                    id="city-label"
+                                                    required
+                                                >
+                                                    City in LA County
+                                                </InputLabel>
+                                                <Select
+                                                    fullWidth
+                                                    id="city"
+                                                    name="city"
+                                                    autoComplete="city"
+                                                    value={selectedCity || ''}
+                                                    disabled={disabledStatus}
+                                                    onChange={(event) => {
+                                                        const value = event.target
+                                                            .value as string;
+                                                        setSelectedCity(value);
+                                                    }}
+                                                    placeholder="City"
+                                                    labelId="city-label"
+                                                    label="City in LA County"
+                                                >
+                                                    <MenuItem
+                                                        value="Other City"
+                                                        style={{
+                                                            borderBottom:
+                                                                '1px solid #ccc'
+                                                        }}
+                                                    >
+                                                        Other City
+                                                    </MenuItem>
+                                                    {cities?.map((city) => (
+                                                        <MenuItem
+                                                            key={city}
+                                                            value={city}
+                                                        >
+                                                            {city}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+                                        )}
                                     </Grid>
                                 </Grid>
-                            )}
+
+                                {disabledStatus && (
+                                    <Button
+                                        fullWidth
+                                        variant="contained"
+                                        sx={{ mt: 3, mb: 2 }}
+                                        onClick={handleEdit}
+                                    >
+                                        EDIT
+                                    </Button>
+                                )}
+                            </Box>
                         </Box>
-                    </Box> */}
-                </Container>
+                    </Container>
+                )}
             </ThemeProvider>
         </Fragment>
     );
