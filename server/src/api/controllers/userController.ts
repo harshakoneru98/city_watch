@@ -47,6 +47,8 @@ export default class UserController {
                     email: user.email,
                     city_located: user.city,
                     password: hashedPassword,
+                    firstName: user.firstName,
+                    lastName: user.lastName
                 }
             };
     
@@ -113,5 +115,40 @@ export default class UserController {
                 message: 'Invalid Credentials',
             });
         }
+    };
+
+    // Get User Info By UserID
+    public get_user_data = async (req: Request, res: Response) => {
+        let documentClient = new AWS.DynamoDB.DocumentClient();
+        let {userId} = req.body
+
+        let params = {
+            TableName: config.DATABASE_NAME,
+            KeyConditionExpression: '#PK = :PK and #SK = :SK',
+            ExpressionAttributeNames: { '#PK': 'PK', '#SK': 'SK' },
+            ExpressionAttributeValues: {
+                ':PK': 'AUTH#' + userId,
+                ':SK': userId
+            }
+        };
+    
+        const response = await documentClient
+            .query(params)
+            .promise();
+
+        let user_meta_data = {
+            firstName: response.Items[0].firstName,
+            lastName: response.Items[0].lastName,
+            email: response.Items[0].email,
+            city_located: response.Items[0].city_located
+        }
+
+        res.send({
+            status: 200,
+            data: user_meta_data,
+            message: 'Fetched User Metadata'
+        });
+            
+        
     };
 }

@@ -61,3 +61,10 @@ export interface HousingInfoDataState {
     housingInfoDataStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
     housingInfoDataError: string | null;
 }
+
+// User Data
+export interface UserDataState {
+    userData: any;
+    userDataStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    userDataError: string | null;
+}

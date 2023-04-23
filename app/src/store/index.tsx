@@ -8,6 +8,7 @@ import crimedataReducer from './slices/crimedataSlice'
 import topcrimedataReducer from './slices/topcrimedataSlice'
 import housingcitiesdataReducer from './slices/housingcitiesdataSlice';
 import housingdataReducer from './slices/housingdataSlice'
+import userdataReducer from './slices/userdataSlice';
 
 const store = configureStore({
   reducer: {
@@ -16,7 +17,8 @@ const store = configureStore({
     crimeDataInfo: crimedataReducer,
     topCrimeDataInfo: topcrimedataReducer,
     housingCitiesDataInfo: housingcitiesdataReducer,
-    housingDataInfo: housingdataReducer
+    housingDataInfo: housingdataReducer,
+    userDataInfo: userdataReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });
