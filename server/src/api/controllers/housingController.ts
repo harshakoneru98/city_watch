@@ -150,6 +150,23 @@ export default class HousingController {
                 combinedData.push(obj);
             }
 
+            combinedData.sort((a, b) => {
+                const riskZoneOrder = ["Low Risk Zone", "Medium Risk Zone", "High Risk Zone"];
+                const aRiskZoneIndex = riskZoneOrder.indexOf(a.year_data[0].risk_zone);
+                const bRiskZoneIndex = riskZoneOrder.indexOf(b.year_data[0].risk_zone);
+                if (aRiskZoneIndex !== bRiskZoneIndex) {
+                  return aRiskZoneIndex - bRiskZoneIndex;
+                }
+              
+                // If risk zone is equal, sort by year
+                if (a.year_data[0].year !== b.year_data[0].year) {
+                  return b.year_data[0].year - a.year_data[0].year;
+                }
+              
+                // If year is equal, sort by persqrt_price
+                return a.year_data[0].persqrt_price - b.year_data[0].persqrt_price;
+              });
+
             res.send({
                 status: 200,
                 data: combinedData,

@@ -83,10 +83,12 @@ export default function Housing() {
     };
 
     const handleGetResults = () => {
+        let cities_selected = selectedCities ? selectedCities : ['Los Angeles']
+        handleCityChange(cities_selected)
         dispatch(
           fetchHousingDataInfoData({
               endpoint: 'housing/get_housing_recommendation_info',
-              cities: selectedCities,
+              cities: cities_selected,
               persqrt_range: priceRange.map(item => (item*1000)/areaRange)
           })
       );
@@ -94,6 +96,7 @@ export default function Housing() {
 
     useEffect(() => {
       if(housingInfoData.data){
+        console.log('Housing Data : ', housingInfoData.data)
         setHousingData(housingInfoData.data)
       }
     }, [housingInfoData])
