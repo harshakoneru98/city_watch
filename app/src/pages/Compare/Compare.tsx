@@ -1,12 +1,13 @@
 import { Fragment, useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
-import './Compare.scss';
 import { Typography, Grid, Box } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
-import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
+import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
+import SelectInput from '../../components/SelectInput/SelectInput';
+import './Compare.scss';
 
 export default function Compare() {
     const dispatch =
@@ -39,6 +40,22 @@ export default function Compare() {
         }
     }, [metaData]);
 
+    const handleCityChange = (city: string, selectInput: string) => {
+        if (selectInput === 'city1') {
+            setSelectedCity1(city);
+        } else if (selectInput === 'city2') {
+            setSelectedCity2(city);
+        }
+    };
+
+    useEffect(() => {
+        console.log('Selected City 1 : ', selectedCity1);
+    }, [selectedCity1]);
+
+    useEffect(() => {
+        console.log('Selected City 2 : ', selectedCity2);
+    }, [selectedCity2]);
+
     return (
         <Fragment>
             <Header />
@@ -50,9 +67,31 @@ export default function Compare() {
                         </Typography>
                     </Box>
 
-                    <Grid container direction="column">
-                        <Grid item xs={6}></Grid>
-                        <Grid item xs={6}></Grid>
+                    <Grid container bgcolor="white" className="compare-filters">
+                        <Grid item xs={6}>
+                            <div className="selectInputCompare">
+                                <SelectInput
+                                    data={cities}
+                                    name="City 1"
+                                    selectedValue={selectedCity1}
+                                    onValChange={(city) =>
+                                        handleCityChange(city, 'city1')
+                                    }
+                                />
+                            </div>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <div className="selectInputCompare">
+                                <SelectInput
+                                    data={cities}
+                                    name="City 2"
+                                    selectedValue={selectedCity2}
+                                    onValChange={(city) =>
+                                        handleCityChange(city, 'city2')
+                                    }
+                                />
+                            </div>
+                        </Grid>
                     </Grid>
                 </div>
             </div>
