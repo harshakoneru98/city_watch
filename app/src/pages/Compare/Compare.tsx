@@ -35,6 +35,22 @@ export default function Compare() {
     const [crimeData1, setCrimeData1] = useState<any>();
     const [crimeData2, setCrimeData2] = useState<any>();
 
+    const [top5CrimeData1, setTop5CrimeData1] = useState<any>();
+    const [top5Ethnicity1, setTop5Ethnicity1] = useState<any>();
+    const [top5Gender1, setTop5Gender1] = useState<any>();
+    const [ageDistribution1, setAgeDistribution1] = useState<any>();
+    const [montlyFrequency1, setMontlyFrequency1] = useState<any>();
+    const [weeklyFrequency1, setWeeklyFrequency1] = useState<any>();
+    const [crimeFrequency1, setCrimeFrequency1] = useState<string>('Monthly');
+
+    const [top5CrimeData2, setTop5CrimeData2] = useState<any>();
+    const [top5Ethnicity2, setTop5Ethnicity2] = useState<any>();
+    const [top5Gender2, setTop5Gender2] = useState<any>();
+    const [ageDistribution2, setAgeDistribution2] = useState<any>();
+    const [montlyFrequency2, setMontlyFrequency2] = useState<any>();
+    const [weeklyFrequency2, setWeeklyFrequency2] = useState<any>();
+    const [crimeFrequency2, setCrimeFrequency2] = useState<string>('Monthly');
+
     const { metaData, metaDataStatus, metaDataError } = useSelector(
         (state: RootState) => state.metaDataInfo
     );
@@ -215,15 +231,357 @@ export default function Compare() {
         getCrime2Data()
     }, [zipCodes2, selectedZipcode2, selectedYear2]);
 
+    const get_aggregated_data = (
+        data: any,
+        max: number,
+        sort_data: boolean,
+        montly_line_chart: boolean,
+        weekly_line_chart: boolean
+    ) => {
+        const aggregatedData = data.reduce((accumulator: any, current: any) => {
+            current.forEach((data_type: any) => {
+                const dataTypeName = Object.keys(data_type)[0];
+                const dataTypeCount = data_type[dataTypeName];
+                if (accumulator[dataTypeName]) {
+                    accumulator[dataTypeName] += dataTypeCount;
+                } else {
+                    accumulator[dataTypeName] = dataTypeCount;
+                }
+            });
+            return accumulator;
+        }, {});
+
+        if (montly_line_chart) {
+            let lineChartData = Object.keys(aggregatedData)
+                .map((dataName) => [
+                    { x: dataName, y: aggregatedData[dataName] }
+                ])
+                .flat();
+            const months = [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May',
+                'Jun',
+                'Jul',
+                'Aug',
+                'Sep',
+                'Oct',
+                'Nov',
+                'Dec'
+            ];
+
+            const newData = lineChartData.map((d) => {
+                const monthIndex = parseInt(d.x) - 1; // subtract 1 to convert from 1-based to 0-based indexing
+                return { x: months[monthIndex], y: d.y };
+            });
+            return newData;
+        } else if (weekly_line_chart) {
+            let lineChartData = Object.keys(aggregatedData)
+                .map((dataName) => [
+                    { x: dataName, y: aggregatedData[dataName] }
+                ])
+                .flat();
+            return lineChartData;
+        } else {
+            let sortedData = Object.keys(aggregatedData)
+                .map((dataName) => [
+                    {
+                        id: dataName.toUpperCase(),
+                        value: aggregatedData[dataName]
+                    }
+                ])
+                .flat();
+            if (sort_data) {
+                sortedData = sortedData.sort((a, b) => b.value - a.value);
+            }
+            sortedData = sortedData.slice(0, max);
+            return sortedData;
+        }
+    };
+
     useEffect(() => {
         if(crimeData1){
             console.log('Crime Data 1 : ', crimeData1)
+
+            // Top 5 Crimes
+            const top_5_crimes_data = crimeData1.map((obj: any) => obj.top5_crimes);
+            setTop5CrimeData1(
+                get_aggregated_data(top_5_crimes_data, 5, true, false, false)
+            );
+
+            // Ethnicity Distribution
+            const ethnicity_distribution_data = crimeData1.map(
+                (obj: any) => obj.ethnicity_distribution
+            );
+            let agg_ethnicity_data = get_aggregated_data(
+                ethnicity_distribution_data,
+                5,
+                true,
+                false,
+                false
+            );
+            setTop5Ethnicity1(agg_ethnicity_data);
+
+            // Gender Distribution
+            const gender_distribution_data = crimeData1.map(
+                (obj: any) => obj.gender_distribution
+            );
+            let agg_gender_data = get_aggregated_data(
+                gender_distribution_data,
+                5,
+                true,
+                false,
+                false
+            );
+            setTop5Gender1(agg_gender_data);
+
+            // Age Distribution
+            const age_distribution_data = crimeData1.map(
+                (obj: any) => obj.age_distribution
+            );
+            let agg_age_data = get_aggregated_data(
+                age_distribution_data,
+                10,
+                false,
+                false,
+                false
+            );
+            setAgeDistribution1(agg_age_data);
+
+            // Crime Frequency
+            let actual_monthly_data = crimeData1.map(
+                (obj: any) => obj.actual_month_crime_freq
+            );
+
+            actual_monthly_data = get_aggregated_data(
+                actual_monthly_data,
+                12,
+                false,
+                true,
+                false
+            );
+
+            let actual_weekly_data = crimeData1.map(
+                (obj: any) => obj.actual_week_crime_freq
+            );
+
+            actual_weekly_data = get_aggregated_data(
+                actual_weekly_data,
+                52,
+                false,
+                false,
+                true
+            );
+
+            setCrimeFrequency1('Monthly');
+
+            if (
+                crimeData1 &&
+                (crimeData1[0]?.prediction_month_crime_freq ||
+                    crimeData1[0]?.prediction_week_crime_freq)
+            ) {
+                let prediction_monthly_data = crimeData1.map(
+                    (obj: any) => obj.prediction_month_crime_freq
+                );
+
+                prediction_monthly_data = get_aggregated_data(
+                    prediction_monthly_data,
+                    12,
+                    false,
+                    true,
+                    false
+                );
+
+                let prediction_weekly_data = crimeData1.map(
+                    (obj: any) => obj.prediction_week_crime_freq
+                );
+
+                prediction_weekly_data = get_aggregated_data(
+                    prediction_weekly_data,
+                    52,
+                    false,
+                    false,
+                    true
+                );
+
+                let complete_montly_data = [
+                    {
+                        id: 'Actual',
+                        data: actual_monthly_data
+                    },
+                    { id: 'Forecasted', data: prediction_monthly_data }
+                ];
+                setMontlyFrequency1(complete_montly_data);
+
+                let complete_weekly_data = [
+                    {
+                        id: 'Actual',
+                        data: actual_weekly_data
+                    },
+                    { id: 'Forecasted', data: prediction_weekly_data }
+                ];
+                setWeeklyFrequency1(complete_weekly_data);
+            } else {
+                let complete_montly_data = [
+                    {
+                        id: 'Actual',
+                        data: actual_monthly_data
+                    }
+                ];
+                setMontlyFrequency1(complete_montly_data);
+
+                let complete_weekly_data = [
+                    {
+                        id: 'Actual',
+                        data: actual_weekly_data
+                    }
+                ];
+                setWeeklyFrequency1(complete_weekly_data);
+            }
         }
     }, [crimeData1])
 
     useEffect(() => {
         if(crimeData2){
             console.log('Crime Data 2 : ', crimeData2)
+
+            // Top 5 Crimes
+            const top_5_crimes_data = crimeData2.map((obj: any) => obj.top5_crimes);
+            setTop5CrimeData2(
+                get_aggregated_data(top_5_crimes_data, 5, true, false, false)
+            );
+
+            // Ethnicity Distribution
+            const ethnicity_distribution_data = crimeData2.map(
+                (obj: any) => obj.ethnicity_distribution
+            );
+            let agg_ethnicity_data = get_aggregated_data(
+                ethnicity_distribution_data,
+                5,
+                true,
+                false,
+                false
+            );
+            setTop5Ethnicity2(agg_ethnicity_data);
+
+            // Gender Distribution
+            const gender_distribution_data = crimeData2.map(
+                (obj: any) => obj.gender_distribution
+            );
+            let agg_gender_data = get_aggregated_data(
+                gender_distribution_data,
+                5,
+                true,
+                false,
+                false
+            );
+            setTop5Gender2(agg_gender_data);
+
+            // Age Distribution
+            const age_distribution_data = crimeData2.map(
+                (obj: any) => obj.age_distribution
+            );
+            let agg_age_data = get_aggregated_data(
+                age_distribution_data,
+                10,
+                false,
+                false,
+                false
+            );
+            setAgeDistribution2(agg_age_data);
+
+            // Crime Frequency
+            let actual_monthly_data = crimeData2.map(
+                (obj: any) => obj.actual_month_crime_freq
+            );
+
+            actual_monthly_data = get_aggregated_data(
+                actual_monthly_data,
+                12,
+                false,
+                true,
+                false
+            );
+
+            let actual_weekly_data = crimeData2.map(
+                (obj: any) => obj.actual_week_crime_freq
+            );
+
+            actual_weekly_data = get_aggregated_data(
+                actual_weekly_data,
+                52,
+                false,
+                false,
+                true
+            );
+
+            setCrimeFrequency2('Monthly');
+
+            if (
+                crimeData2 &&
+                (crimeData2[0]?.prediction_month_crime_freq ||
+                    crimeData2[0]?.prediction_week_crime_freq)
+            ) {
+                let prediction_monthly_data = crimeData2.map(
+                    (obj: any) => obj.prediction_month_crime_freq
+                );
+
+                prediction_monthly_data = get_aggregated_data(
+                    prediction_monthly_data,
+                    12,
+                    false,
+                    true,
+                    false
+                );
+
+                let prediction_weekly_data = crimeData2.map(
+                    (obj: any) => obj.prediction_week_crime_freq
+                );
+
+                prediction_weekly_data = get_aggregated_data(
+                    prediction_weekly_data,
+                    52,
+                    false,
+                    false,
+                    true
+                );
+
+                let complete_montly_data = [
+                    {
+                        id: 'Actual',
+                        data: actual_monthly_data
+                    },
+                    { id: 'Forecasted', data: prediction_monthly_data }
+                ];
+                setMontlyFrequency2(complete_montly_data);
+
+                let complete_weekly_data = [
+                    {
+                        id: 'Actual',
+                        data: actual_weekly_data
+                    },
+                    { id: 'Forecasted', data: prediction_weekly_data }
+                ];
+                setWeeklyFrequency2(complete_weekly_data);
+            } else {
+                let complete_montly_data = [
+                    {
+                        id: 'Actual',
+                        data: actual_monthly_data
+                    }
+                ];
+                setMontlyFrequency2(complete_montly_data);
+
+                let complete_weekly_data = [
+                    {
+                        id: 'Actual',
+                        data: actual_weekly_data
+                    }
+                ];
+                setWeeklyFrequency2(complete_weekly_data);
+            }
         }
     }, [crimeData2])
 
