@@ -17,7 +17,7 @@ export default function Compare() {
     const dispatch =
         useDispatch<ThunkDispatch<RootState, undefined, AnyAction>>();
 
-    const API_BASE_URL = import.meta.env.VITE_SERVER_URL;
+    const API_BASE_URL = process.env.REACT_APP_SERVER_URL;
 
     const [cities, setCities] = useState<string[]>([]);
     const [selectedCity1, setSelectedCity1] = useState<string>('');

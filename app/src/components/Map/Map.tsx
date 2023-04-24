@@ -22,7 +22,7 @@ Map.defaultProps = {
         lng: -118.243683
     },
     zoom: 10.5,
-    apiKey: import.meta.env.VITE_GOOGLE_API_KEY
+    apiKey: process.env.REACT_APP_GOOGLE_API_KEY
 };
 
 Map.propTypes = {
