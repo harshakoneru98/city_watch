@@ -17,6 +17,7 @@ import { fetchTop5CrimeDataInfoData } from '../../store/slices/topcrimedataSlice
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import BarChart from '../../components/BarChart/BarChart';
+import loading_gif from '../../assets/loading.gif';
 
 interface DashboardProps {
     defaultCity: string;
@@ -66,10 +67,6 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         (state: RootState) => state.metaDataInfo
     );
 
-    if (metaDataStatus === 'loading') {
-        console.log('Meta Data Loading');
-    }
-
     if (metaDataStatus === 'failed') {
         console.log(metaDataError);
     }
@@ -78,10 +75,6 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         (state: RootState) => state.zipDataInfo
     );
 
-    if (zipDataStatus === 'loading') {
-        console.log('ZipData Loading');
-    }
-
     if (zipDataError === 'failed') {
         console.log(zipDataError);
     }
@@ -89,10 +82,6 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
     const { crimeData, crimeDataStatus, crimeDataError } = useSelector(
         (state: RootState) => state.crimeDataInfo
     );
-
-    if (crimeDataStatus === 'loading') {
-        console.log('CrimeData Loading');
-    }
 
     if (crimeDataError === 'failed') {
         console.log(crimeDataError);
@@ -103,10 +92,6 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         top5RecentCrimeDataStatus,
         top5RecentCrimeDataError
     } = useSelector((state: RootState) => state.topCrimeDataInfo);
-
-    if (top5RecentCrimeDataStatus === 'loading') {
-        console.log('Top 5 Crime Data Loading');
-    }
 
     if (top5RecentCrimeDataError === 'failed') {
         console.log(top5RecentCrimeDataError);
@@ -516,10 +501,31 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
         }
     }, [top5RecentCrimeData]);
 
+    const [showLoader, setShowLoader] = useState<boolean>(false);
+
+    useEffect(() => {
+        setShowLoader(
+            metaDataStatus === 'loading' ||
+                zipDataStatus === 'loading' ||
+                crimeDataStatus === 'loading' ||
+                top5RecentCrimeDataStatus === 'loading'
+        );
+    }, [
+        metaDataStatus,
+        zipDataStatus,
+        crimeDataStatus,
+        top5RecentCrimeDataStatus
+    ]);
+
     return (
         <Fragment>
             <Header />
             <div className="main-container">
+                {showLoader && (
+                    <div className="overlay">
+                        <img src={loading_gif} alt="Loading..." />
+                    </div>
+                )}
                 <div className="dashboard-container">
                     <div className="filter-container">
                         <div className="selectInputContainer selectInputRight">
@@ -674,10 +680,12 @@ export default function Dashboard({ defaultCity }: DashboardProps) {
                                                                 ? montlyFrequency
                                                                 : weeklyFrequency
                                                         }
-                                                        line_type={crimeFrequency ===
+                                                        line_type={
+                                                            crimeFrequency ===
                                                             'Monthly'
                                                                 ? 'Monthly'
-                                                                : 'Weekly'}
+                                                                : 'Weekly'
+                                                        }
                                                     />
                                                 )}
                                             </Box>

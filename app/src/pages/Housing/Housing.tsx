@@ -12,6 +12,7 @@ import RangeSlider from '../../components/RangeSlider/RangeSlider';
 import SingleSlider from '../../components/SingleSlider/SingleSlider';
 import './Housing.scss';
 import HousingTable from '../../components/HousingTable/HousingTable';
+import loading_gif from '../../assets/loading.gif';
 
 export default function Housing() {
     const [cities, setCities] = useState<string[]>([]);
@@ -98,10 +99,24 @@ export default function Housing() {
         }
     }, [housingInfoData]);
 
+    const [showLoader, setShowLoader] = useState<boolean>(false);
+
+    useEffect(() => {
+        setShowLoader(
+            housingCitiesDataStatus === 'loading' ||
+                housingInfoDataStatus === 'loading'
+        );
+    }, [housingCitiesDataStatus, housingInfoDataStatus]);
+
     return (
         <Fragment>
             <Header />
             <div className="main-container">
+                {showLoader && (
+                    <div className="overlay">
+                        <img src={loading_gif} alt="Loading..." />
+                    </div>
+                )}
                 <div className="housing-container">
                     <Fragment>
                         <Grid

@@ -23,6 +23,7 @@ import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
 import { postAxiosRequest } from '../../api';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
+import loading_gif from '../../assets/loading.gif';
 
 const theme = createTheme();
 
@@ -131,6 +132,14 @@ export default function SignUp(): JSX.Element {
         }
     };
 
+    const [showLoader, setShowLoader] = useState<boolean>(false);
+
+    useEffect(() => {
+        setShowLoader(
+            metaDataStatus === 'loading'
+        );
+    }, [metaDataStatus]);
+
     return (
         <div
             style={{
@@ -140,6 +149,11 @@ export default function SignUp(): JSX.Element {
         >
             <AuthHeader />
             <ThemeProvider theme={theme}>
+                {showLoader && (
+                    <div className="overlay">
+                        <img src={loading_gif} alt="Loading..." />
+                    </div>
+                )}
                 <Container
                     component="main"
                     maxWidth="xs"

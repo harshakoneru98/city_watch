@@ -24,6 +24,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
+import loading_gif from '../../assets/loading.gif';
 import './Profile.scss';
 
 const theme = createTheme();
@@ -50,10 +51,6 @@ export default function Profile() {
         dispatch(fetchMetaDataInfoData('crime/get_metadata_info/'));
     }, [dispatch]);
 
-    if (metaDataStatus === 'loading') {
-        console.log('Loading');
-    }
-
     if (metaDataStatus === 'failed') {
         console.log(metaDataError);
     }
@@ -62,20 +59,12 @@ export default function Profile() {
         (state: RootState) => state.userDataInfo
     );
 
-    if (userDataStatus === 'loading') {
-        console.log('user Loading');
-    }
-
     if (userDataError === 'failed') {
         console.log(userDataError);
     }
 
     const { updateUserData, updateUserDataStatus, updateUserDataError } =
         useSelector((state: RootState) => state.updateUserDataInfo);
-
-    if (updateUserDataStatus === 'loading') {
-        console.log('update user Loading');
-    }
 
     if (updateUserDataError === 'failed') {
         console.log(updateUserDataError);
@@ -172,11 +161,26 @@ export default function Profile() {
         }
     }, [updateUserData]);
 
+    const [showLoader, setShowLoader] = useState<boolean>(false);
+
+    useEffect(() => {
+        setShowLoader(
+            metaDataStatus === 'loading' ||
+            userDataStatus === 'loading' ||
+            updateUserDataStatus === 'loading'
+        );
+    }, [metaDataStatus, userDataStatus, updateUserDataStatus]);
+
     return (
         <Fragment>
             <Header />
             <ThemeProvider theme={theme}>
                 <div className="main-container">
+                    {showLoader && (
+                        <div className="overlay">
+                            <img src={loading_gif} alt="Loading..." />
+                        </div>
+                    )}
                     <div className="profile-container">
                         {userData.data && (
                             <Container

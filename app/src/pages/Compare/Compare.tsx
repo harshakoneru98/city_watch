@@ -10,6 +10,7 @@ import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
 import SelectInput from '../../components/SelectInput/SelectInput';
 import PieChart from '../../components/PieChart/PieChart';
 import BarChart from '../../components/BarChart/BarChart';
+import loading_gif from '../../assets/loading.gif';
 import './Compare.scss';
 
 export default function Compare() {
@@ -46,6 +47,7 @@ export default function Compare() {
     const [top5Ethnicity2, setTop5Ethnicity2] = useState<any>();
     const [top5Gender2, setTop5Gender2] = useState<any>();
     const [ageDistribution2, setAgeDistribution2] = useState<any>();
+    const [loadingData, setLoadingData] = useState<boolean>(false);
 
     const insights = [
         'Top 5 Crime Statistics',
@@ -108,11 +110,11 @@ export default function Compare() {
         const getCity1Data = async () => {
             if (selectedCity1) {
                 try {
+                    setLoadingData(true)
                     const response = await postAxiosRequest(
                         JSON.stringify({ city: selectedCity1 }),
                         'crime/get_yearly_zipcodes_info_by_city'
                     );
-                    console.log('Selected City 1 : ', selectedCity1);
                     setYearZipCodes1(response.data);
                     let new_years = Object.keys(response.data);
                     new_years.sort((a, b) => b.localeCompare(a));
@@ -124,6 +126,7 @@ export default function Compare() {
                     }
                     setZipCodes1(new_zip_codes);
                     setSelectedZipcode1(new_zip_codes[0]);
+                    setLoadingData(false)
                 } catch (error) {
                     console.log(error);
                 }
@@ -136,11 +139,11 @@ export default function Compare() {
         const getCity2Data = async () => {
             if (selectedCity2) {
                 try {
+                    setLoadingData(true)
                     const response = await postAxiosRequest(
                         JSON.stringify({ city: selectedCity2 }),
                         'crime/get_yearly_zipcodes_info_by_city'
                     );
-                    console.log('Selected City 2 : ', selectedCity2);
                     setYearZipCodes2(response.data);
                     let new_years = Object.keys(response.data);
                     new_years.sort((a, b) => b.localeCompare(a));
@@ -152,6 +155,7 @@ export default function Compare() {
                     }
                     setZipCodes2(new_zip_codes);
                     setSelectedZipcode2(new_zip_codes[0]);
+                    setLoadingData(false)
                 } catch (error) {
                     console.log(error);
                 }
@@ -201,6 +205,7 @@ export default function Compare() {
                 }
 
                 try {
+                    setLoadingData(true)
                     const response = await postAxiosRequest(
                         JSON.stringify({
                             year: selectedYear1,
@@ -209,6 +214,7 @@ export default function Compare() {
                         'crime/get_crimedata_info_by_year_zipcode'
                     );
                     setCrimeData1(response.data);
+                    setLoadingData(false)
                 } catch (error) {
                     console.log(error);
                 }
@@ -230,6 +236,7 @@ export default function Compare() {
                 }
 
                 try {
+                    setLoadingData(true)
                     const response = await postAxiosRequest(
                         JSON.stringify({
                             year: selectedYear2,
@@ -238,6 +245,7 @@ export default function Compare() {
                         'crime/get_crimedata_info_by_year_zipcode'
                     );
                     setCrimeData2(response.data);
+                    setLoadingData(false)
                 } catch (error) {
                     console.log(error);
                 }
@@ -318,8 +326,6 @@ export default function Compare() {
 
     useEffect(() => {
         if (crimeData1) {
-            console.log('Crime Data 1 : ', crimeData1);
-
             // Top 5 Crimes
             const top_5_crimes_data = crimeData1.map(
                 (obj: any) => obj.top5_crimes
@@ -371,8 +377,6 @@ export default function Compare() {
 
     useEffect(() => {
         if (crimeData2) {
-            console.log('Crime Data 2 : ', crimeData2);
-
             // Top 5 Crimes
             const top_5_crimes_data = crimeData2.map(
                 (obj: any) => obj.top5_crimes
@@ -426,14 +430,21 @@ export default function Compare() {
         setSelectedInsight(insight);
     };
 
+    const [showLoader, setShowLoader] = useState<boolean>(false);
+
     useEffect(() => {
-        console.log('Selected Insight : ', selectedInsight);
-    }, [selectedInsight]);
+        setShowLoader(metaDataStatus === 'loading' || loadingData);
+    }, [metaDataStatus, loadingData]);
 
     return (
         <Fragment>
             <Header />
             <div className="main-container">
+                {showLoader && (
+                    <div className="overlay">
+                        <img src={loading_gif} alt="Loading..." />
+                    </div>
+                )}
                 <div className="compare-container">
                     <Box bgcolor="white">
                         <Typography className="compare_header" variant="h4">
