@@ -32,7 +32,6 @@ export default function Compare() {
     const [zipCodes2, setZipCodes2] = useState<any[]>([]);
     const [selectedZipcode2, setSelectedZipcode2] = useState<any>();
 
-
     const { metaData, metaDataStatus, metaDataError } = useSelector(
         (state: RootState) => state.metaDataInfo
     );
@@ -84,57 +83,57 @@ export default function Compare() {
     useEffect(() => {
         const getCity1Data = async () => {
             if (selectedCity1) {
-              try {
-                const response = await postAxiosRequest(
-                  JSON.stringify({ city: selectedCity1 }),
-                  'crime/get_yearly_zipcodes_info_by_city'
-                );
-                console.log('Selected City 1 : ', selectedCity1);
-                setYearZipCodes1(response.data)
-                let new_years = Object.keys(response.data);
-                new_years.sort((a, b) => b.localeCompare(a));
-                setYears1(new_years);
-                setSelectedYear1(new_years[0]);
-                let new_zip_codes = response.data[new_years[0]];
-                if (new_zip_codes.length != 1) {
-                    new_zip_codes = ['All', ...new_zip_codes];
+                try {
+                    const response = await postAxiosRequest(
+                        JSON.stringify({ city: selectedCity1 }),
+                        'crime/get_yearly_zipcodes_info_by_city'
+                    );
+                    console.log('Selected City 1 : ', selectedCity1);
+                    setYearZipCodes1(response.data);
+                    let new_years = Object.keys(response.data);
+                    new_years.sort((a, b) => b.localeCompare(a));
+                    setYears1(new_years);
+                    setSelectedYear1(new_years[0]);
+                    let new_zip_codes = response.data[new_years[0]];
+                    if (new_zip_codes.length != 1) {
+                        new_zip_codes = ['All', ...new_zip_codes];
+                    }
+                    setZipCodes1(new_zip_codes);
+                    setSelectedZipcode1(new_zip_codes[0]);
+                } catch (error) {
+                    console.log(error);
                 }
-                setZipCodes1(new_zip_codes);
-                setSelectedZipcode1(new_zip_codes[0]);
-              } catch (error) {
-                console.log(error);
-              }
             }
-          };
-          getCity1Data();
+        };
+        getCity1Data();
     }, [selectedCity1]);
 
     useEffect(() => {
         const getCity2Data = async () => {
             if (selectedCity2) {
-              try {
-                const response = await postAxiosRequest(
-                  JSON.stringify({ city: selectedCity2 }),
-                  'crime/get_yearly_zipcodes_info_by_city'
-                );
-                console.log('Selected City 2 : ', selectedCity2);
-                setYearZipCodes2(response.data)
-                let new_years = Object.keys(response.data);
-                new_years.sort((a, b) => b.localeCompare(a));
-                setYears2(new_years);
-                setSelectedYear2(new_years[0]);
-                let new_zip_codes = response.data[new_years[0]];
-                if (new_zip_codes.length != 1) {
-                    new_zip_codes = ['All', ...new_zip_codes];
+                try {
+                    const response = await postAxiosRequest(
+                        JSON.stringify({ city: selectedCity2 }),
+                        'crime/get_yearly_zipcodes_info_by_city'
+                    );
+                    console.log('Selected City 2 : ', selectedCity2);
+                    setYearZipCodes2(response.data);
+                    let new_years = Object.keys(response.data);
+                    new_years.sort((a, b) => b.localeCompare(a));
+                    setYears2(new_years);
+                    setSelectedYear2(new_years[0]);
+                    let new_zip_codes = response.data[new_years[0]];
+                    if (new_zip_codes.length != 1) {
+                        new_zip_codes = ['All', ...new_zip_codes];
+                    }
+                    setZipCodes2(new_zip_codes);
+                    setSelectedZipcode2(new_zip_codes[0]);
+                } catch (error) {
+                    console.log(error);
                 }
-                setZipCodes2(new_zip_codes);
-                setSelectedZipcode2(new_zip_codes[0]);
-              } catch (error) {
-                console.log(error);
-              }
             }
-          };
-          getCity2Data();
+        };
+        getCity2Data();
     }, [selectedCity2]);
 
     const handleYearChange = (year: string, selectInput: string) => {
@@ -158,24 +157,24 @@ export default function Compare() {
     };
 
     const handleZipcodeChange = (zip: string, selectInput: string) => {
-        if (selectInput === 'zip1'){
-            setSelectedZipcode1(zip)
-        }else if(selectInput === 'zip2'){
-            setSelectedZipcode2(zip)
+        if (selectInput === 'zip1') {
+            setSelectedZipcode1(zip);
+        } else if (selectInput === 'zip2') {
+            setSelectedZipcode2(zip);
         }
     };
 
     useEffect(() => {
         if (selectedYear1) {
-            console.log('Selected Year 1 : ', selectedYear1)
-            console.log('Selected Zip code 1 : ', selectedZipcode1)
+            console.log('Selected Year 1 : ', selectedYear1);
+            console.log('Selected Zip code 1 : ', selectedZipcode1);
         }
     }, [zipCodes1, selectedZipcode1, selectedYear1]);
 
     useEffect(() => {
         if (selectedYear2) {
-            console.log('Selected Year 2 : ', selectedYear2)
-            console.log('Selected Zip code 2 : ', selectedZipcode2)
+            console.log('Selected Year 2 : ', selectedYear2);
+            console.log('Selected Zip code 2 : ', selectedZipcode2);
         }
     }, [zipCodes2, selectedZipcode2, selectedYear2]);
 
@@ -190,7 +189,7 @@ export default function Compare() {
                         </Typography>
                     </Box>
 
-                    <Grid container bgcolor="white" className="compare-filters">
+                    <Grid container bgcolor="white">
                         <Grid item xs={6}>
                             <div className="selectInputCompare">
                                 <SelectInput
@@ -202,26 +201,30 @@ export default function Compare() {
                                     }
                                 />
                             </div>
-                            <div className="selectInputCompare">
-                                <SelectInput
-                                    data={years1}
-                                    name="Year 1"
-                                    selectedValue={selectedYear1}
-                                    onValChange={(year) =>
-                                        handleYearChange(year, 'year1')
-                                    }
-                                />
-                            </div>
-                            <div className="selectInputCompare">
-                                <SelectInput
-                                    data={zipCodes1}
-                                    name="Zipcode 1"
-                                    selectedValue={selectedZipcode1}
-                                    onValChange={(zip) =>
-                                        handleZipcodeChange(zip, 'zip1')
-                                    }
-                                />
-                            </div>
+                            {selectedCity1 && (
+                                <Fragment>
+                                    <div className="selectInputCompare">
+                                        <SelectInput
+                                            data={years1}
+                                            name="Year 1"
+                                            selectedValue={selectedYear1}
+                                            onValChange={(year) =>
+                                                handleYearChange(year, 'year1')
+                                            }
+                                        />
+                                    </div>
+                                    <div className="selectInputCompare">
+                                        <SelectInput
+                                            data={zipCodes1}
+                                            name="Zipcode 1"
+                                            selectedValue={selectedZipcode1}
+                                            onValChange={(zip) =>
+                                                handleZipcodeChange(zip, 'zip1')
+                                            }
+                                        />
+                                    </div>
+                                </Fragment>
+                            )}
                         </Grid>
                         <Grid item xs={6}>
                             <div className="selectInputCompare">
@@ -234,26 +237,30 @@ export default function Compare() {
                                     }
                                 />
                             </div>
-                            <div className="selectInputCompare">
-                                <SelectInput
-                                    data={years2}
-                                    name="Year 2"
-                                    selectedValue={selectedYear2}
-                                    onValChange={(year) =>
-                                        handleYearChange(year, 'year2')
-                                    }
-                                />
-                            </div>
-                            <div className="selectInputCompare">
-                                <SelectInput
-                                    data={zipCodes2}
-                                    name="Zipcode 2"
-                                    selectedValue={selectedZipcode2}
-                                    onValChange={(zip) =>
-                                        handleZipcodeChange(zip, 'zip2')
-                                    }
-                                />
-                            </div>
+                            {selectedCity2 && (
+                                <Fragment>
+                                    <div className="selectInputCompare">
+                                        <SelectInput
+                                            data={years2}
+                                            name="Year 2"
+                                            selectedValue={selectedYear2}
+                                            onValChange={(year) =>
+                                                handleYearChange(year, 'year2')
+                                            }
+                                        />
+                                    </div>
+                                    <div className="selectInputCompare">
+                                        <SelectInput
+                                            data={zipCodes2}
+                                            name="Zipcode 2"
+                                            selectedValue={selectedZipcode2}
+                                            onValChange={(zip) =>
+                                                handleZipcodeChange(zip, 'zip2')
+                                            }
+                                        />
+                                    </div>
+                                </Fragment>
+                            )}
                         </Grid>
                     </Grid>
                 </div>
