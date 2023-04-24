@@ -19,8 +19,8 @@ export default function Compare() {
     const [cities, setCities] = useState<string[]>([]);
     const [selectedCity1, setSelectedCity1] = useState<string>('');
     const [selectedCity2, setSelectedCity2] = useState<string>('');
-    const [yearZipCodes1, setYearZipCodes1] = useState<any>([]);
-    const [yearZipCodes2, setYearZipCodes2] = useState<any>([]);
+    const [yearZipCodes1, setYearZipCodes1] = useState<any>();
+    const [yearZipCodes2, setYearZipCodes2] = useState<any>();
 
     const [years1, setYears1] = useState<string[]>([]);
     const [selectedYear1, setSelectedYear1] = useState<string>('');
@@ -31,6 +31,9 @@ export default function Compare() {
     const [selectedYear2, setSelectedYear2] = useState<string>('');
     const [zipCodes2, setZipCodes2] = useState<any[]>([]);
     const [selectedZipcode2, setSelectedZipcode2] = useState<any>();
+
+    const [crimeData1, setCrimeData1] = useState<any>();
+    const [crimeData2, setCrimeData2] = useState<any>();
 
     const { metaData, metaDataStatus, metaDataError } = useSelector(
         (state: RootState) => state.metaDataInfo
@@ -165,18 +168,64 @@ export default function Compare() {
     };
 
     useEffect(() => {
-        if (selectedYear1) {
-            console.log('Selected Year 1 : ', selectedYear1);
-            console.log('Selected Zip code 1 : ', selectedZipcode1);
+        const getCrime1Data = async () => {
+            if (selectedYear1) {
+                let new_zip_codes_api = [];
+                if (selectedZipcode1 === 'All') {
+                    new_zip_codes_api = zipCodes1.filter((elem) => elem !== 'All');
+                } else {
+                    new_zip_codes_api = [selectedZipcode1];
+                }
+    
+                try{
+                    const response = await postAxiosRequest(
+                        JSON.stringify({ year: selectedYear1, zipcodes: new_zip_codes_api }),
+                        'crime/get_crimedata_info_by_year_zipcode'
+                    );
+                    setCrimeData1(response.data)
+                } catch (error) {
+                        console.log(error);
+                }
+            }
         }
+        getCrime1Data()
     }, [zipCodes1, selectedZipcode1, selectedYear1]);
 
     useEffect(() => {
-        if (selectedYear2) {
-            console.log('Selected Year 2 : ', selectedYear2);
-            console.log('Selected Zip code 2 : ', selectedZipcode2);
+        const getCrime2Data = async () => {
+            if (selectedYear2) {
+                let new_zip_codes_api = [];
+                if (selectedZipcode2 === 'All') {
+                    new_zip_codes_api = zipCodes2.filter((elem) => elem !== 'All');
+                } else {
+                    new_zip_codes_api = [selectedZipcode2];
+                }
+    
+                try{
+                    const response = await postAxiosRequest(
+                        JSON.stringify({ year: selectedYear2, zipcodes: new_zip_codes_api }),
+                        'crime/get_crimedata_info_by_year_zipcode'
+                    );
+                    setCrimeData2(response.data)
+                } catch (error) {
+                        console.log(error);
+                }
+            }
         }
+        getCrime2Data()
     }, [zipCodes2, selectedZipcode2, selectedYear2]);
+
+    useEffect(() => {
+        if(crimeData1){
+            console.log('Crime Data 1 : ', crimeData1)
+        }
+    }, [crimeData1])
+
+    useEffect(() => {
+        if(crimeData2){
+            console.log('Crime Data 2 : ', crimeData2)
+        }
+    }, [crimeData2])
 
     return (
         <Fragment>
