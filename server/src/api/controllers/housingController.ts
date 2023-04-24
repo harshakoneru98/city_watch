@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as AWS from 'aws-sdk';
 import config from '../../config/config';
-import * as housing from '../../config/Final_Datasets/housing.json';
+// import * as housing from '../../config/Final_Datasets/housing.json';
 
 AWS.config.update({
     region: config.CITY_WATCH_AWS_REGION,
@@ -10,35 +10,35 @@ AWS.config.update({
 });
 
 export default class HousingController {
-    // Create Housing Price Database
-    public create_housing_price_db = async (req: Request, res: Response) => {
-        let documentClient = new AWS.DynamoDB.DocumentClient();
+    // // Create Housing Price Database
+    // public create_housing_price_db = async (req: Request, res: Response) => {
+    //     let documentClient = new AWS.DynamoDB.DocumentClient();
 
-        await housing.forEach(async (data) => {
-            let params = {
-                TableName: config.CITY_WATCH_DATABASE_NAME,
-                Item: {
-                    PK: `HSG#${data.zip_code}`,
-                    SK: `YR#${data.year}`,
-                    persqrt_price: data.persqrt_price,
-                    risk_zone: data.risk_zone,
-                    crime_count: data.crime_count,
-                    housing_city: data.primary_city,
-                    house_crime_correlation: data.house_crime_correlation
-                }
-            };
+    //     await housing.forEach(async (data) => {
+    //         let params = {
+    //             TableName: config.CITY_WATCH_DATABASE_NAME,
+    //             Item: {
+    //                 PK: `HSG#${data.zip_code}`,
+    //                 SK: `YR#${data.year}`,
+    //                 persqrt_price: data.persqrt_price,
+    //                 risk_zone: data.risk_zone,
+    //                 crime_count: data.crime_count,
+    //                 housing_city: data.primary_city,
+    //                 house_crime_correlation: data.house_crime_correlation
+    //             }
+    //         };
 
-            await documentClient.put(params, function (err, data) {
-                if (err) console.log(err);
-            });
-        });
+    //         await documentClient.put(params, function (err, data) {
+    //             if (err) console.log(err);
+    //         });
+    //     });
 
-        await res.send({
-            status: 200,
-            data: 'Created Housing Price DB Successfully',
-            message: 'OK'
-        });
-    };
+    //     await res.send({
+    //         status: 200,
+    //         data: 'Created Housing Price DB Successfully',
+    //         message: 'OK'
+    //     });
+    // };
 
     // Get Housing Cities Information
     public get_housing_cities_info = async (req: Request, res: Response) => {
