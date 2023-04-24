@@ -7,6 +7,7 @@ interface SelectInputProps {
     name: string;
     defaultValue?: string;
     selectedValue?: any;
+    width?: any;
     onValChange: (value: any) => void;
 }
 
@@ -15,9 +16,12 @@ export default function SelectInput({
     name,
     defaultValue,
     selectedValue,
-    onValChange
+    onValChange,
+    width
 }: SelectInputProps) {
     const [val, setVal] = useState(defaultValue || '');
+
+    const given_width = width ? width : '200px'
 
     useEffect(() => {
         if (!defaultValue) {
@@ -32,7 +36,7 @@ export default function SelectInput({
     };
 
     return (
-        <Box sx={{ width: '200px' }}>
+        <Box sx={{ width: given_width }}>
             <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">{name}</InputLabel>
                 <Select

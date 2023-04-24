@@ -51,6 +51,16 @@ export default function Compare() {
     const [weeklyFrequency2, setWeeklyFrequency2] = useState<any>();
     const [crimeFrequency2, setCrimeFrequency2] = useState<string>('Monthly');
 
+    const insights = [
+        'Crime Forecasting',
+        'Top 5 Crime Statistics',
+        'Victim Ethnicity Breakdown',
+        'Victim Age Range Analysis',
+        'Victim Gender Distribution'
+    ];
+
+    const [selectedInsight, setSelectedInsight] = useState<string>('');
+
     const { metaData, metaDataStatus, metaDataError } = useSelector(
         (state: RootState) => state.metaDataInfo
     );
@@ -188,23 +198,28 @@ export default function Compare() {
             if (selectedYear1) {
                 let new_zip_codes_api = [];
                 if (selectedZipcode1 === 'All') {
-                    new_zip_codes_api = zipCodes1.filter((elem) => elem !== 'All');
+                    new_zip_codes_api = zipCodes1.filter(
+                        (elem) => elem !== 'All'
+                    );
                 } else {
                     new_zip_codes_api = [selectedZipcode1];
                 }
-    
-                try{
+
+                try {
                     const response = await postAxiosRequest(
-                        JSON.stringify({ year: selectedYear1, zipcodes: new_zip_codes_api }),
+                        JSON.stringify({
+                            year: selectedYear1,
+                            zipcodes: new_zip_codes_api
+                        }),
                         'crime/get_crimedata_info_by_year_zipcode'
                     );
-                    setCrimeData1(response.data)
+                    setCrimeData1(response.data);
                 } catch (error) {
-                        console.log(error);
+                    console.log(error);
                 }
             }
-        }
-        getCrime1Data()
+        };
+        getCrime1Data();
     }, [zipCodes1, selectedZipcode1, selectedYear1]);
 
     useEffect(() => {
@@ -212,23 +227,28 @@ export default function Compare() {
             if (selectedYear2) {
                 let new_zip_codes_api = [];
                 if (selectedZipcode2 === 'All') {
-                    new_zip_codes_api = zipCodes2.filter((elem) => elem !== 'All');
+                    new_zip_codes_api = zipCodes2.filter(
+                        (elem) => elem !== 'All'
+                    );
                 } else {
                     new_zip_codes_api = [selectedZipcode2];
                 }
-    
-                try{
+
+                try {
                     const response = await postAxiosRequest(
-                        JSON.stringify({ year: selectedYear2, zipcodes: new_zip_codes_api }),
+                        JSON.stringify({
+                            year: selectedYear2,
+                            zipcodes: new_zip_codes_api
+                        }),
                         'crime/get_crimedata_info_by_year_zipcode'
                     );
-                    setCrimeData2(response.data)
+                    setCrimeData2(response.data);
                 } catch (error) {
-                        console.log(error);
+                    console.log(error);
                 }
             }
-        }
-        getCrime2Data()
+        };
+        getCrime2Data();
     }, [zipCodes2, selectedZipcode2, selectedYear2]);
 
     const get_aggregated_data = (
@@ -302,11 +322,13 @@ export default function Compare() {
     };
 
     useEffect(() => {
-        if(crimeData1){
-            console.log('Crime Data 1 : ', crimeData1)
+        if (crimeData1) {
+            console.log('Crime Data 1 : ', crimeData1);
 
             // Top 5 Crimes
-            const top_5_crimes_data = crimeData1.map((obj: any) => obj.top5_crimes);
+            const top_5_crimes_data = crimeData1.map(
+                (obj: any) => obj.top5_crimes
+            );
             setTop5CrimeData1(
                 get_aggregated_data(top_5_crimes_data, 5, true, false, false)
             );
@@ -441,14 +463,16 @@ export default function Compare() {
                 setWeeklyFrequency1(complete_weekly_data);
             }
         }
-    }, [crimeData1])
+    }, [crimeData1]);
 
     useEffect(() => {
-        if(crimeData2){
-            console.log('Crime Data 2 : ', crimeData2)
+        if (crimeData2) {
+            console.log('Crime Data 2 : ', crimeData2);
 
             // Top 5 Crimes
-            const top_5_crimes_data = crimeData2.map((obj: any) => obj.top5_crimes);
+            const top_5_crimes_data = crimeData2.map(
+                (obj: any) => obj.top5_crimes
+            );
             setTop5CrimeData2(
                 get_aggregated_data(top_5_crimes_data, 5, true, false, false)
             );
@@ -583,7 +607,15 @@ export default function Compare() {
                 setWeeklyFrequency2(complete_weekly_data);
             }
         }
-    }, [crimeData2])
+    }, [crimeData2]);
+
+    const handleInsightChange = (insight: string) => {
+        setSelectedInsight(insight);
+    };
+
+    useEffect(() => {
+        console.log('Selected Insight : ', selectedInsight)
+    }, [selectedInsight])
 
     return (
         <Fragment>
@@ -668,6 +700,22 @@ export default function Compare() {
                                     </div>
                                 </Fragment>
                             )}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container bgcolor="white">
+                        <Grid item xs={12}>
+                            {(selectedCity1 && selectedCity2) && <div className="selectInputCompare">
+                                <SelectInput
+                                    data={insights}
+                                    name="Insights"
+                                    selectedValue={selectedInsight}
+                                    onValChange={(insights) =>
+                                        handleInsightChange(insights)
+                                    }
+                                    width={"400px"}
+                                />
+                            </div>}
                         </Grid>
                     </Grid>
                 </div>
