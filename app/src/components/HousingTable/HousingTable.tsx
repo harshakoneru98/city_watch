@@ -109,7 +109,7 @@ function HousingRow({ row, sqrt_selected }: HousingTableRowProps) {
                     {row.year_data[0].risk_zone}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    {row.year_data[0].house_crime_correlation}
+                    {-1*row.year_data[0].house_crime_correlation}
                 </TableCell>
             </TableRow>
             <TableRow>
