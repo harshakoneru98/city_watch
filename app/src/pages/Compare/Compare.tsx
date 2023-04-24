@@ -8,6 +8,9 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
 import SelectInput from '../../components/SelectInput/SelectInput';
+import LineChart from '../../components/LineChart/LineChart';
+import PieChart from '../../components/PieChart/PieChart';
+import BarChart from '../../components/BarChart/BarChart';
 import './Compare.scss';
 
 export default function Compare() {
@@ -614,8 +617,8 @@ export default function Compare() {
     };
 
     useEffect(() => {
-        console.log('Selected Insight : ', selectedInsight)
-    }, [selectedInsight])
+        console.log('Selected Insight : ', selectedInsight);
+    }, [selectedInsight]);
 
     return (
         <Fragment>
@@ -705,17 +708,176 @@ export default function Compare() {
 
                     <Grid container bgcolor="white">
                         <Grid item xs={12}>
-                            {(selectedCity1 && selectedCity2) && <div className="selectInputCompare">
-                                <SelectInput
-                                    data={insights}
-                                    name="Insights"
-                                    selectedValue={selectedInsight}
-                                    onValChange={(insights) =>
-                                        handleInsightChange(insights)
-                                    }
-                                    width={"400px"}
-                                />
-                            </div>}
+                            {selectedCity1 && selectedCity2 && (
+                                <div className="selectInputCompare">
+                                    <SelectInput
+                                        data={insights}
+                                        name="Insights"
+                                        selectedValue={selectedInsight}
+                                        onValChange={(insights) =>
+                                            handleInsightChange(insights)
+                                        }
+                                        width={'400px'}
+                                    />
+                                </div>
+                            )}
+                        </Grid>
+                    </Grid>
+
+                    <Grid
+                        container
+                        bgcolor="white"
+                        className="compare-insights"
+                    >
+                        <Grid item xs={6}>
+                            {selectedInsight === 'Top 5 Crime Statistics' && (
+                                <Box>
+                                    {top5CrimeData1 && (
+                                        <Fragment>
+                                            <Typography
+                                                className="demographics_header"
+                                                variant="h6"
+                                            >
+                                                Top 5 Crime Statistics
+                                            </Typography>
+
+                                            <PieChart
+                                                data={top5CrimeData1}
+                                                type="top5crimes"
+                                            />
+                                        </Fragment>
+                                    )}
+                                </Box>
+                            )}
+                            {selectedInsight ===
+                                'Victim Ethnicity Breakdown' && (
+                                <Box>
+                                    {top5Ethnicity1 && (
+                                        <Fragment>
+                                            <Typography
+                                                className="demographics_header"
+                                                variant="h6"
+                                            >
+                                                Ethnicity Breakdown
+                                            </Typography>
+                                            <PieChart
+                                                data={top5Ethnicity1}
+                                                type="ethnicity"
+                                            />
+                                        </Fragment>
+                                    )}
+                                </Box>
+                            )}
+                            {selectedInsight ===
+                                'Victim Age Range Analysis' && (
+                                <Box>
+                                    {ageDistribution1 && (
+                                        <Fragment>
+                                            <Typography
+                                                className="demographics_header"
+                                                variant="h6"
+                                            >
+                                                Age Range Analysis
+                                            </Typography>
+                                            <BarChart data={ageDistribution1} />
+                                        </Fragment>
+                                    )}
+                                </Box>
+                            )}
+                            {selectedInsight ===
+                                'Victim Gender Distribution' && (
+                                <Box>
+                                    {top5Gender1 && (
+                                        <Fragment>
+                                            <Typography
+                                                className="demographics_header"
+                                                variant="h6"
+                                            >
+                                                Gender Distribution
+                                            </Typography>
+                                            <PieChart
+                                                data={top5Gender1}
+                                                type="gender"
+                                            />
+                                        </Fragment>
+                                    )}
+                                </Box>
+                            )}
+                        </Grid>
+                        <Grid item xs={6}>
+                            {selectedInsight === 'Top 5 Crime Statistics' && (
+                                <Box>
+                                    {top5CrimeData2 && (
+                                        <Fragment>
+                                            <Typography
+                                                className="demographics_header"
+                                                variant="h6"
+                                            >
+                                                Top 5 Crime Statistics
+                                            </Typography>
+
+                                            <PieChart
+                                                data={top5CrimeData2}
+                                                type="top5crimes"
+                                            />
+                                        </Fragment>
+                                    )}
+                                </Box>
+                            )}
+                            {selectedInsight ===
+                                'Victim Ethnicity Breakdown' && (
+                                <Box>
+                                    {top5Ethnicity2 && (
+                                        <Fragment>
+                                            <Typography
+                                                className="demographics_header"
+                                                variant="h6"
+                                            >
+                                                Ethnicity Breakdown
+                                            </Typography>
+                                            <PieChart
+                                                data={top5Ethnicity2}
+                                                type="ethnicity"
+                                            />
+                                        </Fragment>
+                                    )}
+                                </Box>
+                            )}
+                            {selectedInsight ===
+                                'Victim Age Range Analysis' && (
+                                <Box>
+                                    {ageDistribution2 && (
+                                        <Fragment>
+                                            <Typography
+                                                className="demographics_header"
+                                                variant="h6"
+                                            >
+                                                Age Range Analysis
+                                            </Typography>
+                                            <BarChart data={ageDistribution2} />
+                                        </Fragment>
+                                    )}
+                                </Box>
+                            )}
+                            {selectedInsight ===
+                                'Victim Gender Distribution' && (
+                                <Box>
+                                    {top5Gender2 && (
+                                        <Fragment>
+                                            <Typography
+                                                className="demographics_header"
+                                                variant="h6"
+                                            >
+                                                Gender Distribution
+                                            </Typography>
+                                            <PieChart
+                                                data={top5Gender2}
+                                                type="gender"
+                                            />
+                                        </Fragment>
+                                    )}
+                                </Box>
+                            )}
                         </Grid>
                     </Grid>
                 </div>
