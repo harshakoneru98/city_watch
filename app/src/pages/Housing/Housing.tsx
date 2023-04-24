@@ -170,10 +170,10 @@ export default function Housing() {
                                         </Grid>
                                         <Grid item>
                                             <SingleSlider
-                                                defaultValue={1000}
-                                                step={1000}
-                                                min={1000}
-                                                max={10000}
+                                                defaultValue={500}
+                                                step={500}
+                                                min={500}
+                                                max={5000}
                                                 alias="sqft"
                                                 onValChange={
                                                     handleAreaRangeChange

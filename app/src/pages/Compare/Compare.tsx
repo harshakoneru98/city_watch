@@ -8,7 +8,6 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { fetchMetaDataInfoData } from '../../store/slices/metadataSlice';
 import SelectInput from '../../components/SelectInput/SelectInput';
-import LineChart from '../../components/LineChart/LineChart';
 import PieChart from '../../components/PieChart/PieChart';
 import BarChart from '../../components/BarChart/BarChart';
 import './Compare.scss';
@@ -42,20 +41,13 @@ export default function Compare() {
     const [top5Ethnicity1, setTop5Ethnicity1] = useState<any>();
     const [top5Gender1, setTop5Gender1] = useState<any>();
     const [ageDistribution1, setAgeDistribution1] = useState<any>();
-    const [montlyFrequency1, setMontlyFrequency1] = useState<any>();
-    const [weeklyFrequency1, setWeeklyFrequency1] = useState<any>();
-    const [crimeFrequency1, setCrimeFrequency1] = useState<string>('Monthly');
 
     const [top5CrimeData2, setTop5CrimeData2] = useState<any>();
     const [top5Ethnicity2, setTop5Ethnicity2] = useState<any>();
     const [top5Gender2, setTop5Gender2] = useState<any>();
     const [ageDistribution2, setAgeDistribution2] = useState<any>();
-    const [montlyFrequency2, setMontlyFrequency2] = useState<any>();
-    const [weeklyFrequency2, setWeeklyFrequency2] = useState<any>();
-    const [crimeFrequency2, setCrimeFrequency2] = useState<string>('Monthly');
 
     const insights = [
-        'Crime Forecasting',
         'Top 5 Crime Statistics',
         'Victim Ethnicity Breakdown',
         'Victim Age Range Analysis',
@@ -374,97 +366,6 @@ export default function Compare() {
                 false
             );
             setAgeDistribution1(agg_age_data);
-
-            // Crime Frequency
-            let actual_monthly_data = crimeData1.map(
-                (obj: any) => obj.actual_month_crime_freq
-            );
-
-            actual_monthly_data = get_aggregated_data(
-                actual_monthly_data,
-                12,
-                false,
-                true,
-                false
-            );
-
-            let actual_weekly_data = crimeData1.map(
-                (obj: any) => obj.actual_week_crime_freq
-            );
-
-            actual_weekly_data = get_aggregated_data(
-                actual_weekly_data,
-                52,
-                false,
-                false,
-                true
-            );
-
-            setCrimeFrequency1('Monthly');
-
-            if (
-                crimeData1 &&
-                (crimeData1[0]?.prediction_month_crime_freq ||
-                    crimeData1[0]?.prediction_week_crime_freq)
-            ) {
-                let prediction_monthly_data = crimeData1.map(
-                    (obj: any) => obj.prediction_month_crime_freq
-                );
-
-                prediction_monthly_data = get_aggregated_data(
-                    prediction_monthly_data,
-                    12,
-                    false,
-                    true,
-                    false
-                );
-
-                let prediction_weekly_data = crimeData1.map(
-                    (obj: any) => obj.prediction_week_crime_freq
-                );
-
-                prediction_weekly_data = get_aggregated_data(
-                    prediction_weekly_data,
-                    52,
-                    false,
-                    false,
-                    true
-                );
-
-                let complete_montly_data = [
-                    {
-                        id: 'Actual',
-                        data: actual_monthly_data
-                    },
-                    { id: 'Forecasted', data: prediction_monthly_data }
-                ];
-                setMontlyFrequency1(complete_montly_data);
-
-                let complete_weekly_data = [
-                    {
-                        id: 'Actual',
-                        data: actual_weekly_data
-                    },
-                    { id: 'Forecasted', data: prediction_weekly_data }
-                ];
-                setWeeklyFrequency1(complete_weekly_data);
-            } else {
-                let complete_montly_data = [
-                    {
-                        id: 'Actual',
-                        data: actual_monthly_data
-                    }
-                ];
-                setMontlyFrequency1(complete_montly_data);
-
-                let complete_weekly_data = [
-                    {
-                        id: 'Actual',
-                        data: actual_weekly_data
-                    }
-                ];
-                setWeeklyFrequency1(complete_weekly_data);
-            }
         }
     }, [crimeData1]);
 
@@ -518,97 +419,6 @@ export default function Compare() {
                 false
             );
             setAgeDistribution2(agg_age_data);
-
-            // Crime Frequency
-            let actual_monthly_data = crimeData2.map(
-                (obj: any) => obj.actual_month_crime_freq
-            );
-
-            actual_monthly_data = get_aggregated_data(
-                actual_monthly_data,
-                12,
-                false,
-                true,
-                false
-            );
-
-            let actual_weekly_data = crimeData2.map(
-                (obj: any) => obj.actual_week_crime_freq
-            );
-
-            actual_weekly_data = get_aggregated_data(
-                actual_weekly_data,
-                52,
-                false,
-                false,
-                true
-            );
-
-            setCrimeFrequency2('Monthly');
-
-            if (
-                crimeData2 &&
-                (crimeData2[0]?.prediction_month_crime_freq ||
-                    crimeData2[0]?.prediction_week_crime_freq)
-            ) {
-                let prediction_monthly_data = crimeData2.map(
-                    (obj: any) => obj.prediction_month_crime_freq
-                );
-
-                prediction_monthly_data = get_aggregated_data(
-                    prediction_monthly_data,
-                    12,
-                    false,
-                    true,
-                    false
-                );
-
-                let prediction_weekly_data = crimeData2.map(
-                    (obj: any) => obj.prediction_week_crime_freq
-                );
-
-                prediction_weekly_data = get_aggregated_data(
-                    prediction_weekly_data,
-                    52,
-                    false,
-                    false,
-                    true
-                );
-
-                let complete_montly_data = [
-                    {
-                        id: 'Actual',
-                        data: actual_monthly_data
-                    },
-                    { id: 'Forecasted', data: prediction_monthly_data }
-                ];
-                setMontlyFrequency2(complete_montly_data);
-
-                let complete_weekly_data = [
-                    {
-                        id: 'Actual',
-                        data: actual_weekly_data
-                    },
-                    { id: 'Forecasted', data: prediction_weekly_data }
-                ];
-                setWeeklyFrequency2(complete_weekly_data);
-            } else {
-                let complete_montly_data = [
-                    {
-                        id: 'Actual',
-                        data: actual_monthly_data
-                    }
-                ];
-                setMontlyFrequency2(complete_montly_data);
-
-                let complete_weekly_data = [
-                    {
-                        id: 'Actual',
-                        data: actual_weekly_data
-                    }
-                ];
-                setWeeklyFrequency2(complete_weekly_data);
-            }
         }
     }, [crimeData2]);
 
@@ -729,7 +539,8 @@ export default function Compare() {
                         bgcolor="white"
                         className="compare-insights"
                     >
-                        <Grid item xs={6}>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={4}>
                             {selectedInsight === 'Top 5 Crime Statistics' && (
                                 <Box>
                                     {top5CrimeData1 && (
@@ -804,7 +615,8 @@ export default function Compare() {
                                 </Box>
                             )}
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={2}></Grid>
+                        <Grid item xs={4}>
                             {selectedInsight === 'Top 5 Crime Statistics' && (
                                 <Box>
                                     {top5CrimeData2 && (
@@ -879,6 +691,7 @@ export default function Compare() {
                                 </Box>
                             )}
                         </Grid>
+                        <Grid item xs={1}></Grid>
                     </Grid>
                 </div>
             </div>
