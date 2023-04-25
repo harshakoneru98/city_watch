@@ -30,6 +30,7 @@ CITY_WATCH_DATABASE_NAME = <your_dynamodb_database_name> Ex: 'city_watch_data'
 EMAIL_INDEX = <your_dynamodb_database_email_index_name> Ex: 'email-index'
 PRIMARY_CITY_INDEX = <your_dynamodb_database_city_index_name> Ex: 'primary_city-index'
 AUTH_KEY = <your_authentication_key> Ex: 'secretkey'
+```
 
 ## Run the Application
 First open the terminal at app folder in project directory. Run the following command to run the front-end application.
